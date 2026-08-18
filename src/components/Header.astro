@@ -1,0 +1,53 @@
+---
+---
+<header class="site-header">
+  <div class="container header-container">
+    <a href="/" class="logo">Danish West Indies</a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="/history">History</a></li>
+        <li><a href="/resources">Resources</a></li>
+        <li><a href="/thesis">Thesis</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  
+  .main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: var(--space-md);
+  }
+  
+  .main-nav a {
+    color: var(--color-text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+  
+  .main-nav a:hover {
+    color: var(--color-accent);
+  }
+</style>
