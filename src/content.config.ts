@@ -30,8 +30,20 @@ const thesisCollection = defineCollection({
   }),
 });
 
+const memorialCollection = defineCollection({
+  loader: glob({ pattern: "**/*.json", base: "./src/content/memorial" }),
+  schema: z.object({
+    name: z.string(),
+    yearOfBirth: z.number().optional(),
+    origin: z.string().optional(),
+    location: z.string().optional(),
+    notes: z.string().optional(),
+  }),
+});
+
 export const collections = {
   'history': historyCollection,
   'resources': resourcesCollection,
   'thesis': thesisCollection,
+  'memorial': memorialCollection,
 };
