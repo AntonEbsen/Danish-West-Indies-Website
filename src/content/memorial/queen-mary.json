@@ -3,5 +3,10 @@
   "yearOfBirth": 1848,
   "origin": "Antigua (Moved to St. Croix)",
   "location": "St. Croix",
-  "notes": "One of the three 'Queens' of the 1878 Fireburn labor riot. Though born free, she and others lived under contract labor conditions nearly identical to slavery. She led the revolt for fair wages and working conditions."
+  "island": "St. Croix",
+  "biography": "Queen Mary, born Mary Leticia Thomas in Antigua around 1848, was one of the three legendary 'Queens' who led the 1878 Fireburn labor riot on St. Croix. Though technically born free after the 1848 emancipation, she and thousands of other laborers lived under contract conditions that were nearly indistinguishable from slavery. Enraged by the continued exploitation and harsh labor laws, Mary and her co-leaders—Queen Agnes and Queen Mathilda—organized the largest labor revolt in Danish West Indian history. The Fireburn destroyed over 50 plantations and resulted in widespread property damage across the island. Mary was captured, tried, and sentenced to death, later commuted to life imprisonment. She spent the remainder of her life in a Danish prison. Today she is celebrated as a symbol of defiance and the fight for justice in the U.S. Virgin Islands.",
+  "notes": "One of the three 'Queens' of the 1878 Fireburn labor riot. Though born free, she and others lived under contract labor conditions nearly identical to slavery. She led the revolt for fair wages and working conditions.",
+  "tags": ["1878 Fireburn", "Resistance Leader", "Labor Rights"],
+  "mapLat": 17.7468,
+  "mapLng": -64.7032
 }

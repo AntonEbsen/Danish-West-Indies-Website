@@ -35,9 +35,16 @@ const memorialCollection = defineCollection({
   schema: z.object({
     name: z.string(),
     yearOfBirth: z.number().optional(),
+    yearOfDeath: z.number().optional(),
     origin: z.string().optional(),
     location: z.string().optional(),
+    island: z.enum(["St. Croix", "St. Thomas", "St. John"]).optional(),
+    plantation: z.string().optional(),
+    biography: z.string().optional(),
     notes: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    mapLat: z.number().optional(),
+    mapLng: z.number().optional(),
   }),
 });
 

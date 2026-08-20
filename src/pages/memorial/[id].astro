@@ -1,0 +1,362 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('memorial');
+  return entries.map(entry => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { name, yearOfBirth, yearOfDeath, origin, location, island, plantation, biography, notes, tags, mapLat, mapLng } = entry.data;
+
+// Get related entries (same tags)
+const allEntries = await getCollection('memorial');
+const relatedEntries = allEntries
+  .filter(e => e.id !== entry.id && tags && e.data.tags?.some(t => tags.includes(t)))
+  .slice(0, 3);
+---
+
+<Layout title={`${name} - Memorial | Danish West Indies`}>
+	<article class="profile animate-fade-in">
+		<a href="/memorial" class="back-link">← Back to Memorial Register</a>
+
+		<header class="profile-header">
+			<div class="candle-icon" aria-hidden="true">🕯</div>
+			<h1>{name}</h1>
+			<div class="life-dates">
+				{yearOfBirth && <span>Born ~{yearOfBirth}</span>}
+				{yearOfBirth && yearOfDeath && <span class="separator">—</span>}
+				{yearOfDeath && <span>Died ~{yearOfDeath}</span>}
+			</div>
+		</header>
+
+		<div class="profile-body">
+			<aside class="profile-details">
+				<h3>Details</h3>
+				<dl>
+					{origin && (
+						<>
+							<dt>Origin</dt>
+							<dd>{origin}</dd>
+						</>
+					)}
+					{island && (
+						<>
+							<dt>Island</dt>
+							<dd>{island}</dd>
+						</>
+					)}
+					{plantation && (
+						<>
+							<dt>Plantation</dt>
+							<dd>{plantation}</dd>
+						</>
+					)}
+					{location && (
+						<>
+							<dt>Location</dt>
+							<dd>{location}</dd>
+						</>
+					)}
+				</dl>
+
+				{tags && tags.length > 0 && (
+					<div class="profile-tags">
+						<h3>Connected Events</h3>
+						<div class="tag-list">
+							{tags.map(tag => (
+								<span class="tag">{tag}</span>
+							))}
+						</div>
+					</div>
+				)}
+			</aside>
+
+			<div class="profile-content">
+				{biography && (
+					<section class="bio-section">
+						<h2>Their Story</h2>
+						<p class="biography">{biography}</p>
+					</section>
+				)}
+
+				{notes && !biography && (
+					<section class="bio-section">
+						<h2>About</h2>
+						<p class="biography">{notes}</p>
+					</section>
+				)}
+
+				{mapLat && mapLng && island && (
+					<section class="location-section">
+						<h2>Location</h2>
+						<div class="mini-map">
+							<svg viewBox="0 0 400 250" class="mini-map-svg">
+								<rect width="400" height="250" fill="#0a1628" rx="6"/>
+								{island === "St. Croix" && (
+									<g>
+										<path d="M100,100 Q140,70 200,65 Q260,70 310,85 Q330,100 325,120 Q310,140 260,145 Q200,148 150,135 Q115,125 100,100Z" 
+											fill="#1a3a2a" stroke="#c4a77d" stroke-width="1.5"/>
+										<circle cx={200} cy={110} r="6" fill="#c4a77d"/>
+										<circle cx={200} cy={110} r="10" fill="none" stroke="#c4a77d" stroke-width="1" opacity="0.4" class="pin-pulse"/>
+										<text x="200" y="170" text-anchor="middle" fill="#c4a77d" font-size="14" font-family="Lora, serif">{island}</text>
+									</g>
+								)}
+								{island === "St. Thomas" && (
+									<g>
+										<path d="M130,100 Q160,80 200,85 Q230,90 245,105 Q240,120 220,130 Q190,135 160,125 Q135,115 130,100Z" 
+											fill="#1a3a2a" stroke="#c4a77d" stroke-width="1.5"/>
+										<circle cx={190} cy={105} r="6" fill="#c4a77d"/>
+										<circle cx={190} cy={105} r="10" fill="none" stroke="#c4a77d" stroke-width="1" opacity="0.4" class="pin-pulse"/>
+										<text x="190" y="160" text-anchor="middle" fill="#c4a77d" font-size="14" font-family="Lora, serif">{island}</text>
+									</g>
+								)}
+								{island === "St. John" && (
+									<g>
+										<path d="M150,100 Q175,82 210,87 Q235,95 240,112 Q235,128 210,133 Q185,138 165,128 Q148,115 150,100Z" 
+											fill="#1a3a2a" stroke="#c4a77d" stroke-width="1.5"/>
+										<circle cx={195} cy={108} r="6" fill="#c4a77d"/>
+										<circle cx={195} cy={108} r="10" fill="none" stroke="#c4a77d" stroke-width="1" opacity="0.4" class="pin-pulse"/>
+										<text x="195" y="160" text-anchor="middle" fill="#c4a77d" font-size="14" font-family="Lora, serif">{island}</text>
+									</g>
+								)}
+							</svg>
+						</div>
+					</section>
+				)}
+			</div>
+		</div>
+
+		{relatedEntries.length > 0 && (
+			<section class="related-section">
+				<h2>Connected Lives</h2>
+				<p class="related-intro">Other individuals connected through shared events and resistance.</p>
+				<div class="related-grid">
+					{relatedEntries.map(related => (
+						<a href={`/memorial/${related.id}`} class="related-card">
+							<h3>{related.data.name}</h3>
+							{related.data.notes && <p>{related.data.notes}</p>}
+						</a>
+					))}
+				</div>
+			</section>
+		)}
+	</article>
+</Layout>
+
+<style>
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-lg);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.profile-header {
+		text-align: center;
+		padding-bottom: var(--space-lg);
+		margin-bottom: var(--space-lg);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.candle-icon {
+		font-size: 2.5rem;
+		margin-bottom: var(--space-sm);
+		animation: flicker 3s ease-in-out infinite alternate;
+	}
+
+	@keyframes flicker {
+		0%, 100% { opacity: 0.7; }
+		25% { opacity: 0.8; }
+		50% { opacity: 0.6; }
+		75% { opacity: 0.9; }
+	}
+
+	.profile-header h1 {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		margin-bottom: var(--space-xs);
+	}
+
+	.life-dates {
+		font-size: 1.1rem;
+		color: var(--color-text-muted);
+		font-family: var(--font-heading);
+		font-style: italic;
+	}
+
+	.separator {
+		margin: 0 0.5rem;
+	}
+
+	.profile-body {
+		display: grid;
+		grid-template-columns: 280px 1fr;
+		gap: var(--space-lg);
+		margin-bottom: var(--space-xl);
+	}
+
+	/* Sidebar */
+	.profile-details {
+		position: sticky;
+		top: var(--space-md);
+		align-self: start;
+	}
+
+	.profile-details h3 {
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-accent);
+		margin-bottom: var(--space-sm);
+	}
+
+	dl {
+		margin-bottom: var(--space-md);
+	}
+
+	dt {
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		color: var(--color-text-muted);
+		margin-bottom: 0.15rem;
+	}
+
+	dd {
+		font-size: 1rem;
+		color: var(--color-text);
+		margin-bottom: var(--space-sm);
+	}
+
+	.profile-tags {
+		padding-top: var(--space-md);
+		border-top: 1px solid var(--color-border);
+	}
+
+	.tag-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.tag {
+		display: inline-block;
+		padding: 0.25rem 0.7rem;
+		background: rgba(196, 167, 125, 0.12);
+		color: var(--color-accent);
+		border: 1px solid rgba(196, 167, 125, 0.25);
+		border-radius: 3px;
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+
+	/* Main content */
+	.bio-section h2, .location-section h2 {
+		font-size: 1.3rem;
+		margin-bottom: var(--space-md);
+		color: var(--color-accent);
+	}
+
+	.biography {
+		font-size: 1.05rem;
+		line-height: 1.9;
+		color: var(--color-text);
+	}
+
+	.location-section {
+		margin-top: var(--space-lg);
+	}
+
+	.mini-map {
+		border: 1px solid var(--color-border);
+		border-radius: 6px;
+		overflow: hidden;
+	}
+
+	.mini-map-svg {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	@keyframes pulse {
+		0% { r: 10; opacity: 0.4; }
+		100% { r: 18; opacity: 0; }
+	}
+
+	.pin-pulse {
+		animation: pulse 2s ease-out infinite;
+	}
+
+	/* Related section */
+	.related-section {
+		padding-top: var(--space-lg);
+		border-top: 1px solid var(--color-border);
+	}
+
+	.related-section h2 {
+		text-align: center;
+		margin-bottom: var(--space-xs);
+	}
+
+	.related-intro {
+		text-align: center;
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-lg);
+	}
+
+	.related-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: var(--space-md);
+	}
+
+	.related-card {
+		display: block;
+		padding: var(--space-md);
+		background: var(--color-bg-light);
+		border: 1px solid var(--color-border);
+		border-left: 3px solid var(--color-accent);
+		border-radius: 4px;
+		text-decoration: none;
+		color: inherit;
+		transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+	}
+
+	.related-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+		color: inherit;
+	}
+
+	.related-card h3 {
+		font-size: 1.15rem;
+		margin-bottom: var(--space-xs);
+	}
+
+	.related-card p {
+		font-size: 0.88rem;
+		color: var(--color-text-muted);
+		line-height: 1.5;
+		margin-bottom: 0;
+	}
+
+	@media (max-width: 768px) {
+		.profile-body {
+			grid-template-columns: 1fr;
+		}
+
+		.profile-details {
+			position: static;
+		}
+	}
+</style>
