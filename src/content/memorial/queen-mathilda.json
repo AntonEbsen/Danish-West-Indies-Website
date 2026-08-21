@@ -13,5 +13,15 @@
   ],
   "mapLat": 17.7368,
   "mapLng": -64.7532,
-  "source": "Danish National Archives (Placeholder)"
+  "source": "Danish National Archives (Placeholder)",
+  "relationships": [
+    {
+      "id": "queen-mary",
+      "type": "co-leader"
+    },
+    {
+      "id": "queen-agnes",
+      "type": "co-leader"
+    }
+  ]
 }

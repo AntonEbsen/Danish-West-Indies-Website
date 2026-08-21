@@ -47,6 +47,15 @@ const memorialCollection = defineCollection({
     mapLng: z.number().optional(),
     images: z.array(z.string()).optional(),
     source: z.string().optional(),
+    relationships: z.array(z.object({
+      id: z.string(),
+      type: z.string()
+    })).optional(),
+    descendantStories: z.array(z.object({
+      author: z.string(),
+      text: z.string()
+    })).optional(),
+    audioRecording: z.string().optional(),
   }),
 });
 

@@ -1,0 +1,289 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import AmbientSound from '../../components/AmbientSound.astro';
+
+const allEntries = await getCollection('memorial');
+
+// Prepare graph data
+const nodes: any[] = [];
+const edges: any[] = [];
+const nodeIds = new Set();
+const eventNodes = new Set();
+const islandNodes = new Set();
+
+allEntries.forEach(entry => {
+	// Add person node
+	if (!nodeIds.has(entry.id)) {
+		nodes.push({ id: entry.id, label: entry.data.name, group: 'person', url: `/memorial/${entry.id}` });
+		nodeIds.add(entry.id);
+	}
+
+	// Add Island nodes
+	if (entry.data.island) {
+		const islandId = `island-${entry.data.island}`;
+		if (!islandNodes.has(islandId)) {
+			nodes.push({ id: islandId, label: entry.data.island, group: 'island' });
+			islandNodes.add(islandId);
+		}
+		edges.push({ from: entry.id, to: islandId });
+	}
+
+	// Add Event nodes (tags)
+	if (entry.data.tags) {
+		entry.data.tags.forEach(tag => {
+			const tagId = `tag-${tag}`;
+			if (!eventNodes.has(tagId)) {
+				nodes.push({ id: tagId, label: tag, group: 'event' });
+				eventNodes.add(tagId);
+			}
+			edges.push({ from: entry.id, to: tagId });
+		});
+	}
+
+	// Add Relationships
+	if (entry.data.relationships) {
+		entry.data.relationships.forEach(rel => {
+			if (!nodeIds.has(rel.id)) {
+				// We don't have the full name, just use ID
+				nodes.push({ id: rel.id, label: rel.id.replace(/-/g, ' '), group: 'person', url: `/memorial/${rel.id}` });
+				nodeIds.add(rel.id);
+			}
+			// Avoid duplicate bidirectional edges
+			const edgeId1 = `${entry.id}-${rel.id}`;
+			const edgeId2 = `${rel.id}-${entry.id}`;
+			
+			edges.push({ from: entry.id, to: rel.id, label: rel.type, arrows: 'to' });
+		});
+	}
+});
+
+const graphData = JSON.stringify({ nodes, edges });
+---
+
+<Layout title="Connected Lives Network - Memorial Register">
+	<div class="page-header">
+		<a href="/memorial" class="back-link">← Back to Register</a>
+		<h1>Connected Lives</h1>
+		<p class="subtitle">A visual web of relationships, shared events, and locations.</p>
+	</div>
+	
+	<section class="network-section">
+		<div class="network-container" id="network-container">
+			<div class="loading-overlay" id="loading-overlay">
+				<div class="spinner"></div>
+				<p>Loading network graph...</p>
+			</div>
+		</div>
+		<div class="legend">
+			<div class="legend-item"><span class="legend-color person-color"></span> Person</div>
+			<div class="legend-item"><span class="legend-color island-color"></span> Island</div>
+			<div class="legend-item"><span class="legend-color event-color"></span> Event / Tag</div>
+		</div>
+	</section>
+
+	<AmbientSound />
+
+	<!-- Load vis-network -->
+	<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js" is:inline></script>
+	
+	<script define:vars={{ graphData }}>
+		document.addEventListener("DOMContentLoaded", () => {
+			const data = JSON.parse(graphData);
+			const container = document.getElementById('network-container');
+			const overlay = document.getElementById('loading-overlay');
+			
+			const options = {
+				nodes: {
+					shape: 'dot',
+					size: 16,
+					font: {
+						size: 14,
+						color: '#d4d4d4',
+						face: 'Lora, serif'
+					},
+					borderWidth: 2,
+					shadow: true
+				},
+				edges: {
+					width: 1,
+					color: { inherit: 'from' },
+					smooth: {
+						type: 'continuous'
+					},
+					font: {
+						size: 10,
+						color: '#8b8b8b',
+						align: 'middle'
+					}
+				},
+				groups: {
+					person: {
+						color: { background: '#111111', border: '#c4a77d' },
+						size: 18
+					},
+					island: {
+						color: { background: '#1a3a2a', border: '#6b8c7b' },
+						shape: 'hexagon',
+						size: 25
+					},
+					event: {
+						color: { background: '#2c1a1a', border: '#b27a5d' },
+						shape: 'diamond',
+						size: 20
+					}
+				},
+				physics: {
+					forceAtlas2Based: {
+						gravitationalConstant: -50,
+						centralGravity: 0.01,
+						springLength: 100,
+						springConstant: 0.08
+					},
+					maxVelocity: 50,
+					solver: 'forceAtlas2Based',
+					timestep: 0.35,
+					stabilization: { iterations: 150 }
+				},
+				interaction: {
+					hover: true,
+					tooltipDelay: 200,
+					zoomView: true
+				}
+			};
+
+			const network = new vis.Network(container, data, options);
+
+			network.on("stabilizationIterationsDone", function () {
+				if(overlay) overlay.style.display = 'none';
+			});
+
+			network.on("click", function (params) {
+				if (params.nodes.length > 0) {
+					const nodeId = params.nodes[0];
+					const node = data.nodes.find(n => n.id === nodeId);
+					if (node && node.url) {
+						window.location.href = node.url;
+					}
+				}
+			});
+		});
+	</script>
+</Layout>
+
+<style>
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-sm);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.page-header {
+		margin-bottom: var(--space-md);
+		text-align: center;
+	}
+	
+	.page-header h1 {
+		font-size: clamp(2rem, 5vw, 4rem);
+		color: var(--color-text);
+		margin-bottom: var(--space-xs);
+	}
+	
+	.subtitle {
+		font-size: 1.1rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+		font-family: var(--font-heading);
+	}
+
+	.network-section {
+		width: 100%;
+		max-width: 1200px;
+		margin: 0 auto;
+		position: relative;
+	}
+
+	.network-container {
+		width: 100%;
+		height: 600px;
+		background: var(--color-bg-light);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.loading-overlay {
+		position: absolute;
+		top: 0; left: 0; right: 0; bottom: 0;
+		background: rgba(10, 10, 10, 0.8);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		z-index: 10;
+		color: var(--color-accent);
+	}
+
+	.spinner {
+		width: 40px;
+		height: 40px;
+		border: 3px solid rgba(196, 167, 125, 0.3);
+		border-radius: 50%;
+		border-top-color: var(--color-accent);
+		animation: spin 1s ease-in-out infinite;
+		margin-bottom: 1rem;
+	}
+
+	@keyframes spin {
+		to { transform: rotate(360deg); }
+	}
+
+	.legend {
+		display: flex;
+		justify-content: center;
+		gap: 2rem;
+		margin-top: var(--space-md);
+		padding: var(--space-sm);
+		background: var(--color-bg-light);
+		border-radius: 30px;
+		border: 1px solid var(--color-border);
+		width: fit-content;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.legend-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.9rem;
+		color: var(--color-text);
+	}
+
+	.legend-color {
+		width: 16px;
+		height: 16px;
+		display: inline-block;
+		border-radius: 50%;
+	}
+
+	.person-color { background: #111111; border: 2px solid #c4a77d; }
+	.island-color { background: #1a3a2a; border: 2px solid #6b8c7b; border-radius: 4px; }
+	.event-color { background: #2c1a1a; border: 2px solid #b27a5d; transform: rotate(45deg); }
+
+	/* Allow cursor pointer for clickable nodes */
+	:global(.vis-network) {
+		cursor: grab;
+	}
+	:global(.vis-network:active) {
+		cursor: grabbing;
+	}
+</style>

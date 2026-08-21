@@ -53,23 +53,37 @@ const entriesData = memorialEntries.map(e => ({
 		</p>
 
 		<!-- Search and Filters -->
-		<div class="filters-bar">
-			<div class="search-wrapper">
-				<svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-					<circle cx="11" cy="11" r="8"/>
-					<line x1="21" y1="21" x2="16.65" y2="16.65"/>
+		<div class="memorial-controls">
+			<div class="search-bar">
+				<input type="text" id="search-input" placeholder="Search by name, origin, location, or use tags (e.g., island:St.Croix)..." aria-label="Search the memorial register">
+				<svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+					<circle cx="11" cy="11" r="8"></circle>
+					<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
 				</svg>
-				<input type="text" id="memorial-search" placeholder="Search by name, origin, or location..." autocomplete="off" />
 			</div>
 			<div class="filter-group">
-				<select id="filter-island">
+				<select id="filter-island" aria-label="Filter by Island">
 					<option value="">All Islands</option>
-					{islands.map(island => <option value={island}>{island}</option>)}
+					<option value="St. Croix">St. Croix</option>
+					<option value="St. Thomas">St. Thomas</option>
+					<option value="St. John">St. John</option>
 				</select>
-				<select id="filter-tag">
-					<option value="">All Tags</option>
-					{allTags.map(tag => <option value={tag}>{tag}</option>)}
+				
+				<select id="filter-tag" aria-label="Filter by Event/Tag">
+					<option value="">All Events</option>
+					<option value="1848 Uprising">1848 Uprising</option>
+					<option value="1733 Rebellion">1733 Rebellion</option>
+					<option value="1878 Fireburn">1878 Fireburn</option>
+					<option value="Sugar Cultivation">Sugar Cultivation</option>
 				</select>
+
+				<a href="/api/dataset.csv" class="btn-download" title="Download Register Data (CSV)">
+					<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+						<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+						<polyline points="7 10 12 15 17 10"></polyline>
+						<line x1="12" y1="15" x2="12" y2="3"></line>
+					</svg>
+				</a>
 			</div>
 			<p class="results-count" id="results-count">{memorialEntries.length} individuals recorded</p>
 		</div>
@@ -251,25 +265,58 @@ const entriesData = memorialEntries.map(e => ({
 	}
 
 	function filterCards() {
-		const query = searchInput.value.toLowerCase().trim();
+		const rawQuery = searchInput.value.toLowerCase().trim();
 		const island = filterIsland.value;
 		const tag = filterTag.value;
 		
 		visibleCards = [];
+
+		// Parse advanced search (e.g. island:"St. Croix" year:>1800)
+		// A simple implementation: extract key:value pairs and a base query
+		let baseQuery = rawQuery;
+		const searchCriteria: Record<string, string> = {};
+		
+		const matches = rawQuery.match(/(\w+):"([^"]+)"|(\w+):([^\s]+)/g);
+		if (matches) {
+			matches.forEach(match => {
+				const parts = match.split(':');
+				if (parts.length >= 2) {
+					const key = parts[0].trim();
+					const val = parts.slice(1).join(':').replace(/"/g, '').trim();
+					searchCriteria[key] = val;
+					baseQuery = baseQuery.replace(match, '');
+				}
+			});
+		}
+		baseQuery = baseQuery.trim();
 
 		cards.forEach(card => {
 			const name = card.dataset.name || '';
 			const origin = card.dataset.origin || '';
 			const location = card.dataset.location || '';
 			const cardIsland = card.dataset.island || '';
-			const cardTags = card.dataset.tags || '';
+			const cardTags = (card.dataset.tags || '').toLowerCase();
 
-			const matchesSearch = !query || 
-				name.includes(query) || 
-				origin.includes(query) || 
-				location.includes(query);
+			let matchesSearch = true;
+
+			// Handle base query
+			if (baseQuery) {
+				matchesSearch = name.includes(baseQuery) || origin.includes(baseQuery) || location.includes(baseQuery);
+			}
+
+			// Handle advanced criteria
+			for (const [key, val] of Object.entries(searchCriteria)) {
+				if (key === 'island') {
+					if (!cardIsland.toLowerCase().includes(val)) matchesSearch = false;
+				} else if (key === 'origin') {
+					if (!origin.includes(val)) matchesSearch = false;
+				} else if (key === 'tag' || key === 'event') {
+					if (!cardTags.includes(val)) matchesSearch = false;
+				}
+			}
+
 			const matchesIsland = !island || cardIsland === island;
-			const matchesTag = !tag || cardTags.split(',').includes(tag);
+			const matchesTag = !tag || (card.dataset.tags || '').split(',').includes(tag);
 
 			if (matchesSearch && matchesIsland && matchesTag) {
 				visibleCards.push(card);

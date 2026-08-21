@@ -11,7 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { name, yearOfBirth, yearOfDeath, origin, location, island, plantation, biography, notes, tags, mapLat, mapLng, images, source } = entry.data;
+const { name, yearOfBirth, yearOfDeath, origin, location, island, plantation, biography, notes, tags, mapLat, mapLng, images, source, relationships, descendantStories, audioRecording } = entry.data;
 
 // Get related entries (same tags)
 const allEntries = await getCollection('memorial');
@@ -32,6 +32,12 @@ const relatedEntries = allEntries
 				{yearOfBirth && yearOfDeath && <span class="separator">—</span>}
 				{yearOfDeath && <span>Died ~{yearOfDeath}</span>}
 			</div>
+			{audioRecording && (
+				<div class="audio-player">
+					<p class="audio-label">Say Their Name:</p>
+					<audio controls src={audioRecording}></audio>
+				</div>
+			)}
 		</header>
 
 		<div class="profile-body">
@@ -88,6 +94,20 @@ const relatedEntries = allEntries
 						</div>
 					</div>
 				)}
+
+				{relationships && relationships.length > 0 && (
+					<div class="profile-relationships">
+						<h3>Family & Relations</h3>
+						<ul class="relationship-list">
+							{relationships.map(rel => (
+								<li>
+									<a href={`/memorial/${rel.id}`} class="rel-link">{rel.id.replace(/-/g, ' ')}</a>
+									<span class="rel-type">({rel.type})</span>
+								</li>
+							))}
+						</ul>
+					</div>
+				)}
 			</aside>
 
 			<div class="profile-content">
@@ -102,6 +122,38 @@ const relatedEntries = allEntries
 					<section class="bio-section">
 						<h2>About</h2>
 						<p class="biography">{notes}</p>
+					</section>
+				)}
+
+				{descendantStories && descendantStories.length > 0 && (
+					<section class="stories-section">
+						<h2>Descendant Testimonies</h2>
+						<div class="stories-list">
+							{descendantStories.map(story => (
+								<blockquote class="descendant-story">
+									<p>"{story.text}"</p>
+									<footer>— {story.author}</footer>
+								</blockquote>
+							))}
+						</div>
+					</section>
+				)}
+
+				{tags && (tags.includes('1848 Uprising') || tags.includes('Sugar Cultivation')) && (
+					<section class="context-section">
+						<h2>Historical Context</h2>
+						{tags.includes('1848 Uprising') && (
+							<div class="context-panel">
+								<h3>The 1848 Uprising</h3>
+								<p>In July 1848, thousands of enslaved people marched on Frederiksted, St. Croix, demanding immediate emancipation. Led by figures like General Buddhoe, this mass mobilization forced Governor Peter von Scholten to declare emancipation, effectively ending slavery in the Danish West Indies.</p>
+							</div>
+						)}
+						{tags.includes('Sugar Cultivation') && (
+							<div class="context-panel">
+								<h3>Sugar Cultivation</h3>
+								<p>The economy of the Danish West Indies was heavily dependent on sugar cane production. Enslaved people endured grueling, back-breaking labor in the fields and dangerous conditions in the boiling houses to produce sugar and rum for European markets.</p>
+							</div>
+						)}
 					</section>
 				)}
 
@@ -332,9 +384,63 @@ const relatedEntries = allEntries
 		margin-left: 0.5rem;
 	}
 
-	.profile-tags {
+	.profile-tags, .profile-relationships {
 		padding-top: var(--space-md);
 		border-top: 1px solid var(--color-border);
+		margin-bottom: var(--space-md);
+	}
+
+	.profile-relationships h3 {
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-accent);
+		margin-bottom: var(--space-sm);
+	}
+
+	.relationship-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.relationship-list li {
+		margin-bottom: 0.4rem;
+	}
+
+	.rel-link {
+		color: var(--color-text);
+		text-decoration: none;
+		border-bottom: 1px dotted var(--color-accent);
+		text-transform: capitalize;
+	}
+
+	.rel-link:hover {
+		color: var(--color-accent);
+	}
+
+	.rel-type {
+		font-size: 0.8rem;
+		color: var(--color-text-muted);
+		margin-left: 0.3rem;
+	}
+
+	.audio-player {
+		margin-top: var(--space-md);
+		display: inline-block;
+	}
+
+	.audio-label {
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		color: var(--color-text-muted);
+		margin-bottom: 0.4rem;
+	}
+
+	audio {
+		height: 36px;
+		border-radius: 4px;
 	}
 
 	.tag-list {
@@ -367,8 +473,56 @@ const relatedEntries = allEntries
 		color: var(--color-text);
 	}
 
-	.location-section, .gallery-section {
+	.stories-section, .context-section, .location-section, .gallery-section {
 		margin-top: var(--space-lg);
+	}
+
+	.stories-section h2, .context-section h2 {
+		font-size: 1.3rem;
+		margin-bottom: var(--space-md);
+		color: var(--color-accent);
+	}
+
+	.descendant-story {
+		background: rgba(196, 167, 125, 0.05);
+		border-left: 3px solid var(--color-accent);
+		padding: var(--space-md);
+		margin: 0 0 var(--space-md) 0;
+		border-radius: 0 6px 6px 0;
+	}
+
+	.descendant-story p {
+		font-size: 1.05rem;
+		font-style: italic;
+		line-height: 1.7;
+		margin-bottom: var(--space-sm);
+	}
+
+	.descendant-story footer {
+		font-size: 0.9rem;
+		color: var(--color-accent);
+		font-weight: 600;
+	}
+
+	.context-panel {
+		background: var(--color-bg-light);
+		border: 1px solid var(--color-border);
+		padding: var(--space-md);
+		border-radius: 6px;
+		margin-bottom: var(--space-md);
+	}
+
+	.context-panel h3 {
+		font-size: 1.1rem;
+		color: var(--color-text);
+		margin-bottom: var(--space-xs);
+	}
+
+	.context-panel p {
+		font-size: 0.95rem;
+		line-height: 1.6;
+		color: var(--color-text-muted);
+		margin: 0;
 	}
 
 	.gallery-grid {

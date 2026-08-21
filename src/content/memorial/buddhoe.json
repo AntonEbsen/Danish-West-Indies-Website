@@ -14,5 +14,17 @@
   ],
   "mapLat": 17.7128,
   "mapLng": -64.8821,
-  "source": "Danish National Archives (Placeholder)"
+  "source": "Danish National Archives (Placeholder)",
+  "descendantStories": [
+    {
+      "author": "J. Petersen",
+      "text": "Our family still tells stories of General Buddhoe’s courage."
+    }
+  ],
+  "relationships": [
+    {
+      "id": "queen-mary",
+      "type": "fellow leader"
+    }
+  ]
 }

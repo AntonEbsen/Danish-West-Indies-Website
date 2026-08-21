@@ -13,5 +13,15 @@
   ],
   "mapLat": 17.7268,
   "mapLng": -64.7832,
-  "source": "Danish National Archives (Placeholder)"
+  "source": "Danish National Archives (Placeholder)",
+  "relationships": [
+    {
+      "id": "queen-mary",
+      "type": "co-leader"
+    },
+    {
+      "id": "queen-mathilda",
+      "type": "co-leader"
+    }
+  ]
 }
