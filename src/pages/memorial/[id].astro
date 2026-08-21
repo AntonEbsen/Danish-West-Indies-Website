@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import InteractiveCandle from '../../components/InteractiveCandle.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('memorial');
@@ -25,7 +26,7 @@ const relatedEntries = allEntries
 		<a href="/memorial" class="back-link">← Back to Memorial Register</a>
 
 		<header class="profile-header">
-			<div class="candle-icon" aria-hidden="true">🕯</div>
+			<InteractiveCandle id={entry.id} name={name} />
 			<h1>{name}</h1>
 			<div class="life-dates">
 				{yearOfBirth && <span>Born ~{yearOfBirth}</span>}

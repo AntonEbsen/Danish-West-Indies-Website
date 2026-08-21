@@ -1,0 +1,184 @@
+---
+interface Props {
+  id: string;
+  name?: string;
+}
+
+const { id, name } = Astro.props;
+---
+
+<div class="interactive-candle-container" data-id={id}>
+  <div class="candle-wrapper">
+    <div class="candle-flame" aria-hidden="true"></div>
+    <div class="candle-wick"></div>
+    <div class="candle-body">
+      <div class="candle-wax"></div>
+    </div>
+  </div>
+  
+  <div class="candle-action">
+    <button class="btn-light-candle" aria-label={`Light a candle for ${name || 'remembrance'}`}>
+      Light a Candle {name ? `for ${name}` : 'in Remembrance'}
+    </button>
+    <p class="candle-message" style="display: none;">
+      A candle has been lit in remembrance.
+    </p>
+  </div>
+</div>
+
+<script>
+  // Script runs client-side to handle the interactive candle
+  document.addEventListener('DOMContentLoaded', () => {
+    const containers = document.querySelectorAll('.interactive-candle-container');
+    
+    containers.forEach(container => {
+      const id = container.getAttribute('data-id');
+      const btn = container.querySelector('.btn-light-candle') as HTMLButtonElement;
+      const msg = container.querySelector('.candle-message') as HTMLElement;
+      const flame = container.querySelector('.candle-flame') as HTMLElement;
+      const storageKey = `candle_lit_${id}`;
+
+      // Check if already lit
+      if (localStorage.getItem(storageKey)) {
+        flame.classList.add('lit');
+        btn.style.display = 'none';
+        msg.style.display = 'block';
+        msg.textContent = "You lit a candle in remembrance.";
+      }
+
+      btn.addEventListener('click', () => {
+        flame.classList.add('lit');
+        btn.style.display = 'none';
+        msg.style.display = 'block';
+        localStorage.setItem(storageKey, 'true');
+      });
+    });
+  });
+</script>
+
+<style>
+  .interactive-candle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--space-md);
+  }
+
+  .candle-wrapper {
+    position: relative;
+    width: 30px;
+    height: 80px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+  }
+
+  .candle-body {
+    position: absolute;
+    bottom: 0;
+    width: 30px;
+    height: 60px;
+    background: linear-gradient(to right, #e2d3c1, #fcf6eb, #d1bc9f);
+    border-radius: 3px 3px 2px 2px;
+    box-shadow: inset 0 -5px 10px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.3);
+  }
+
+  .candle-wax {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: radial-gradient(ellipse at top, #fff, #ebdcc3);
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+
+  .candle-wick {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 12px;
+    background: #333;
+    border-radius: 2px;
+    z-index: 2;
+  }
+
+  .candle-flame {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    width: 16px;
+    height: 32px;
+    background: radial-gradient(ellipse at bottom, #fff 10%, #ffe484 40%, #ff8c00 80%, rgba(255,140,0,0) 100%);
+    border-radius: 50% 50% 20% 20%;
+    filter: blur(1px);
+    z-index: 3;
+    opacity: 0;
+    transition: all 1s ease-in-out;
+    transform-origin: bottom center;
+  }
+
+  .candle-flame.lit {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    animation: flicker 3s ease-in-out infinite alternate;
+    box-shadow: 0 0 20px #ffaa00, 0 0 40px #ff6a00;
+  }
+
+  @keyframes flicker {
+    0%, 100% { 
+      transform: translateX(-50%) scale(1) rotate(-1deg);
+      opacity: 0.9;
+    }
+    25% { 
+      transform: translateX(-50%) scale(1.05) rotate(1deg);
+      opacity: 1;
+    }
+    50% { 
+      transform: translateX(-50%) scale(0.95) rotate(-2deg);
+      opacity: 0.85;
+    }
+    75% { 
+      transform: translateX(-50%) scale(1.02) rotate(2deg);
+      opacity: 0.95;
+    }
+  }
+
+  .candle-action {
+    text-align: center;
+    min-height: 40px;
+  }
+
+  .btn-light-candle {
+    background: transparent;
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-light-candle:hover {
+    background: rgba(196, 167, 125, 0.1);
+    box-shadow: 0 0 10px rgba(196, 167, 125, 0.2);
+  }
+
+  .candle-message {
+    color: var(--color-accent);
+    font-style: italic;
+    font-size: 0.95rem;
+    margin: 0;
+    animation: fadeIn 1s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
