@@ -6,7 +6,12 @@
   "island": "St. Croix",
   "biography": "Queen Mathilda, born Mathilda McBean, was the third of the legendary 'Queens' who led the 1878 Fireburn labor revolt on St. Croix. Like her co-leaders Queen Mary and Queen Agnes, Mathilda organized resistance against the oppressive labor contract system. She was particularly known for her fierce oratory and her ability to rally laborers across multiple plantations. After the uprising was suppressed, she was arrested and sentenced alongside her fellow Queens. Her legacy, along with Mary and Agnes, is honored annually in the U.S. Virgin Islands.",
   "notes": "The third of the three 'Queens' of the 1878 Fireburn. Known for her fierce oratory and ability to rally laborers across plantations.",
-  "tags": ["1878 Fireburn", "Resistance Leader", "Labor Rights"],
+  "tags": [
+    "1878 Fireburn",
+    "Resistance Leader",
+    "Labor Rights"
+  ],
   "mapLat": 17.7368,
-  "mapLng": -64.7532
+  "mapLng": -64.7532,
+  "source": "Danish National Archives (Placeholder)"
 }

@@ -1,0 +1,250 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import AmbientSound from '../../components/AmbientSound.astro';
+
+// Fetch all memorial entries from the collection
+const allEntries = await getCollection('memorial');
+
+// Filter entries that have a birth year or death year, and sort them chronologically
+const timelineEntries = allEntries
+  .filter(e => e.data.yearOfBirth || e.data.yearOfDeath)
+  .sort((a, b) => {
+    const yearA = a.data.yearOfBirth || a.data.yearOfDeath || 0;
+    const yearB = b.data.yearOfBirth || b.data.yearOfDeath || 0;
+    return yearA - yearB;
+  });
+---
+
+<Layout title="Chronological Timeline - Memorial Register | Danish West Indies">
+	<div class="page-header animate-fade-in">
+		<a href="/memorial" class="back-link">← Back to Register</a>
+		<h1>Historical Timeline</h1>
+		<p class="subtitle">Lives of the enslaved documented through time.</p>
+	</div>
+	
+	<section class="timeline-section animate-fade-in" style="animation-delay: 0.2s;">
+		<div class="timeline-container">
+			<div class="timeline-line"></div>
+			
+			{timelineEntries.map((entry, index) => {
+				const year = entry.data.yearOfBirth ? `Born ~${entry.data.yearOfBirth}` : `Died ~${entry.data.yearOfDeath}`;
+				const isLeft = index % 2 === 0;
+				
+				return (
+					<div class={`timeline-event ${isLeft ? 'left' : 'right'} scroll-animate`}>
+						<div class="timeline-dot"></div>
+						<div class="timeline-content">
+							<div class="timeline-date">{year}</div>
+							<h3><a href={`/memorial/${entry.id}`}>{entry.data.name}</a></h3>
+							{entry.data.island && <span class="island-badge">{entry.data.island}</span>}
+							<p>{entry.data.notes}</p>
+						</div>
+					</div>
+				);
+			})}
+			
+			{timelineEntries.length === 0 && (
+				<p class="empty-state">No chronological records available yet.</p>
+			)}
+		</div>
+	</section>
+
+	<AmbientSound />
+</Layout>
+
+<script>
+	// Intersection Observer for scroll animations
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach(entry => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('is-visible');
+				observer.unobserve(entry.target);
+			}
+		});
+	}, { threshold: 0.1 });
+
+	document.querySelectorAll('.scroll-animate').forEach(el => {
+		observer.observe(el);
+	});
+</script>
+
+<style>
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-sm);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.page-header {
+		margin-bottom: var(--space-xl);
+		text-align: center;
+	}
+	
+	.page-header h1 {
+		font-size: clamp(2rem, 5vw, 4rem);
+		color: var(--color-text);
+		margin-bottom: var(--space-xs);
+	}
+	
+	.subtitle {
+		font-size: 1.1rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+		font-family: var(--font-heading);
+	}
+
+	.timeline-container {
+		position: relative;
+		max-width: 900px;
+		margin: 0 auto;
+		padding: var(--space-lg) 0;
+	}
+
+	.timeline-line {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 50%;
+		width: 2px;
+		background: var(--color-border);
+		transform: translateX(-50%);
+	}
+
+	.timeline-event {
+		position: relative;
+		width: 50%;
+		padding: 0 var(--space-lg);
+		margin-bottom: var(--space-xl);
+	}
+
+	.timeline-event.left {
+		left: 0;
+		text-align: right;
+	}
+
+	.timeline-event.right {
+		left: 50%;
+	}
+
+	.timeline-dot {
+		position: absolute;
+		top: 0;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		background: var(--color-bg);
+		border: 3px solid var(--color-accent);
+		z-index: 2;
+	}
+
+	.timeline-event.left .timeline-dot {
+		right: -8px;
+	}
+
+	.timeline-event.right .timeline-dot {
+		left: -8px;
+	}
+
+	.timeline-content {
+		background: var(--color-bg-light);
+		padding: var(--space-md);
+		border-radius: 8px;
+		border: 1px solid var(--color-border);
+		position: relative;
+		transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+	}
+
+	.timeline-content:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+		border-color: var(--color-accent);
+	}
+
+	.timeline-event.left .timeline-content {
+		margin-right: var(--space-sm);
+	}
+
+	.timeline-event.right .timeline-content {
+		margin-left: var(--space-sm);
+	}
+
+	.timeline-date {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		color: var(--color-accent);
+		font-size: 1.2rem;
+		margin-bottom: var(--space-xs);
+	}
+
+	.timeline-content h3 {
+		margin-bottom: var(--space-xs);
+	}
+
+	.timeline-content h3 a {
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	.timeline-content h3 a:hover {
+		color: var(--color-accent);
+	}
+
+	.island-badge {
+		display: inline-block;
+		font-size: 0.75rem;
+		padding: 0.2rem 0.5rem;
+		background: rgba(196, 167, 125, 0.1);
+		color: var(--color-accent);
+		border-radius: 4px;
+		margin-bottom: var(--space-sm);
+	}
+
+	.timeline-content p {
+		font-size: 0.95rem;
+		color: var(--color-text-muted);
+		margin-bottom: 0;
+	}
+
+	.scroll-animate {
+		opacity: 0;
+		transform: translateY(40px);
+		transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+	}
+
+	.scroll-animate.is-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	@media (max-width: 768px) {
+		.timeline-line {
+			left: 20px;
+		}
+
+		.timeline-event {
+			width: 100%;
+			padding-left: 50px;
+			padding-right: 0;
+			text-align: left;
+		}
+
+		.timeline-event.left, .timeline-event.right {
+			left: 0;
+		}
+
+		.timeline-event.left .timeline-dot, .timeline-event.right .timeline-dot {
+			left: 12px;
+		}
+
+		.timeline-event.left .timeline-content {
+			margin-right: 0;
+		}
+	}
+</style>

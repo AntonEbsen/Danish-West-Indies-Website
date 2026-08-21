@@ -11,7 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { name, yearOfBirth, yearOfDeath, origin, location, island, plantation, biography, notes, tags, mapLat, mapLng } = entry.data;
+const { name, yearOfBirth, yearOfDeath, origin, location, island, plantation, biography, notes, tags, mapLat, mapLng, images, source } = entry.data;
 
 // Get related entries (same tags)
 const allEntries = await getCollection('memorial');
@@ -62,7 +62,21 @@ const relatedEntries = allEntries
 							<dd>{location}</dd>
 						</>
 					)}
+					{source && (
+						<>
+							<dt>Source</dt>
+							<dd class="source-attr">{source}</dd>
+						</>
+					)}
 				</dl>
+
+				<div class="citation-tool">
+					<h3>Cite this Page</h3>
+					<button id="cite-btn" class="btn-cite" data-name={name} data-url={`https://danishwestindies.org/memorial/${entry.id}`}>
+						Copy Citation
+					</button>
+					<span id="cite-msg" class="cite-msg" style="display: none;">Copied!</span>
+				</div>
 
 				{tags && tags.length > 0 && (
 					<div class="profile-tags">
@@ -88,6 +102,19 @@ const relatedEntries = allEntries
 					<section class="bio-section">
 						<h2>About</h2>
 						<p class="biography">{notes}</p>
+					</section>
+				)}
+
+				{images && images.length > 0 && (
+					<section class="gallery-section">
+						<h2>Archival Records</h2>
+						<div class="gallery-grid">
+							{images.map(img => (
+								<figure class="gallery-item">
+									<img src={img} alt={`Archival record for ${name}`} loading="lazy" />
+								</figure>
+							))}
+						</div>
 					</section>
 				)}
 
@@ -147,6 +174,32 @@ const relatedEntries = allEntries
 		)}
 	</article>
 </Layout>
+
+<script>
+	const citeBtn = document.getElementById('cite-btn');
+	const citeMsg = document.getElementById('cite-msg');
+
+	if (citeBtn && citeMsg) {
+		citeBtn.addEventListener('click', async () => {
+			const name = citeBtn.getAttribute('data-name');
+			const url = citeBtn.getAttribute('data-url');
+			const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+			
+			// Chicago style citation
+			const citation = `"${name}," The Memorial Register, Danish West Indies Website, accessed ${date}, ${url}.`;
+			
+			try {
+				await navigator.clipboard.writeText(citation);
+				citeMsg.style.display = 'inline-block';
+				setTimeout(() => {
+					citeMsg.style.display = 'none';
+				}, 2000);
+			} catch (err) {
+				console.error('Failed to copy citation', err);
+			}
+		});
+	}
+</script>
 
 <style>
 	.back-link {
@@ -237,6 +290,48 @@ const relatedEntries = allEntries
 		margin-bottom: var(--space-sm);
 	}
 
+	.source-attr {
+		font-size: 0.85rem;
+		font-style: italic;
+		color: var(--color-text-muted);
+	}
+
+	.citation-tool {
+		margin-bottom: var(--space-md);
+		padding: var(--space-sm) 0;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.citation-tool h3 {
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-accent);
+		margin-bottom: var(--space-sm);
+	}
+
+	.btn-cite {
+		background: transparent;
+		border: 1px solid var(--color-accent);
+		color: var(--color-accent);
+		padding: 0.4rem 0.8rem;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 0.85rem;
+		font-family: var(--font-body);
+		transition: all var(--transition-fast);
+	}
+
+	.btn-cite:hover {
+		background: rgba(196, 167, 125, 0.1);
+	}
+
+	.cite-msg {
+		font-size: 0.85rem;
+		color: #4ade80;
+		margin-left: 0.5rem;
+	}
+
 	.profile-tags {
 		padding-top: var(--space-md);
 		border-top: 1px solid var(--color-border);
@@ -272,8 +367,32 @@ const relatedEntries = allEntries
 		color: var(--color-text);
 	}
 
-	.location-section {
+	.location-section, .gallery-section {
 		margin-top: var(--space-lg);
+	}
+
+	.gallery-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: var(--space-sm);
+	}
+
+	.gallery-item {
+		border: 1px solid var(--color-border);
+		border-radius: 6px;
+		overflow: hidden;
+		background: var(--color-bg-light);
+	}
+
+	.gallery-item img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform var(--transition-fast);
+	}
+
+	.gallery-item img:hover {
+		transform: scale(1.05);
 	}
 
 	.mini-map {

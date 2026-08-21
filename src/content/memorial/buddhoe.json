@@ -7,7 +7,12 @@
   "plantation": "La Grange",
   "biography": "General Buddhoe, also known as John Gottlieb, was the principal leader of the 1848 slave rebellion on St. Croix. A skilled artisan who may have been a free man or a highly privileged enslaved individual, Buddhoe organized and led thousands of enslaved people in a peaceful march to Frederiksted on July 3, 1848. The overwhelming force of the assembled crowd compelled Governor Peter von Scholten to declare immediate emancipation for all enslaved persons in the Danish West Indies. His leadership represents one of the most consequential acts of resistance in Danish colonial history, effectively ending over 170 years of institutionalized slavery.",
   "notes": "A skilled artisan and a free man (or highly privileged enslaved man) who became the principal leader of the 1848 slave rebellion on St. Croix, which forced Governor Peter von Scholten to declare emancipation.",
-  "tags": ["1848 Emancipation", "Resistance Leader", "Frederiksted"],
+  "tags": [
+    "1848 Emancipation",
+    "Resistance Leader",
+    "Frederiksted"
+  ],
   "mapLat": 17.7128,
-  "mapLng": -64.8821
+  "mapLng": -64.8821,
+  "source": "Danish National Archives (Placeholder)"
 }

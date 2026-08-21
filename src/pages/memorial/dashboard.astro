@@ -1,0 +1,254 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import AmbientSound from '../../components/AmbientSound.astro';
+
+const allEntries = await getCollection('memorial');
+
+// Calculate statistics
+const totalEntries = allEntries.length;
+
+// Islands Breakdown
+const islandCounts: Record<string, number> = {};
+allEntries.forEach(entry => {
+  const island = entry.data.island || 'Unknown';
+  islandCounts[island] = (islandCounts[island] || 0) + 1;
+});
+const sortedIslands = Object.entries(islandCounts).sort((a, b) => b[1] - a[1]);
+
+// Origins Breakdown
+const originCounts: Record<string, number> = {};
+allEntries.forEach(entry => {
+  const origin = entry.data.origin || 'Unknown';
+  originCounts[origin] = (originCounts[origin] || 0) + 1;
+});
+const sortedOrigins = Object.entries(originCounts).sort((a, b) => b[1] - a[1]).slice(0, 10); // Top 10
+
+// Top Tags
+const tagCounts: Record<string, number> = {};
+allEntries.forEach(entry => {
+  (entry.data.tags || []).forEach(tag => {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  });
+});
+const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]).slice(0, 10); // Top 10
+
+// Helper to calculate percentage for CSS bar charts
+const getPercentage = (value: number, max: number) => {
+  return max > 0 ? (value / max) * 100 : 0;
+};
+
+const maxIsland = sortedIslands.length > 0 ? sortedIslands[0][1] : 0;
+const maxOrigin = sortedOrigins.length > 0 ? sortedOrigins[0][1] : 0;
+const maxTag = sortedTags.length > 0 ? sortedTags[0][1] : 0;
+---
+
+<Layout title="Statistics Dashboard - Memorial Register | Danish West Indies">
+	<div class="page-header animate-fade-in">
+		<a href="/memorial" class="back-link">← Back to Register</a>
+		<h1>Data & Statistics</h1>
+		<p class="subtitle">A macro-perspective on the lives we remember.</p>
+	</div>
+	
+	<section class="dashboard-section animate-fade-in" style="animation-delay: 0.2s;">
+		<div class="stat-card total-card">
+			<h2>Total Individuals Recorded</h2>
+			<div class="big-number">{totalEntries}</div>
+			<p>And growing as more archival records are digitized.</p>
+		</div>
+
+		<div class="dashboard-grid">
+			<!-- Island Distribution -->
+			<div class="stat-card">
+				<h3>Population by Island</h3>
+				<div class="bar-chart">
+					{sortedIslands.map(([island, count]) => (
+						<div class="bar-row">
+							<div class="bar-label">{island}</div>
+							<div class="bar-track">
+								<div class="bar-fill" style={`width: ${getPercentage(count, maxIsland)}%;`} title={`${count} individuals`}></div>
+							</div>
+							<div class="bar-value">{count}</div>
+						</div>
+					))}
+				</div>
+			</div>
+
+			<!-- Top Origins -->
+			<div class="stat-card">
+				<h3>Top Origins (Where Known)</h3>
+				<div class="bar-chart">
+					{sortedOrigins.map(([origin, count]) => (
+						<div class="bar-row">
+							<div class="bar-label">{origin}</div>
+							<div class="bar-track">
+								<div class="bar-fill alt-fill" style={`width: ${getPercentage(count, maxOrigin)}%;`} title={`${count} individuals`}></div>
+							</div>
+							<div class="bar-value">{count}</div>
+						</div>
+					))}
+				</div>
+			</div>
+
+			<!-- Top Tags/Events -->
+			<div class="stat-card full-width">
+				<h3>Most Documented Connections & Events</h3>
+				<div class="bar-chart">
+					{sortedTags.map(([tag, count]) => (
+						<div class="bar-row">
+							<div class="bar-label">{tag}</div>
+							<div class="bar-track">
+								<div class="bar-fill accent-fill" style={`width: ${getPercentage(count, maxTag)}%;`} title={`${count} individuals`}></div>
+							</div>
+							<div class="bar-value">{count}</div>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<AmbientSound />
+</Layout>
+
+<style>
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-sm);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.page-header {
+		margin-bottom: var(--space-xl);
+		text-align: center;
+	}
+	
+	.page-header h1 {
+		font-size: clamp(2rem, 5vw, 4rem);
+		color: var(--color-text);
+		margin-bottom: var(--space-xs);
+	}
+	
+	.subtitle {
+		font-size: 1.1rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+		font-family: var(--font-heading);
+	}
+
+	.dashboard-section {
+		max-width: 1000px;
+		margin: 0 auto;
+		padding-bottom: var(--space-xl);
+	}
+
+	.dashboard-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-md);
+	}
+
+	.stat-card {
+		background: var(--color-bg-light);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: var(--space-md);
+	}
+
+	.total-card {
+		text-align: center;
+		margin-bottom: var(--space-md);
+		border-color: var(--color-accent);
+	}
+
+	.total-card h2 {
+		font-size: 1.2rem;
+		color: var(--color-text-muted);
+		text-transform: uppercase;
+		letter-spacing: 2px;
+	}
+
+	.big-number {
+		font-size: 5rem;
+		font-weight: 700;
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+		line-height: 1;
+		margin: var(--space-sm) 0;
+	}
+
+	.stat-card.full-width {
+		grid-column: 1 / -1;
+	}
+
+	.stat-card h3 {
+		font-size: 1.2rem;
+		margin-bottom: var(--space-md);
+		border-bottom: 1px solid var(--color-border);
+		padding-bottom: var(--space-xs);
+	}
+
+	/* Simple CSS Bar Charts */
+	.bar-chart {
+		display: flex;
+		flex-direction: column;
+		gap: 0.8rem;
+	}
+
+	.bar-row {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.bar-label {
+		flex: 0 0 120px;
+		font-size: 0.85rem;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.bar-track {
+		flex: 1;
+		height: 8px;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 4px;
+		overflow: hidden;
+	}
+
+	.bar-fill {
+		height: 100%;
+		background: var(--color-accent);
+		border-radius: 4px;
+		transition: width 1s ease-out;
+	}
+
+	.alt-fill {
+		background: #6b8c7b;
+	}
+
+	.accent-fill {
+		background: #b27a5d;
+	}
+
+	.bar-value {
+		flex: 0 0 30px;
+		text-align: right;
+		font-size: 0.85rem;
+		color: var(--color-text-muted);
+		font-weight: 600;
+	}
+
+	@media (max-width: 768px) {
+		.dashboard-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,0 +1,110 @@
+---
+// AmbientSound.astro
+// A subtle, toggleable ambient sound player to add emotional depth to the memorial page.
+---
+
+<div class="ambient-sound-toggle">
+  <button id="ambient-toggle" aria-label="Toggle ambient sound" title="Toggle ambient sound">
+    <svg class="icon-play" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+      <path d="M8 5v14l11-7z"/>
+    </svg>
+    <svg class="icon-pause" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="display: none;">
+      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+    </svg>
+    <span class="label">Ambient Audio</span>
+  </button>
+  
+  <!-- 
+    Place an ambient.mp3 or ambient.ogg file in the /public directory.
+    You can download a royalty-free ocean or wind sound.
+  -->
+  <audio id="ambient-audio" loop>
+    <source src="/ambient-ocean.ogg" type="audio/ogg">
+    <source src="/ambient.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('ambient-toggle');
+  const audio = document.getElementById('ambient-audio') as HTMLAudioElement;
+  const iconPlay = document.querySelector('.icon-play') as HTMLElement;
+  const iconPause = document.querySelector('.icon-pause') as HTMLElement;
+
+  if (toggleBtn && audio) {
+    // Start volume at 0 and fade in
+    audio.volume = 0;
+
+    toggleBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play().then(() => {
+          iconPlay.style.display = 'none';
+          iconPause.style.display = 'block';
+          toggleBtn.classList.add('playing');
+          
+          // Fade in
+          let vol = 0;
+          const fadeInterval = setInterval(() => {
+            if (vol < 0.4) {
+              vol += 0.05;
+              audio.volume = Math.min(vol, 0.4); // Max volume 40%
+            } else {
+              clearInterval(fadeInterval);
+            }
+          }, 200);
+        }).catch(err => console.error("Audio playback failed:", err));
+      } else {
+        // Fade out
+        let vol = audio.volume;
+        const fadeInterval = setInterval(() => {
+          if (vol > 0.05) {
+            vol -= 0.05;
+            audio.volume = vol;
+          } else {
+            clearInterval(fadeInterval);
+            audio.pause();
+            iconPlay.style.display = 'block';
+            iconPause.style.display = 'none';
+            toggleBtn.classList.remove('playing');
+          }
+        }, 100);
+      }
+    });
+  }
+</script>
+
+<style>
+  .ambient-sound-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+  }
+
+  #ambient-toggle {
+    background: rgba(17, 17, 17, 0.8);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    border-radius: 30px;
+    padding: 0.5rem 1rem 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all var(--transition-fast);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+  }
+
+  #ambient-toggle:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background: rgba(36, 36, 36, 0.9);
+  }
+
+  #ambient-toggle.playing {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 10px rgba(196, 167, 125, 0.2);
+  }
+</style>

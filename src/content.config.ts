@@ -45,6 +45,8 @@ const memorialCollection = defineCollection({
     tags: z.array(z.string()).optional(),
     mapLat: z.number().optional(),
     mapLng: z.number().optional(),
+    images: z.array(z.string()).optional(),
+    source: z.string().optional(),
   }),
 });
 

@@ -7,7 +7,12 @@
   "island": "St. John",
   "biography": "King Kanta was one of the principal leaders of the 1733 St. John slave rebellion—one of the earliest and longest slave revolts in the Americas. Originally from the Akwamu people of the Gold Coast, Kanta and his fellow Akwamu captives seized control of Fort Frederiksværn (now Fort Frederik) on November 23, 1733, and held the island for nearly six months. The rebels fought to reclaim their freedom and establish self-governance on the island. The rebellion was eventually suppressed with the help of French troops from Martinique in May 1734. Rather than submit to recapture, many of the rebels, including Kanta, chose death over a return to bondage.",
   "notes": "One of the leaders of the 1733 St. John slave rebellion, the earliest major slave revolt in the Danish West Indies. Originally from the Akwamu people of the Gold Coast.",
-  "tags": ["1733 St. John Rebellion", "Resistance Leader", "Akwamu"],
+  "tags": [
+    "1733 St. John Rebellion",
+    "Resistance Leader",
+    "Akwamu"
+  ],
   "mapLat": 18.3358,
-  "mapLng": -64.7281
+  "mapLng": -64.7281,
+  "source": "Danish National Archives (Placeholder)"
 }
