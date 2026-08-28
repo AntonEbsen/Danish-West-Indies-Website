@@ -2,9 +2,49 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const historyArticles = await getCollection('history');
-// Sort by date descending
-historyArticles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const allArticles = await getCollection('history');
+
+// Define manual category mapping
+const getCategory = (id: string) => {
+	const economics = ['the-colonial-ledger', 'the-royal-ledgers', 'west-india-company-monopoly', 'pricing-the-enslaved', 'profit-margins-middle-passage', 'sugar-beet-threat', 'the-rum-trade', 'disease-and-the-mortality-ledger', 'anatomy-of-a-danish-sugar-estate', 'compensated-emancipation', 'st-thomas-free-port'];
+	const resistance = ['1733-st-john-rebellion', '1878-fireburn-st-croix', 'marronage-puerto-rican-escape', 'bamboula-and-cultural-survival'];
+	const laws = ['1733-slave-codes', '1792-abolition-decree', '1848-emancipation', '1849-labor-act', '1917-transfer-to-us', '1792-price-shock'];
+	const figures = ['anna-heegaard', 'peter-von-scholten', 'schimmelmann-family', 'mary-thomas'];
+
+	if (economics.includes(id)) return 'economics';
+	if (resistance.includes(id)) return 'resistance';
+	if (laws.includes(id)) return 'laws';
+	if (figures.includes(id)) return 'figures';
+	return 'general';
+};
+
+// Map articles and extract years
+const mappedArticles = allArticles.map(article => {
+	// Try to extract a year from the beginning of the filename (e.g., "1733-slave-codes")
+	const yearMatch = article.id.match(/^(\d{4})-/);
+	const year = yearMatch ? parseInt(yearMatch[1], 10) : null;
+	const sortYear = year || 9999; // Sort non-year items at the end
+
+	return {
+		...article,
+		category: getCategory(article.id),
+		year: year,
+		sortYear: sortYear
+	};
+});
+
+// Sort by historical year ascending, then by title
+mappedArticles.sort((a, b) => {
+	if (a.sortYear !== b.sortYear) {
+		return a.sortYear - b.sortYear;
+	}
+	return a.data.title.localeCompare(b.data.title);
+});
+
+// Separate Foundational Reading articles
+const foundationalIds = ['the-colonial-ledger', 'west-india-company-monopoly'];
+const foundationalArticles = mappedArticles.filter(a => foundationalIds.includes(a.id));
+const generalArticles = mappedArticles.filter(a => !foundationalIds.includes(a.id));
 ---
 
 <Layout 
@@ -14,127 +54,458 @@ historyArticles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 	<div class="page-container animate-fade-in">
 		<header class="page-header">
 			<span class="label">Historical Portal</span>
-			<h1>Colonial History</h1>
-			<p class="subtitle">An archive exploring the timeline, historical events, and enslaved populations affected by the transatlantic slave trade in the Danish West Indies.</p>
+			<h1>Colonial History Archive</h1>
+			<p class="subtitle">An economic and social history of the Danish West Indies, 1672–1917.</p>
 		</header>
 		
-		<section class="articles-section animate-fade-in" style="animation-delay: 0.2s;">
-			<div class="articles-grid">
-				{historyArticles.map((article) => (
-					<a href={`/history/${article.id}`} class="article-card">
+		<!-- Foundational Reading -->
+		<section class="foundational-section">
+			<h2 class="section-title">Start Here: Foundational Reading</h2>
+			<div class="foundational-grid">
+				{foundationalArticles.map((article) => (
+					<a href={`/history/${article.id}`} class="foundational-card article-item" data-id={article.id}>
 						<div class="card-content">
-							<span class="date">{article.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-							<h2>{article.data.title}</h2>
-							{article.data.description && <p>{article.data.description}</p>}
-							<span class="read-more">Read Article →</span>
+							<span class="foundational-tag">Essential</span>
+							<h3>{article.data.title}</h3>
+							<p>{article.data.description}</p>
+							<div class="card-footer">
+								<span class="read-more">Read Article →</span>
+								<div class="card-actions">
+									<button class="btn-action btn-bookmark" data-action-id={article.id} aria-label="Bookmark" onclick="event.preventDefault(); toggleBookmark(this);">🔖</button>
+									<button class="btn-action btn-read" data-action-id={article.id} aria-label="Mark as Read" onclick="event.preventDefault(); toggleRead(this);">✓</button>
+								</div>
+							</div>
 						</div>
 					</a>
 				))}
 			</div>
+		</section>
+
+		<!-- Controls: Search, Filter, View Toggle -->
+		<section class="controls-section">
+			<div class="search-wrapper">
+				<span class="search-icon">🔍</span>
+				<input type="text" id="article-search" placeholder="Search articles by title, subject, or year..." />
+			</div>
+
+			<div class="controls-row">
+				<div class="filter-bar">
+					<button class="btn-filter active" data-filter="all">All Articles</button>
+					<button class="btn-filter" data-filter="economics">Economics</button>
+					<button class="btn-filter" data-filter="resistance">Resistance</button>
+					<button class="btn-filter" data-filter="laws">Laws & Bureaucracy</button>
+					<button class="btn-filter" data-filter="figures">Key Figures</button>
+					<button class="btn-filter" data-filter="general">General</button>
+				</div>
+				<div class="view-toggle">
+					<button class="btn-view active" id="btn-grid" aria-label="Grid View">⊞ Grid</button>
+					<button class="btn-view" id="btn-timeline" aria-label="Timeline View">⏳ Timeline</button>
+				</div>
+			</div>
+		</section>
+
+		<!-- Main Article Container -->
+		<section class="archive-container" id="archive-container">
+			
+			<!-- GRID VIEW -->
+			<div class="articles-grid" id="view-grid">
+				{generalArticles.map((article) => (
+					<a href={`/history/${article.id}`} class="article-card article-item" data-id={article.id} data-category={article.category} data-search={article.data.title.toLowerCase() + ' ' + (article.data.description?.toLowerCase() || '')}>
+						<div class="card-content">
+							<div class="card-meta">
+								{article.year ? <span class="year-badge">{article.year}</span> : <span class="year-badge thematic">Thematic</span>}
+								<span class="category-badge">{article.category}</span>
+							</div>
+							<h2>{article.data.title}</h2>
+							{article.data.description && <p>{article.data.description}</p>}
+							
+							<div class="card-footer">
+								<span class="read-more">Read Article →</span>
+								<div class="card-actions">
+									<button class="btn-action btn-bookmark" data-action-id={article.id} aria-label="Bookmark" onclick="event.preventDefault(); toggleBookmark(this);">🔖</button>
+									<button class="btn-action btn-read" data-action-id={article.id} aria-label="Mark as Read" onclick="event.preventDefault(); toggleRead(this);">✓</button>
+								</div>
+							</div>
+						</div>
+					</a>
+				))}
+			</div>
+
+			<!-- TIMELINE VIEW -->
+			<div class="articles-timeline hidden" id="view-timeline">
+				<div class="timeline-line"></div>
+				{generalArticles.map((article) => (
+					<div class="timeline-node article-item" data-id={article.id} data-category={article.category} data-search={article.data.title.toLowerCase() + ' ' + (article.data.description?.toLowerCase() || '')}>
+						<div class="timeline-marker">
+							{article.year ? <span class="timeline-year">{article.year}</span> : <span class="timeline-year thematic">✱</span>}
+						</div>
+						<a href={`/history/${article.id}`} class="timeline-card">
+							<span class="category-badge">{article.category}</span>
+							<h2>{article.data.title}</h2>
+							{article.data.description && <p>{article.data.description}</p>}
+							<div class="card-footer">
+								<span class="read-more">Read Article →</span>
+								<div class="card-actions">
+									<button class="btn-action btn-bookmark" data-action-id={article.id} aria-label="Bookmark" onclick="event.preventDefault(); toggleBookmark(this);">🔖</button>
+									<button class="btn-action btn-read" data-action-id={article.id} aria-label="Mark as Read" onclick="event.preventDefault(); toggleRead(this);">✓</button>
+								</div>
+							</div>
+						</a>
+					</div>
+				))}
+			</div>
+
+			<!-- Empty State -->
+			<div class="empty-state hidden" id="empty-state">
+				<div class="empty-icon">🔍</div>
+				<h3>No articles found</h3>
+				<p>Try adjusting your search or filters.</p>
+			</div>
+
 		</section>
 	</div>
 </Layout>
 
 <style>
 	.page-container {
-		max-width: 1000px;
+		max-width: 1100px;
 		margin: 0 auto;
 		padding-bottom: var(--space-2xl);
 	}
 
+	/* Header */
 	.page-header {
-		text-align: center;
-		margin-bottom: var(--space-2xl);
-		padding-bottom: var(--space-xl);
-		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+		text-align: center; margin-bottom: var(--space-xl);
 	}
-
 	.label {
-		display: inline-block;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 2px;
-		color: var(--color-accent);
-		background: rgba(196, 167, 125, 0.1);
-		padding: 0.3rem 0.8rem;
-		border-radius: 20px;
-		margin-bottom: var(--space-sm);
+		display: inline-block; font-size: 0.8rem; text-transform: uppercase;
+		letter-spacing: 2px; color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1); padding: 0.3rem 0.8rem;
+		border-radius: 20px; margin-bottom: var(--space-sm);
 	}
-
 	.page-header h1 {
-		color: var(--color-accent);
-		font-size: 3rem;
-		margin-bottom: 0.5rem;
+		color: var(--color-text); font-family: var(--font-heading);
+		font-size: 3rem; margin-bottom: 0.5rem;
 	}
-
 	.subtitle {
+		color: var(--color-text-muted); font-size: 1.2rem; font-style: italic;
+	}
+
+	.section-title {
+		font-family: var(--font-heading); font-size: 1.5rem;
+		color: var(--color-text); margin-bottom: var(--space-md);
+		border-bottom: 1px solid rgba(196, 167, 125, 0.2); padding-bottom: 0.5rem;
+	}
+
+	/* =========================================
+	   FOUNDATIONAL READING (HERO CARDS)
+	   ========================================= */
+	.foundational-section {
+		margin-bottom: var(--space-2xl);
+	}
+	.foundational-grid {
+		display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg);
+	}
+	.foundational-card {
+		display: flex; flex-direction: column;
+		background: linear-gradient(135deg, rgba(196, 167, 125, 0.1) 0%, rgba(0,0,0,0.2) 100%);
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		border-radius: 12px; padding: var(--space-xl);
+		text-decoration: none; transition: all 0.3s ease;
+		position: relative; overflow: hidden;
+	}
+	.foundational-card:hover {
+		transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+		border-color: var(--color-accent);
+	}
+	.foundational-tag {
+		display: inline-block; font-size: 0.75rem; text-transform: uppercase;
+		letter-spacing: 1px; color: var(--color-bg); background: var(--color-accent);
+		padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 1rem;
+		align-self: flex-start; font-weight: bold;
+	}
+	.foundational-card h3 {
+		font-family: var(--font-heading); font-size: 1.6rem; color: var(--color-text);
+		margin-bottom: 0.8rem; line-height: 1.3;
+	}
+	.foundational-card p {
+		color: var(--color-text-muted); line-height: 1.6; margin-bottom: 1.5rem; flex: 1;
+	}
+
+	/* =========================================
+	   CONTROLS (Search, Filter, View)
+	   ========================================= */
+	.controls-section {
+		background: var(--color-surface); border: 1px solid var(--color-border);
+		border-radius: 12px; padding: var(--space-lg); margin-bottom: var(--space-2xl);
+	}
+	.search-wrapper {
+		position: relative; margin-bottom: var(--space-md);
+	}
+	.search-icon {
+		position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
 		color: var(--color-text-muted);
-		font-size: 1.2rem;
-		font-style: italic;
+	}
+	#article-search {
+		width: 100%; padding: 0.8rem 1rem 0.8rem 2.5rem;
+		background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);
+		border-radius: 8px; color: var(--color-text); font-family: var(--font-body);
+		font-size: 1rem; transition: border-color 0.2s;
+	}
+	#article-search:focus { outline: none; border-color: var(--color-accent); }
+	
+	.controls-row {
+		display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+	}
+	.filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+	.btn-filter {
+		background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+		color: var(--color-text-muted); padding: 0.4rem 0.8rem; border-radius: 20px;
+		cursor: pointer; font-size: 0.85rem; text-transform: capitalize; transition: all 0.2s ease;
+	}
+	.btn-filter:hover { border-color: rgba(196, 167, 125, 0.4); color: var(--color-text); }
+	.btn-filter.active { background: rgba(196, 167, 125, 0.15); border-color: var(--color-accent); color: var(--color-accent); }
+	
+	.view-toggle { display: flex; background: rgba(0,0,0,0.3); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+	.btn-view {
+		background: transparent; border: none; color: var(--color-text-muted);
+		padding: 0.4rem 0.8rem; cursor: pointer; font-size: 0.85rem; transition: all 0.2s ease;
+	}
+	.btn-view:hover { color: var(--color-text); background: rgba(255,255,255,0.05); }
+	.btn-view.active { background: rgba(255,255,255,0.1); color: var(--color-accent); font-weight: bold; }
+
+	/* =========================================
+	   CARD COMPONENTS
+	   ========================================= */
+	.card-footer {
+		display: flex; justify-content: space-between; align-items: center; margin-top: auto;
+	}
+	.read-more { color: var(--color-accent); font-size: 0.9rem; font-weight: bold; transition: transform 0.2s; }
+	.card-actions { display: flex; gap: 0.5rem; }
+	.btn-action {
+		background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+		width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+		display: flex; justify-content: center; align-items: center;
+		font-size: 1rem; color: var(--color-text-muted); transition: all 0.2s ease;
+	}
+	.btn-action:hover { background: rgba(255,255,255,0.1); color: var(--color-text); transform: scale(1.1); }
+	
+	/* Saved States */
+	.article-item.is-read { opacity: 0.6; }
+	.article-item.is-read .btn-read { background: rgba(76, 175, 80, 0.2); border-color: #4caf50; color: #4caf50; }
+	.article-item.is-bookmarked .btn-bookmark { background: rgba(196, 167, 125, 0.2); border-color: var(--color-accent); color: var(--color-accent); }
+	.article-item:hover { opacity: 1 !important; } /* Restore opacity on hover */
+
+	.category-badge {
+		font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;
+		color: var(--color-accent); padding: 0.1rem 0;
 	}
 
+	/* =========================================
+	   GRID VIEW
+	   ========================================= */
 	.articles-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-		gap: var(--space-lg);
+		display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-lg);
 	}
+	.article-card {
+		display: flex; flex-direction: column;
+		background: var(--color-surface); border: 1px solid var(--color-border);
+		border-radius: 12px; padding: var(--space-lg);
+		text-decoration: none; transition: all 0.3s ease; height: 100%;
+	}
+	.article-card:hover { transform: translateY(-4px); border-color: rgba(196, 167, 125, 0.4); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+	.article-card:hover .read-more { transform: translateX(5px); }
+	.card-content { display: flex; flex-direction: column; height: 100%; }
+	.card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+	.year-badge {
+		background: rgba(255,255,255,0.08); color: var(--color-text);
+		padding: 0.2rem 0.6rem; border-radius: 4px; font-family: monospace; font-size: 0.85rem;
+	}
+	.year-badge.thematic { color: var(--color-text-muted); font-style: italic; }
+	.article-card h2 { font-family: var(--font-heading); font-size: 1.3rem; color: var(--color-text); margin-bottom: 0.5rem; line-height: 1.3; }
+	.article-card p { color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; flex: 1; }
 
+	/* =========================================
+	   TIMELINE VIEW
+	   ========================================= */
+	.articles-timeline { position: relative; padding: 2rem 0; max-width: 800px; margin: 0 auto; }
+	.timeline-line {
+		position: absolute; left: 40px; top: 0; bottom: 0; width: 2px;
+		background: linear-gradient(to bottom, transparent, rgba(196,167,125,0.3) 5%, rgba(196,167,125,0.3) 95%, transparent);
+	}
+	.timeline-node { position: relative; display: flex; gap: 2rem; margin-bottom: var(--space-xl); opacity: 1; transition: opacity 0.3s; }
+	.timeline-marker { width: 80px; display: flex; justify-content: flex-end; position: relative; z-index: 2; padding-top: 0.5rem; }
+	.timeline-year {
+		background: var(--color-bg); border: 2px solid var(--color-accent); color: var(--color-text);
+		font-family: monospace; font-size: 0.9rem; font-weight: bold;
+		padding: 0.3rem 0.6rem; border-radius: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	}
+	.timeline-year.thematic { border-color: rgba(255,255,255,0.2); color: var(--color-text-muted); }
+	
+	.timeline-card {
+		flex: 1; background: var(--color-surface); border: 1px solid var(--color-border);
+		border-radius: 12px; padding: var(--space-lg); text-decoration: none; transition: all 0.3s ease;
+		display: flex; flex-direction: column;
+	}
+	.timeline-card:hover { transform: translateX(5px); border-color: rgba(196, 167, 125, 0.4); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+	.timeline-card h2 { font-family: var(--font-heading); font-size: 1.4rem; color: var(--color-text); margin: 0.5rem 0; }
+	.timeline-card p { color: var(--color-text-muted); line-height: 1.5; margin-bottom: 1.5rem; }
+
+	/* Helpers */
+	.hidden { display: none !important; }
+	.empty-state { text-align: center; padding: 4rem 0; color: var(--color-text-muted); }
+	.empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+
+	/* Responsive */
 	@media (max-width: 768px) {
-		.articles-grid {
-			grid-template-columns: 1fr;
+		.foundational-grid { grid-template-columns: 1fr; }
+		.timeline-node { flex-direction: column; gap: 1rem; }
+		.timeline-marker { justify-content: flex-start; padding-left: 20px; }
+		.timeline-line { left: 20px; }
+		.controls-row { flex-direction: column; align-items: stretch; }
+		.view-toggle { align-self: flex-start; }
+	}
+</style>
+
+<script>
+	// ==========================================
+	// DOM Elements
+	// ==========================================
+	const searchInput = document.getElementById('article-search') as HTMLInputElement;
+	const filterButtons = document.querySelectorAll('.btn-filter');
+	const viewBtns = document.querySelectorAll('.btn-view');
+	const viewGrid = document.getElementById('view-grid');
+	const viewTimeline = document.getElementById('view-timeline');
+	const emptyState = document.getElementById('empty-state');
+	const articleItems = document.querySelectorAll('.article-item:not(.foundational-card)');
+
+	let currentFilter = 'all';
+	let currentSearch = '';
+
+	// ==========================================
+	// Filtering & Searching Logic
+	// ==========================================
+	function updateVisibility() {
+		let visibleCount = 0;
+
+		articleItems.forEach(item => {
+			const el = item as HTMLElement;
+			const category = el.getAttribute('data-category');
+			const searchText = el.getAttribute('data-search') || '';
+			
+			const matchesFilter = currentFilter === 'all' || category === currentFilter;
+			const matchesSearch = searchText.includes(currentSearch);
+
+			if (matchesFilter && matchesSearch) {
+				el.classList.remove('hidden');
+				visibleCount++;
+			} else {
+				el.classList.add('hidden');
+			}
+		});
+
+		if (emptyState) {
+			if (visibleCount === 0) {
+				emptyState.classList.remove('hidden');
+			} else {
+				emptyState.classList.add('hidden');
+			}
 		}
 	}
 
-	.article-card {
-		display: flex;
-		flex-direction: column;
-		background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0) 100%);
-		border: 1px solid rgba(196, 167, 125, 0.2);
-		border-radius: 12px;
-		padding: var(--space-xl);
-		text-decoration: none;
-		transition: all 0.3s ease;
-		height: 100%;
+	filterButtons.forEach(btn => {
+		btn.addEventListener('click', () => {
+			filterButtons.forEach(b => b.classList.remove('active'));
+			btn.classList.add('active');
+			currentFilter = btn.getAttribute('data-filter') || 'all';
+			updateVisibility();
+		});
+	});
+
+	searchInput?.addEventListener('input', (e) => {
+		currentSearch = (e.target as HTMLInputElement).value.toLowerCase();
+		updateVisibility();
+	});
+
+	// ==========================================
+	// View Toggling (Grid / Timeline)
+	// ==========================================
+	viewBtns.forEach(btn => {
+		btn.addEventListener('click', () => {
+			viewBtns.forEach(b => b.classList.remove('active'));
+			btn.classList.add('active');
+
+			if (btn.id === 'btn-grid') {
+				viewTimeline?.classList.add('hidden');
+				viewGrid?.classList.remove('hidden');
+			} else {
+				viewGrid?.classList.add('hidden');
+				viewTimeline?.classList.remove('hidden');
+			}
+		});
+	});
+
+	// ==========================================
+	// LocalStorage (Bookmarks & Read State)
+	// ==========================================
+	const getStorage = (key: string): string[] => {
+		try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
+	};
+	const setStorage = (key: string, data: string[]) => {
+		localStorage.setItem(key, JSON.stringify(data));
+	};
+
+	function renderStates() {
+		const reads = getStorage('dwi-history-read');
+		const bookmarks = getStorage('dwi-history-bookmarks');
+
+		document.querySelectorAll('.article-item').forEach(el => {
+			const id = el.getAttribute('data-id');
+			if (!id) return;
+
+			// Handle Read State
+			if (reads.includes(id)) {
+				el.classList.add('is-read');
+			} else {
+				el.classList.remove('is-read');
+			}
+
+			// Handle Bookmark State
+			if (bookmarks.includes(id)) {
+				el.classList.add('is-bookmarked');
+			} else {
+				el.classList.remove('is-bookmarked');
+			}
+		});
 	}
 
-	.article-card:hover {
-		transform: translateY(-5px);
-		border-color: var(--color-accent);
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-		background: linear-gradient(145deg, rgba(196, 167, 125, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
-	}
+	// Make toggle functions available globally for inline onclick handlers
+	(window as any).toggleRead = function(btn: HTMLElement) {
+		const id = btn.getAttribute('data-action-id');
+		if (!id) return;
+		let reads = getStorage('dwi-history-read');
+		if (reads.includes(id)) {
+			reads = reads.filter(x => x !== id);
+		} else {
+			reads.push(id);
+		}
+		setStorage('dwi-history-read', reads);
+		renderStates();
+	};
 
-	.date {
-		display: block;
-		font-size: 0.85rem;
-		color: var(--color-text-muted);
-		margin-bottom: 0.5rem;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-	}
+	(window as any).toggleBookmark = function(btn: HTMLElement) {
+		const id = btn.getAttribute('data-action-id');
+		if (!id) return;
+		let bookmarks = getStorage('dwi-history-bookmarks');
+		if (bookmarks.includes(id)) {
+			bookmarks = bookmarks.filter(x => x !== id);
+		} else {
+			bookmarks.push(id);
+		}
+		setStorage('dwi-history-bookmarks', bookmarks);
+		renderStates();
+	};
 
-	.card-content h2 {
-		color: var(--color-text);
-		font-size: 1.5rem;
-		margin-bottom: 1rem;
-		line-height: 1.3;
-		transition: color 0.3s;
-	}
-
-	.article-card:hover .card-content h2 {
-		color: var(--color-accent);
-	}
-
-	.card-content p {
-		color: rgba(255, 255, 255, 0.8);
-		line-height: 1.6;
-		margin-bottom: 1.5rem;
-		flex-grow: 1;
-	}
-
-	.read-more {
-		color: var(--color-accent);
-		font-weight: bold;
-		font-size: 0.95rem;
-	}
-</style>
+	// Init states on load
+	renderStates();
+</script>
