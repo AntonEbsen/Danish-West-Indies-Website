@@ -14,7 +14,9 @@ const filesToCopy = [
   { src: 'src/pages/thesis/defense.astro', dest: 'thesis/defense.astro' },
   { src: 'src/pages/thesis/authors.astro', dest: 'thesis/authors.astro' },
   { src: 'src/pages/thesis/glossary.astro', dest: 'thesis/glossary.astro' },
-  { src: 'src/pages/thesis/behind-the-code.astro', dest: 'thesis/behind-the-code.astro' }
+  { src: 'src/pages/thesis/behind-the-code.astro', dest: 'thesis/behind-the-code.astro' },
+  { src: 'src/pages/history/index.astro', dest: 'history/index.astro' },
+  { src: 'src/pages/history/[slug].astro', dest: 'history/[slug].astro' }
 ];
 
 filesToCopy.forEach(file => {
