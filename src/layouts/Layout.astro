@@ -6,10 +6,51 @@ import { getLangFromUrl } from '../i18n/utils';
 
 interface Props {
 	title?: string;
+	description?: string;
+	image?: string;
 }
 
-const { title = "Danish West Indies" } = Astro.props;
+const { 
+	title = "Danish West Indies - Research Portal",
+	description = "Explore the Danish West Indies research portal, a comprehensive collection of historical records, thesis works, and interactive exhibits.",
+	image = "/favicon.svg" // Fallback to favicon if no other image is provided
+} = Astro.props;
 const lang = getLangFromUrl(Astro.url);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url);
+
+// Hreflang logic for 13 locales
+const locales = ["en", "da", "es", "fr", "nl", "ak", "de", "nh", "yo", "ig", "kg", "sv", "pt"];
+let basePath = Astro.url.pathname;
+if (lang !== "en" && basePath.startsWith(`/${lang}`)) {
+	basePath = basePath.replace(`/${lang}`, '') || '/';
+}
+// Breadcrumb Schema Logic
+const pathParts = canonicalURL.pathname.split('/').filter(p => p !== '' && !locales.includes(p));
+const breadcrumbItems = pathParts.map((part, index) => {
+	const prefix = lang === "en" ? "" : `/${lang}`;
+	const pathSegment = pathParts.slice(0, index + 1).join('/');
+	const url = new URL(`${prefix}/${pathSegment}`, Astro.site || Astro.url.origin).href;
+	return {
+		"@type": "ListItem",
+		"position": index + 2,
+		"name": part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' '),
+		"item": url
+	};
+});
+
+const breadcrumbSchema = {
+	"@context": "https://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement": [
+		{
+			"@type": "ListItem",
+			"position": 1,
+			"name": "Home",
+			"item": new URL(lang === "en" ? "/" : `/${lang}`, Astro.site || Astro.url.origin).href
+		},
+		...breadcrumbItems
+	]
+};
 ---
 <!doctype html>
 <html lang={lang}>
@@ -20,7 +61,58 @@ const lang = getLangFromUrl(Astro.url);
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline';" />
+		
+		<!-- Preconnect to Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+		<!-- Advanced SEO & Browser Tags -->
+		<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+		<meta name="theme-color" content="#111111" />
+		
+		<!-- Canonical URL -->
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Multi-language hreflang tags -->
+		{locales.map(l => {
+			// Construct the localized path. 'en' is default (no prefix).
+			const localizedPath = l === "en" ? basePath : `/${l}${basePath === '/' ? '' : basePath}`;
+			const href = new URL(localizedPath, Astro.site || Astro.url.origin).href;
+			return <link rel="alternate" hreflang={l} href={href} />;
+		})}
+		<link rel="alternate" hreflang="x-default" href={new URL(basePath, Astro.site || Astro.url.origin).href} />
+
+		<!-- Primary Meta Tags -->
 		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL(image, Astro.site || Astro.url)} />
+		<meta property="og:locale" content={lang} />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content={Astro.url} />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content={new URL(image, Astro.site || Astro.url)} />
+
+		<!-- JSON-LD Schema -->
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "WebSite",
+			"name": "Danish West Indies - Research Portal",
+			"url": Astro.site?.toString() || Astro.url.origin,
+			"description": "Explore the comprehensive history of the Danish West Indies (1672-1917).",
+			"inLanguage": lang
+		})} />
+		<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
 	</head>
 	<body>
 		<Header />

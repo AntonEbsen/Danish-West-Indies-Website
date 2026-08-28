@@ -46,13 +46,22 @@ const jsonLd = {
   "homeLocation": location ? { "@type": "Place", "name": location } : undefined,
   "url": `https://danishwestindies.org/memorial/${entry.id}`
 };
+
+// Helper to identify erased/unnamed individuals
+const isErased = (name) => {
+	const lower = name.toLowerCase();
+	return lower.includes('unknown') || 
+		   lower.includes('unnamed') || 
+		   /^\d+\s+(boy|girl|man|woman|child|infant|male|female)/.test(lower) ||
+		   ['man', 'woman', 'boy', 'girl', 'infant', 'child', 'slave'].includes(lower);
+};
 ---
 
 <Layout title={`${name} - Memorial | Danish West Indies`}>
 	<!-- Linked Open Data (JSON-LD) -->
 	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
 	
-	<article class="profile animate-fade-in">
+	<article class={`profile animate-fade-in ${isErased(name) ? 'ghost-theme' : ''}`}>
 			<div class="profile-actions">
 				<a href="/memorial" class="back-link">← Back to Register</a>
 				<div class="action-buttons">
@@ -69,25 +78,34 @@ const jsonLd = {
 			<InteractiveCandle id={entry.id} name={name} />
 			<h1>
 				{name}
-				<button class="btn-speak" id="btn-speak-name" title="Speak their name" aria-label="Speak name aloud">
-					<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
-						<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-						<path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-					</svg>
-				</button>
+				{!isErased(name) && (
+					<button class="btn-speak" id="btn-speak-name" title="Speak their name" aria-label="Speak name aloud">
+						<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+							<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+							<path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+						</svg>
+					</button>
+				)}
 			</h1>
 			<div class="life-dates">
 				{yearOfBirth && <span>Born ~{yearOfBirth}</span>}
 				{yearOfBirth && yearOfDeath && <span class="separator">—</span>}
 				{yearOfDeath && <span>Died ~{yearOfDeath}</span>}
 			</div>
-			{audioRecording && (
+			{audioRecording && !isErased(name) && (
 				<div class="audio-player">
 					<p class="audio-label">Say Their Name:</p>
 					<audio controls src={audioRecording}></audio>
 				</div>
 			)}
 		</header>
+
+		{isErased(name) && (
+			<div class="erasure-notice">
+				<h3>Archival Erasure</h3>
+				<p>This individual's true name was stripped from them and not recorded in the colonial ledger. We memorialize them here to acknowledge their existence and the violence of their erasure.</p>
+			</div>
+		)}
 
 		<div class="profile-body">
 			<aside class="profile-details">
@@ -647,6 +665,42 @@ const jsonLd = {
 
 	.separator {
 		margin: 0 0.5rem;
+	}
+
+	/* Ghost Theme / Archival Erasure */
+	.ghost-theme .profile-header h1 {
+		color: rgba(255, 255, 255, 0.6);
+		font-style: italic;
+		letter-spacing: 2px;
+	}
+
+	.ghost-theme .candle-icon {
+		filter: grayscale(100%);
+		opacity: 0.2;
+	}
+
+	.erasure-notice {
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px dashed rgba(255, 255, 255, 0.2);
+		border-left: 4px solid rgba(255, 255, 255, 0.4);
+		padding: var(--space-md) var(--space-lg);
+		margin-bottom: var(--space-xl);
+		border-radius: 4px;
+	}
+
+	.erasure-notice h3 {
+		font-size: 0.9rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: rgba(255, 255, 255, 0.6);
+		margin-bottom: 0.5rem;
+	}
+
+	.erasure-notice p {
+		color: rgba(255, 255, 255, 0.8);
+		font-style: italic;
+		line-height: 1.6;
+		margin: 0;
 	}
 
 	.profile-body {

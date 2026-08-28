@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404: Page Not Found | Danish West Indies" description="The page you are looking for does not exist or has been moved.">
+	<div class="error-page animate-fade-in">
+		<h1>404</h1>
+		<h2>Page Not Found</h2>
+		<p>The historical record or page you are looking for has been lost to time, or the URL is incorrect.</p>
+		<div class="actions">
+			<a href="/" class="btn btn-primary">Return Home</a>
+			<a href="/history" class="btn btn-secondary">Explore History</a>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.error-page {
+		min-height: 60vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		padding: var(--space-xl) var(--space-sm);
+	}
+
+	h1 {
+		font-size: clamp(6rem, 15vw, 12rem);
+		color: var(--color-accent);
+		margin-bottom: 0;
+		line-height: 1;
+		text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+	}
+
+	h2 {
+		font-size: clamp(2rem, 5vw, 3rem);
+		margin-bottom: var(--space-md);
+		color: var(--color-text);
+	}
+
+	p {
+		color: var(--color-text-muted);
+		font-size: 1.2rem;
+		max-width: 600px;
+		margin-bottom: var(--space-xl);
+	}
+
+	.actions {
+		display: flex;
+		gap: var(--space-md);
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.btn {
+		display: inline-block;
+		padding: 0.8rem 1.5rem;
+		border-radius: 4px;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-size: 0.9rem;
+		transition: all var(--transition-fast);
+		text-decoration: none;
+	}
+
+	.btn-primary {
+		background-color: var(--color-accent);
+		color: var(--color-bg);
+	}
+
+	.btn-primary:hover {
+		background-color: var(--color-accent-hover);
+		color: var(--color-bg);
+	}
+
+	.btn-secondary {
+		border: 1px solid var(--color-accent);
+		color: var(--color-accent);
+	}
+
+	.btn-secondary:hover {
+		background-color: rgba(196, 167, 125, 0.1);
+	}
+</style>

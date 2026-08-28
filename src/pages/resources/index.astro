@@ -17,14 +17,30 @@ resources.sort((a, b) => a.data.title.localeCompare(b.data.title));
 		</header>
 		
 		<section class="special-feature animate-fade-in" style="animation-delay: 0.1s;">
-			<h2>Archival Pioneers</h2>
-			<a href="/resources/erik-gobel" class="feature-card">
-				<div class="feature-content">
-					<h3>Tribute to Erik Gøbel</h3>
-					<p>Explore the contributions of the archivist whose 36 years of work at Rigsarkivet unlocked the history of the Danish West Indies.</p>
-					<span class="read-more">Read Tribute →</span>
-				</div>
-			</a>
+			<h2>Archival & Academic Pioneers</h2>
+			<div class="pioneers-grid">
+				<a href="/resources/erik-gobel" class="feature-card">
+					<div class="feature-content">
+						<h3>Tribute to Erik Gøbel</h3>
+						<p>Explore the contributions of the archivist whose 36 years of work at Rigsarkivet unlocked the history of the Danish West Indies.</p>
+						<span class="read-more">Read Tribute →</span>
+					</div>
+				</a>
+				<a href="/resources/klas-ronnback" class="feature-card">
+					<div class="feature-content">
+						<h3>Tribute to Klas Rönnbäck</h3>
+						<p>Explore the quantitative methodologies of the Swedish economic historian who proved the foundational profitability of the transatlantic slave trade.</p>
+						<span class="read-more">Read Tribute →</span>
+					</div>
+				</a>
+				<a href="/resources/niklas-thode-jensen" class="feature-card">
+					<div class="feature-content">
+						<h3>Tribute to Niklas Thode Jensen</h3>
+						<p>Explore the historian's critical research on how colonial medicine and science were used as mechanisms of power and control.</p>
+						<span class="read-more">Read Tribute →</span>
+					</div>
+				</a>
+			</div>
 		</section>
 
 		<section class="resources-section animate-fade-in" style="animation-delay: 0.2s;">
@@ -104,12 +120,19 @@ resources.sort((a, b) => a.data.title.localeCompare(b.data.title));
 		padding: var(--space-xl);
 		text-decoration: none;
 		transition: all 0.3s ease;
+		height: 100%;
 	}
 
 	.feature-card:hover {
 		transform: translateY(-4px);
 		border-color: var(--color-accent);
 		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+	}
+
+	.pioneers-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: var(--space-lg);
 	}
 
 	.feature-content h3 {

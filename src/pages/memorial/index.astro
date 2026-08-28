@@ -18,6 +18,15 @@ const allTags = [...new Set(memorialEntries.flatMap(e => e.data.tags || []))].so
 const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
 const spotlightEntry = memorialEntries.length > 0 ? memorialEntries[dayOfYear % memorialEntries.length] : null;
 
+// Helper to identify erased/unnamed individuals
+const isErased = (name) => {
+	const lower = name.toLowerCase();
+	return lower.includes('unknown') || 
+		   lower.includes('unnamed') || 
+		   /^\d+\s+(boy|girl|man|woman|child|infant|male|female)/.test(lower) ||
+		   ['man', 'woman', 'boy', 'girl', 'infant', 'child', 'slave'].includes(lower);
+};
+
 // Prepare entries as JSON for client-side filtering and map
 const entriesData = memorialEntries.map(e => ({
   id: e.id,
@@ -143,8 +152,10 @@ const mapData = entriesData.filter(e => e.mapLat && e.mapLng).map(e => ({
 
 		<!-- Memorial Grid -->
 		<div class="memorial-grid" id="memorial-grid">
-			{memorialEntries.map((entry, index) => (
-				<a href={`/memorial/${entry.id}`} class="memorial-card scroll-animate" 
+			{memorialEntries.map((entry, index) => {
+				const erased = isErased(entry.data.name);
+				return (
+				<a href={`/memorial/${entry.id}`} class={`memorial-card scroll-animate ${erased ? 'ghost-profile' : ''}`} 
 					data-name={entry.data.name.toLowerCase()}
 					data-origin={(entry.data.origin || '').toLowerCase()}
 					data-location={(entry.data.location || '').toLowerCase()}
@@ -153,6 +164,7 @@ const mapData = entriesData.filter(e => e.mapLat && e.mapLng).map(e => ({
 					style="display: none;">
 					<div class="card-candle" aria-hidden="true">🕯</div>
 					<h3 class="name">{entry.data.name}</h3>
+					{erased && <span class="erasure-badge">Archival Erasure</span>}
 					<div class="details">
 						{entry.data.yearOfBirth && <p><strong>Born:</strong> ~{entry.data.yearOfBirth}</p>}
 						{entry.data.yearOfDeath && <p><strong>Died:</strong> ~{entry.data.yearOfDeath}</p>}
@@ -169,7 +181,7 @@ const mapData = entriesData.filter(e => e.mapLat && e.mapLng).map(e => ({
 					{entry.data.notes && <p class="notes">{entry.data.notes}</p>}
 					<span class="read-more">Read their story →</span>
 				</a>
-			))}
+			)})}
 			
 			{memorialEntries.length === 0 && (
 				<p class="empty-state">The register is currently being compiled.</p>
@@ -643,6 +655,42 @@ const mapData = entriesData.filter(e => e.mapLat && e.mapLng).map(e => ({
 
 	.memorial-card:hover .card-candle {
 		opacity: 0.8;
+	}
+
+	/* Ghost Profile / Archival Erasure */
+	.ghost-profile {
+		border-left-color: rgba(255, 255, 255, 0.2);
+		background-color: rgba(255, 255, 255, 0.01);
+		opacity: 0.85;
+	}
+
+	.ghost-profile:hover {
+		border-left-color: rgba(255, 255, 255, 0.6);
+		box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+	}
+
+	.ghost-profile .name {
+		color: rgba(255, 255, 255, 0.5);
+		font-style: italic;
+		letter-spacing: 1px;
+	}
+
+	.ghost-profile .card-candle {
+		filter: grayscale(100%);
+		opacity: 0.15;
+	}
+
+	.erasure-badge {
+		display: inline-block;
+		font-size: 0.65rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		background: rgba(255, 255, 255, 0.05);
+		color: rgba(255, 255, 255, 0.5);
+		padding: 0.2rem 0.5rem;
+		border-radius: 3px;
+		margin-bottom: var(--space-sm);
+		border: 1px dashed rgba(255, 255, 255, 0.2);
 	}
 
 	@keyframes flicker {

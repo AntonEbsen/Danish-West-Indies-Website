@@ -7,12 +7,15 @@ const historyArticles = await getCollection('history');
 historyArticles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<Layout title="History | Danish West Indies">
+<Layout 
+	title="Colonial History | Danish West Indies"
+	description="Explore the timeline of the Danish West Indies. Read historical articles about the transatlantic slave trade, colonial era events, and the lives of enslaved populations."
+>
 	<div class="page-container animate-fade-in">
 		<header class="page-header">
 			<span class="label">Historical Portal</span>
 			<h1>Colonial History</h1>
-			<p class="subtitle">Exploring the timeline, events, and lives affected in the Danish West Indies.</p>
+			<p class="subtitle">An archive exploring the timeline, historical events, and enslaved populations affected by the transatlantic slave trade in the Danish West Indies.</p>
 		</header>
 		
 		<section class="articles-section animate-fade-in" style="animation-delay: 0.2s;">

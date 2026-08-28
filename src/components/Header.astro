@@ -27,8 +27,8 @@ const currentLangName = languages[lang];
 ---
 <header class="site-header">
   <div class="container header-container">
-    <a href={translatePath('/')} class="logo">Danish West Indies</a>
-    <nav class="main-nav">
+    <a href={translatePath('/')} class="logo" aria-label="Home">Danish West Indies</a>
+    <nav class="main-nav" aria-label="Main Navigation">
       <ul>
         <li><a href={translatePath('/history')}>{t('nav.history')}</a></li>
         <li><a href={translatePath('/memorial')}>{t('nav.memorial')}</a></li>
@@ -41,7 +41,7 @@ const currentLangName = languages[lang];
       </ul>
       
       <div class="lang-dropdown">
-        <button class="lang-btn">{currentLangName} ▼</button>
+        <button class="lang-btn" aria-haspopup="true" aria-expanded="false" aria-label="Select Language">{currentLangName} ▼</button>
         <div class="lang-menu">
           <a href={enUrl} class={lang === 'en' ? 'active' : ''}>English</a>
           <a href={daUrl} class={lang === 'da' ? 'active' : ''}>Dansk</a>

@@ -1,0 +1,404 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Tribute to Niklas Thode Jensen | Danish West Indies" description="Honoring the work of Niklas Thode Jensen, a historian who explored the intersection of medicine, science, and power in the Danish West Indies.">
+	<div class="jensen-page">
+		<header class="page-header animate-fade-in">
+			<a href="/resources" class="back-link">← Back to Resources</a>
+			<h1>Niklas Thode Jensen</h1>
+			<p class="subtitle">The Historian of Colonial Medicine & Science.</p>
+		</header>
+
+		<!-- Tribute Section -->
+		<section class="tribute-section animate-fade-in" style="animation-delay: 0.2s;">
+			<div class="card tribute-card">
+				<div class="tribute-content">
+					<h2>Medicine, Power, and the Enslaved</h2>
+					<p>
+						Niklas Thode Jensen's research offers a chilling perspective on the Danish West Indies by examining the colonial system through the lens of medicine and science. 
+						His work reveals how healthcare on the plantations was rarely an act of humanitarianism; rather, it was a calculated mechanism of power designed to preserve valuable "property."
+					</p>
+					<p>
+						By analyzing medical ledgers, mortality rates, and the practices of colonial physicians and the Moravian brethren, Jensen exposes how the bodies of enslaved Africans were treated as economic units to be maintained, repaired, or discarded based on brutal financial logic.
+					</p>
+					<a href="https://saxoinstitute.ku.dk/staff/?pure=en/persons/282367" target="_blank" rel="noopener noreferrer" class="btn-external">
+						View his Profile <span class="icon">↗</span>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- The Medical Ledger Feature -->
+		<section class="lens-section animate-fade-in" style="animation-delay: 0.4s;">
+			<h2>The Medical Ledger</h2>
+			<p>Explore how colonial physicians documented the illnesses of the enslaved not as human suffering, but as inventory depreciation.</p>
+			
+			<div class="lens-container">
+				<div class="lens-image-wrapper">
+					<img src="/images/colonial_ledger.jpg" alt="Original Colonial Medical Ledger" class="ledger-background" />
+					<div id="lens-overlay" class="lens-overlay">
+						<div class="decoded-text">
+							<h3>Plantation Medical Record (1822)</h3>
+							<ul>
+								<li><strong>Patient:</strong> "Quamina" (Field Hand)</li>
+								<li><strong>Diagnosis:</strong> Cachexia Africana (Malnutrition/Pica)</li>
+								<li><strong>Treatment:</strong> Iron restraints to prevent eating dirt</li>
+								<li><strong>Physician's Note:</strong> "Loss of labor value estimated at 20 Rigsdaler."</li>
+							</ul>
+							<p><em>Extrapolated from Jensen's Research</em></p>
+						</div>
+					</div>
+				</div>
+				<div class="lens-controls">
+					<label class="toggle-switch">
+						<input type="checkbox" id="lens-toggle">
+						<span class="slider"></span>
+						<span class="toggle-label">Apply the Medical Lens</span>
+					</label>
+				</div>
+			</div>
+		</section>
+
+		<!-- Bibliography -->
+		<section class="bibliography-section animate-fade-in" style="animation-delay: 0.6s;">
+			<h2>The Jensen Library</h2>
+			<p>Key publications examining health, religion, and power in the Danish colonies.</p>
+			
+			<div class="book-grid">
+				<a href="#" class="book-card">
+					<div class="book-cover">2012</div>
+					<h3>For the Health of the Enslaved</h3>
+					<p>A seminal work exploring the intersection of slavery, medicine, and colonial power in the Danish West Indies between 1803 and 1848.</p>
+				</a>
+				
+				<a href="#" class="book-card">
+					<div class="book-cover">2007</div>
+					<h3>The Moravian Brethren and the Enslaved</h3>
+					<p>Research detailing the complex role of Moravian missionaries, who provided education and healthcare while simultaneously owning enslaved people and upholding the colonial order.</p>
+				</a>
+
+				<a href="#" class="book-card">
+					<div class="book-cover">2018</div>
+					<h3>Science and Empire</h3>
+					<p>Journal articles investigating how botanical and medical sciences were leveraged to strengthen Denmark's economic grip on the Caribbean.</p>
+				</a>
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const lensToggle = document.getElementById('lens-toggle') as HTMLInputElement;
+		const lensOverlay = document.getElementById('lens-overlay');
+		
+		lensToggle?.addEventListener('change', (e) => {
+			const target = e.target as HTMLInputElement;
+			if (target.checked) {
+				lensOverlay?.classList.add('active');
+			} else {
+				lensOverlay?.classList.remove('active');
+			}
+		});
+	});
+</script>
+
+<style>
+	.jensen-page {
+		max-width: 1000px;
+		margin: 0 auto;
+		padding-bottom: var(--space-xl);
+	}
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-md);
+		color: var(--color-accent);
+		text-decoration: none;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-size: 0.85rem;
+		transition: color 0.3s;
+	}
+
+	.back-link:hover {
+		color: #d4b88f;
+	}
+
+	.page-header h1 {
+		color: var(--color-accent);
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.2rem;
+		font-style: italic;
+	}
+
+	/* Card Base */
+	.card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		padding: var(--space-xl);
+		border-radius: 8px;
+	}
+
+	h2 {
+		color: var(--color-accent);
+		margin-bottom: var(--space-md);
+		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
+		padding-bottom: 0.5rem;
+	}
+
+	/* Tribute */
+	.tribute-section {
+		margin-bottom: var(--space-2xl);
+	}
+
+	.tribute-content p {
+		margin-bottom: var(--space-md);
+		line-height: 1.7;
+		font-size: 1.1rem;
+		color: rgba(255, 255, 255, 0.9);
+	}
+
+	.btn-external {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: var(--space-md);
+		background: rgba(196, 167, 125, 0.1);
+		border: 1px solid var(--color-accent);
+		color: var(--color-accent);
+		padding: 0.8rem 1.5rem;
+		border-radius: 30px;
+		text-decoration: none;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-size: 0.9rem;
+		transition: all 0.3s ease;
+	}
+
+	.btn-external:hover {
+		background: var(--color-accent);
+		color: #000;
+	}
+
+	/* Archivist Lens */
+	.lens-section {
+		margin-bottom: var(--space-2xl);
+	}
+
+	.lens-section > p {
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-lg);
+	}
+
+	.lens-container {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		border-radius: 8px;
+		padding: var(--space-lg);
+	}
+
+	.lens-image-wrapper {
+		position: relative;
+		width: 100%;
+		border-radius: 4px;
+		overflow: hidden;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+	}
+
+	.ledger-background {
+		width: 100%;
+		height: auto;
+		max-height: 400px;
+		object-fit: cover;
+		display: block;
+		filter: contrast(1.2) sepia(0.3);
+	}
+
+	.lens-overlay {
+		position: absolute;
+		top: 0; left: 0; right: 0; bottom: 0;
+		background: rgba(0,0,0,0.85);
+		backdrop-filter: blur(8px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.8s ease;
+	}
+
+	.lens-overlay.active {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.decoded-text {
+		background: #f4ecd8;
+		color: #2b2520;
+		padding: 2rem;
+		border-radius: 4px;
+		border: 2px solid #c4a77d;
+		font-family: "Courier New", Courier, monospace;
+		max-width: 80%;
+		box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+		transform: translateY(20px);
+		transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	}
+
+	.lens-overlay.active .decoded-text {
+		transform: translateY(0);
+	}
+
+	.decoded-text h3 {
+		font-family: var(--font-heading);
+		margin-bottom: 1rem;
+		border-bottom: 1px solid rgba(43, 37, 32, 0.3);
+		padding-bottom: 0.5rem;
+	}
+
+	.decoded-text ul {
+		list-style: none;
+		margin-bottom: 1rem;
+	}
+
+	.decoded-text li {
+		margin-bottom: 0.5rem;
+		font-size: 1.1rem;
+	}
+
+	.decoded-text p {
+		font-style: italic;
+		font-size: 0.9rem;
+		text-align: right;
+		opacity: 0.7;
+	}
+
+	.lens-controls {
+		margin-top: var(--space-lg);
+		display: flex;
+		justify-content: center;
+	}
+
+	/* Toggle Switch */
+	.toggle-switch {
+		position: relative;
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+	}
+
+	.toggle-switch input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.slider {
+		position: relative;
+		display: inline-block;
+		width: 50px;
+		height: 24px;
+		background-color: rgba(255,255,255,0.2);
+		border-radius: 24px;
+		transition: .4s;
+		margin-right: 15px;
+	}
+
+	.slider:before {
+		position: absolute;
+		content: "";
+		height: 18px;
+		width: 18px;
+		left: 3px;
+		bottom: 3px;
+		background-color: white;
+		border-radius: 50%;
+		transition: .4s;
+	}
+
+	input:checked + .slider {
+		background-color: var(--color-accent);
+	}
+
+	input:checked + .slider:before {
+		transform: translateX(26px);
+		background-color: #000;
+	}
+
+	.toggle-label {
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+		font-size: 1.2rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	/* Bibliography */
+	.bibliography-section > p {
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-lg);
+	}
+
+	.book-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: var(--space-lg);
+	}
+
+	.book-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		padding: var(--space-lg);
+		border-radius: 8px;
+		text-decoration: none;
+		color: var(--color-text);
+		transition: all 0.3s ease;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.book-card:hover {
+		transform: translateY(-5px);
+		border-color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.05);
+	}
+
+	.book-cover {
+		background: var(--color-accent);
+		color: #000;
+		font-family: var(--font-heading);
+		font-size: 1.5rem;
+		font-weight: bold;
+		padding: 2rem 1rem;
+		text-align: center;
+		border-radius: 4px;
+		margin-bottom: var(--space-md);
+		box-shadow: inset 5px 0 10px rgba(0,0,0,0.2);
+	}
+
+	.book-card h3 {
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+		font-size: 1.2rem;
+		line-height: 1.4;
+	}
+
+	.book-card p {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.95rem;
+		line-height: 1.5;
+		margin-top: auto;
+	}
+</style>
