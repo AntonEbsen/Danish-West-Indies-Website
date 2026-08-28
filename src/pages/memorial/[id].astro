@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { name, yearOfBirth, yearOfDeath, origin, location, island, plantation, biography, notes, tags, mapLat, mapLng, images, source, relationships, descendantStories, audioRecording } = entry.data;
+const { name, yearOfBirth, yearOfDeath, origin, location, island, plantation, biography, notes, tags, mapLat, mapLng, images, source, relationships, descendantStories, audioRecording, tributes, artifact3d } = entry.data;
 
 // Get related entries (same tags)
 const allEntries = await getCollection('memorial');
@@ -158,6 +158,39 @@ const relatedEntries = allEntries
 					</section>
 				)}
 
+				{artifact3d && (
+					<section class="artifact-section">
+						<h2>Historical Artifact</h2>
+						<div class="model-container">
+							<model-viewer 
+								src={artifact3d} 
+								alt={`3D model related to ${name}`} 
+								auto-rotate 
+								camera-controls 
+								shadow-intensity="1"
+								class="model-viewer-element">
+							</model-viewer>
+						</div>
+					</section>
+				)}
+
+				{tributes && tributes.length > 0 && (
+					<section class="tributes-section">
+						<h2>Community Tributes</h2>
+						<div class="tributes-list">
+							{tributes.map(tribute => (
+								<div class="tribute-card">
+									<p>"{tribute.text}"</p>
+									<footer>— {tribute.author}</footer>
+								</div>
+							))}
+						</div>
+						<div class="leave-tribute-cta">
+							<a href={`mailto:curator@danishwestindies.org?subject=Tribute for ${name}`} class="btn-secondary">Leave a Tribute</a>
+						</div>
+					</section>
+				)}
+
 				{images && images.length > 0 && (
 					<section class="gallery-section">
 						<h2>Archival Records</h2>
@@ -253,6 +286,10 @@ const relatedEntries = allEntries
 		});
 	}
 </script>
+
+{artifact3d && (
+	<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+)}
 
 <style>
 	.back-link {
@@ -474,11 +511,11 @@ const relatedEntries = allEntries
 		color: var(--color-text);
 	}
 
-	.stories-section, .context-section, .location-section, .gallery-section {
+	.stories-section, .context-section, .location-section, .gallery-section, .artifact-section, .tributes-section {
 		margin-top: var(--space-lg);
 	}
 
-	.stories-section h2, .context-section h2 {
+	.stories-section h2, .context-section h2, .artifact-section h2, .tributes-section h2 {
 		font-size: 1.3rem;
 		margin-bottom: var(--space-md);
 		color: var(--color-accent);
@@ -524,6 +561,70 @@ const relatedEntries = allEntries
 		line-height: 1.6;
 		color: var(--color-text-muted);
 		margin: 0;
+	}
+
+	.model-container {
+		width: 100%;
+		height: 400px;
+		background: var(--color-bg-light);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		overflow: hidden;
+	}
+
+	.model-viewer-element {
+		width: 100%;
+		height: 100%;
+		--poster-color: transparent;
+	}
+
+	.tributes-list {
+		display: grid;
+		gap: var(--space-md);
+		margin-bottom: var(--space-md);
+	}
+
+	.tribute-card {
+		background: rgba(196, 167, 125, 0.05);
+		border: 1px solid rgba(196, 167, 125, 0.2);
+		border-radius: 6px;
+		padding: var(--space-md);
+	}
+
+	.tribute-card p {
+		font-size: 1.05rem;
+		font-style: italic;
+		line-height: 1.7;
+		margin-bottom: var(--space-sm);
+	}
+
+	.tribute-card footer {
+		font-size: 0.9rem;
+		color: var(--color-accent);
+		text-align: right;
+	}
+
+	.leave-tribute-cta {
+		text-align: center;
+		margin-top: var(--space-md);
+	}
+
+	.btn-secondary {
+		display: inline-block;
+		padding: 0.6rem 1.2rem;
+		border-radius: 4px;
+		font-weight: 500;
+		transition: all var(--transition-fast);
+		background-color: transparent;
+		color: var(--color-accent);
+		border: 1px solid var(--color-accent);
+		text-decoration: none;
+		font-family: var(--font-body);
+		font-size: 0.9rem;
+	}
+
+	.btn-secondary:hover {
+		background-color: rgba(196, 167, 125, 0.1);
 	}
 
 	.gallery-grid {

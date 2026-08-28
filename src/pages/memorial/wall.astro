@@ -1,0 +1,154 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import AmbientSound from '../../components/AmbientSound.astro';
+
+const allEntries = await getCollection('memorial');
+const names = allEntries.map(e => e.data.name);
+---
+
+<Layout title="Wall of Names - Memorial Register | Danish West Indies">
+	<div class="wall-page">
+		<div class="wall-header">
+			<a href="/memorial" class="back-link">← Back to Register</a>
+			<h1>Wall of Names</h1>
+			<p class="wall-subtitle">In remembrance of every life.</p>
+			<p class="wall-count">{names.length} souls remembered</p>
+		</div>
+
+		<div class="wall-container" id="wall-container">
+			<div class="wall-scroll" id="wall-scroll">
+				{names.map(name => (
+					<div class="wall-name">{name}</div>
+				))}
+				{/* Duplicate for seamless loop */}
+				{names.map(name => (
+					<div class="wall-name">{name}</div>
+				))}
+			</div>
+		</div>
+
+		<div class="wall-footer">
+			<p>Each name represents a human life — with hopes, fears, loves, and a story that deserves to be told.</p>
+		</div>
+	</div>
+
+	<AmbientSound />
+</Layout>
+
+<style>
+	.wall-page {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		background: #050505;
+		position: relative;
+		overflow: hidden;
+	}
+
+	/* Subtle vignette effect */
+	.wall-page::before {
+		content: '';
+		position: fixed;
+		top: 0; left: 0; right: 0; bottom: 0;
+		background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+		pointer-events: none;
+		z-index: 2;
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-sm);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+		position: relative;
+		z-index: 3;
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.wall-header {
+		text-align: center;
+		padding: var(--space-xl) 0 var(--space-lg);
+		position: relative;
+		z-index: 3;
+	}
+
+	.wall-header h1 {
+		font-size: clamp(2rem, 5vw, 3.5rem);
+		color: var(--color-accent);
+		margin-bottom: var(--space-xs);
+		letter-spacing: 3px;
+	}
+
+	.wall-subtitle {
+		font-size: 1.1rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+		font-family: var(--font-heading);
+		margin-bottom: var(--space-xs);
+	}
+
+	.wall-count {
+		font-size: 0.9rem;
+		color: rgba(196, 167, 125, 0.6);
+		text-transform: uppercase;
+		letter-spacing: 2px;
+	}
+
+	.wall-container {
+		width: 100%;
+		max-width: 800px;
+		height: 55vh;
+		overflow: hidden;
+		position: relative;
+		z-index: 1;
+		mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+		-webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+	}
+
+	.wall-scroll {
+		animation: scrollNames 60s linear infinite;
+	}
+
+	@keyframes scrollNames {
+		0% { transform: translateY(0); }
+		100% { transform: translateY(-50%); }
+	}
+
+	.wall-name {
+		text-align: center;
+		font-family: var(--font-heading);
+		font-size: clamp(1.2rem, 3vw, 1.8rem);
+		color: rgba(212, 212, 212, 0.7);
+		padding: 0.8rem 0;
+		letter-spacing: 1px;
+		transition: all 0.5s ease;
+		cursor: default;
+	}
+
+	.wall-name:hover {
+		color: var(--color-accent);
+		text-shadow: 0 0 15px rgba(196, 167, 125, 0.4);
+		transform: scale(1.05);
+	}
+
+	.wall-footer {
+		text-align: center;
+		padding: var(--space-lg) var(--space-md);
+		max-width: 500px;
+		position: relative;
+		z-index: 3;
+	}
+
+	.wall-footer p {
+		font-size: 0.95rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+		line-height: 1.7;
+	}
+</style>

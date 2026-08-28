@@ -26,5 +26,15 @@
       "id": "queen-mary",
       "type": "fellow leader"
     }
-  ]
+  ],
+  "significantDates": [
+    "07-03"
+  ],
+  "tributes": [
+    {
+      "author": "A Visitor",
+      "text": "Your courage changed history forever."
+    }
+  ],
+  "artifact3d": "https://modelviewer.dev/shared-assets/models/Astronaut.glb"
 }

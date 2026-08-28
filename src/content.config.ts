@@ -56,6 +56,22 @@ const memorialCollection = defineCollection({
       text: z.string()
     })).optional(),
     audioRecording: z.string().optional(),
+    tributes: z.array(z.object({
+      author: z.string(),
+      text: z.string()
+    })).optional(),
+    artifact3d: z.string().optional(),
+    significantDates: z.array(z.string()).optional(),
+  }),
+});
+
+const journeysCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/journeys" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    coverImage: z.string().optional(),
+    featuredProfiles: z.array(z.string()).optional(),
   }),
 });
 
@@ -64,4 +80,5 @@ export const collections = {
   'resources': resourcesCollection,
   'thesis': thesisCollection,
   'memorial': memorialCollection,
+  'journeys': journeysCollection,
 };

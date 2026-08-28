@@ -14,5 +14,8 @@
   ],
   "mapLat": 18.3358,
   "mapLng": -64.7281,
-  "source": "Danish National Archives (Placeholder)"
+  "source": "Danish National Archives (Placeholder)",
+  "significantDates": [
+    "11-23"
+  ]
 }

@@ -1,0 +1,104 @@
+---
+import { getCollection } from 'astro:content';
+
+const allEntries = await getCollection('memorial');
+
+// Get today's date in MM-DD format
+const now = new Date();
+const todayStr = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+// Find entries with a significant date matching today
+const todayEntries = allEntries.filter(entry => 
+  entry.data.significantDates?.includes(todayStr)
+);
+---
+
+{todayEntries.length > 0 ? (
+  <div class="on-this-day">
+    <div class="otd-icon">📅</div>
+    <h2 class="otd-heading">On This Day</h2>
+    <div class="otd-entries">
+      {todayEntries.map(entry => (
+        <a href={`/memorial/${entry.id}`} class="otd-card">
+          <span class="otd-name">{entry.data.name}</span>
+          <span class="otd-notes">{entry.data.notes}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+) : (
+  <div class="on-this-day on-this-day--quiet">
+    <div class="otd-icon">🕯️</div>
+    <p class="otd-reflection">Today, we remember all those whose names have been lost to history. Their lives mattered.</p>
+  </div>
+)}
+
+<style>
+  .on-this-day {
+    background: rgba(196, 167, 125, 0.06);
+    border: 1px solid rgba(196, 167, 125, 0.2);
+    border-radius: 8px;
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+    text-align: center;
+  }
+
+  .otd-icon {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .otd-heading {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-accent);
+    margin-bottom: var(--space-sm);
+  }
+
+  .otd-entries {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+
+  .otd-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(196, 167, 125, 0.08);
+    border: 1px solid rgba(196, 167, 125, 0.15);
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    max-width: 300px;
+  }
+
+  .otd-card:hover {
+    background: rgba(196, 167, 125, 0.15);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  .otd-name {
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.2rem;
+  }
+
+  .otd-notes {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+  }
+
+  .otd-reflection {
+    font-style: italic;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+</style>

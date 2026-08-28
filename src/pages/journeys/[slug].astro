@@ -1,0 +1,233 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const journeys = await getCollection('journeys');
+  return journeys.map(journey => ({
+    params: { slug: journey.id },
+    props: { journey },
+  }));
+}
+
+const { journey } = Astro.props;
+const { Content } = await render(journey);
+
+// Load featured profiles
+const allMemorial = await getCollection('memorial');
+const featuredProfiles = journey.data.featuredProfiles
+  ? allMemorial.filter(e => journey.data.featuredProfiles!.includes(e.id))
+  : [];
+---
+
+<Layout title={`${journey.data.title} | Educational Journeys`}>
+	<article class="journey-article animate-fade-in">
+		<a href="/journeys" class="back-link">← All Journeys</a>
+
+		<header class="journey-header">
+			<span class="journey-label">Educational Journey</span>
+			<h1>{journey.data.title}</h1>
+			<p class="journey-desc">{journey.data.description}</p>
+		</header>
+
+		<div class="journey-content">
+			<Content />
+		</div>
+
+		{featuredProfiles.length > 0 && (
+			<section class="featured-section">
+				<h2>Featured Individuals</h2>
+				<p class="featured-intro">Meet the people at the heart of this story.</p>
+				<div class="featured-grid">
+					{featuredProfiles.map(entry => (
+						<a href={`/memorial/${entry.id}`} class="featured-card">
+							<div class="fc-candle" aria-hidden="true">🕯</div>
+							<h3>{entry.data.name}</h3>
+							{entry.data.notes && <p>{entry.data.notes}</p>}
+							<span class="fc-link">View Profile →</span>
+						</a>
+					))}
+				</div>
+			</section>
+		)}
+
+		<div class="journey-footer">
+			<a href="/journeys" class="btn-secondary">← Explore More Journeys</a>
+			<a href="/memorial" class="btn-secondary">Visit the Memorial Register →</a>
+		</div>
+	</article>
+</Layout>
+
+<style>
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-lg);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.journey-header {
+		text-align: center;
+		padding-bottom: var(--space-lg);
+		margin-bottom: var(--space-lg);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.journey-label {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1);
+		padding: 0.3rem 0.8rem;
+		border-radius: 20px;
+		margin-bottom: var(--space-sm);
+	}
+
+	.journey-header h1 {
+		font-size: clamp(2rem, 5vw, 3.5rem);
+		margin-bottom: var(--space-sm);
+	}
+
+	.journey-desc {
+		font-size: 1.1rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+		font-family: var(--font-heading);
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.journey-content {
+		max-width: 700px;
+		margin: 0 auto var(--space-xl);
+	}
+
+	.journey-content :global(h2) {
+		font-size: 1.6rem;
+		color: var(--color-accent);
+		margin-top: var(--space-lg);
+		margin-bottom: var(--space-md);
+	}
+
+	.journey-content :global(h3) {
+		font-size: 1.3rem;
+		color: var(--color-text);
+		margin-top: var(--space-md);
+		margin-bottom: var(--space-sm);
+	}
+
+	.journey-content :global(p) {
+		font-size: 1.05rem;
+		line-height: 1.9;
+		color: var(--color-text);
+		margin-bottom: var(--space-md);
+	}
+
+	.journey-content :global(blockquote) {
+		border-left: 3px solid var(--color-accent);
+		padding-left: var(--space-md);
+		margin: var(--space-md) 0;
+		font-style: italic;
+		color: var(--color-text-muted);
+	}
+
+	.journey-content :global(strong) {
+		color: var(--color-accent);
+	}
+
+	.featured-section {
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--space-lg);
+		margin-bottom: var(--space-xl);
+	}
+
+	.featured-section h2 {
+		text-align: center;
+		margin-bottom: var(--space-xs);
+	}
+
+	.featured-intro {
+		text-align: center;
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-lg);
+	}
+
+	.featured-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+		gap: var(--space-md);
+	}
+
+	.featured-card {
+		display: block;
+		background: var(--color-bg-light);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: var(--space-md);
+		text-decoration: none;
+		color: inherit;
+		text-align: center;
+		transition: all var(--transition-fast);
+	}
+
+	.featured-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+		border-color: var(--color-accent);
+	}
+
+	.fc-candle {
+		font-size: 1.5rem;
+		margin-bottom: var(--space-xs);
+	}
+
+	.featured-card h3 {
+		font-size: 1.2rem;
+		margin-bottom: var(--space-xs);
+	}
+
+	.featured-card p {
+		font-size: 0.9rem;
+		color: var(--color-text-muted);
+		line-height: 1.5;
+		margin-bottom: var(--space-sm);
+	}
+
+	.fc-link {
+		font-size: 0.85rem;
+		color: var(--color-accent);
+		font-weight: 600;
+	}
+
+	.journey-footer {
+		display: flex;
+		justify-content: center;
+		gap: var(--space-md);
+		flex-wrap: wrap;
+	}
+
+	.btn-secondary {
+		display: inline-block;
+		padding: 0.6rem 1.2rem;
+		border-radius: 4px;
+		font-weight: 500;
+		transition: all var(--transition-fast);
+		background-color: transparent;
+		color: var(--color-accent);
+		border: 1px solid var(--color-accent);
+		text-decoration: none;
+		font-family: var(--font-body);
+		font-size: 0.9rem;
+	}
+
+	.btn-secondary:hover {
+		background-color: rgba(196, 167, 125, 0.1);
+	}
+</style>
