@@ -58,6 +58,34 @@ const featuredProfiles = journey.data.featuredProfiles
 	</article>
 </Layout>
 
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Scrollytelling Intersection Observer
+		const contentElements = document.querySelectorAll('.journey-content p, .journey-content h2, .journey-content h3, .journey-content blockquote, .journey-content img, .journey-content ul, .journey-content ol');
+		
+		// Set initial state
+		contentElements.forEach(el => {
+			el.classList.add('scrolly-item');
+		});
+
+		const observer = new IntersectionObserver((entries, observer) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('is-visible');
+					// Unobserve after animating in to prevent re-triggering
+					observer.unobserve(entry.target);
+				}
+			});
+		}, {
+			root: null,
+			rootMargin: '0px 0px -10% 0px',
+			threshold: 0.1
+		});
+
+		contentElements.forEach(el => observer.observe(el));
+	});
+</script>
+
 <style>
 	.back-link {
 		display: inline-block;
@@ -136,6 +164,25 @@ const featuredProfiles = journey.data.featuredProfiles
 		margin: var(--space-md) 0;
 		font-style: italic;
 		color: var(--color-text-muted);
+	}
+
+	.journey-content :global(.journey-content a) {
+		color: var(--color-accent);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+
+	/* Scrollytelling animations */
+	:global(.scrolly-item) {
+		opacity: 0;
+		transform: translateY(30px);
+		transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+		will-change: opacity, transform;
+	}
+
+	:global(.scrolly-item.is-visible) {
+		opacity: 1;
+		transform: translateY(0);
 	}
 
 	.journey-content :global(strong) {

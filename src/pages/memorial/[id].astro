@@ -53,12 +53,17 @@ const jsonLd = {
 	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
 	
 	<article class="profile animate-fade-in">
-		<div class="profile-actions">
-			<a href="/memorial" class="back-link">← Back to Register</a>
-			<button id="btn-save-register" class="btn-save" data-id={entry.id} title="Save to My Register">
-				<span class="icon">🔖</span> <span class="text">Save to My Register</span>
-			</button>
-		</div>
+			<div class="profile-actions">
+				<a href="/memorial" class="back-link">← Back to Register</a>
+				<div class="action-buttons">
+					<button id="btn-share-card" class="btn-share" title="Generate Shareable Card">
+						<span class="icon">📸</span> <span class="text">Share Memory</span>
+					</button>
+					<button id="btn-save-register" class="btn-save" data-id={entry.id} title="Save to My Register">
+						<span class="icon">🔖</span> <span class="text">Save to My Register</span>
+					</button>
+				</div>
+			</div>
 
 		<header class="profile-header">
 			<InteractiveCandle id={entry.id} name={name} />
@@ -381,8 +386,27 @@ const jsonLd = {
 			</section>
 		)}
 	</article>
+
+	<!-- Hidden Template for Social Media Share Card -->
+	<div id="share-card-template" class="share-card-template" aria-hidden="true">
+		<div class="sc-content">
+			<div class="sc-candle">🕯</div>
+			<h2 class="sc-name">{name}</h2>
+			<div class="sc-dates">
+				{yearOfBirth && <span>Born ~{yearOfBirth}</span>}
+				{yearOfBirth && yearOfDeath && <span class="separator">—</span>}
+				{yearOfDeath && <span>Died ~{yearOfDeath}</span>}
+			</div>
+			{location && <div class="sc-location">{location}</div>}
+			<div class="sc-footer">
+				<span class="sc-brand">Danish West Indies Memorial Register</span>
+				<span class="sc-url">danishwestindies.org</span>
+			</div>
+		</div>
+	</div>
 </Layout>
 
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js" is:inline></script>
 <script define:vars={{ name }}>
 	const citeBtn = document.getElementById('cite-btn');
 	const citeMsg = document.getElementById('cite-msg');
@@ -459,6 +483,48 @@ const jsonLd = {
 	} else if (speakBtn) {
 		speakBtn.style.display = 'none';
 	}
+
+	// Share Card Generation
+	const shareBtn = document.getElementById('btn-share-card');
+	const shareTemplate = document.getElementById('share-card-template');
+
+	if (shareBtn && shareTemplate) {
+		shareBtn.addEventListener('click', async () => {
+			if (typeof window.html2canvas === 'undefined') {
+				alert('Share card generator is still loading. Please try again in a moment.');
+				return;
+			}
+			
+			// Temporarily show the template off-screen
+			shareTemplate.style.display = 'flex';
+			
+			const originalText = shareBtn.querySelector('.text').textContent;
+			shareBtn.querySelector('.text').textContent = 'Generating...';
+			shareBtn.style.opacity = '0.5';
+
+			try {
+				const canvas = await window.html2canvas(shareTemplate, {
+					backgroundColor: '#050505',
+					scale: 2, // High resolution
+					logging: false
+				});
+				
+				// Create download link
+				const link = document.createElement('a');
+				link.download = `memorial-${name.replace(/\s+/g, '-').toLowerCase()}.png`;
+				link.href = canvas.toDataURL('image/png');
+				link.click();
+			} catch (err) {
+				console.error('Error generating share card:', err);
+				alert('Sorry, there was an error generating the image.');
+			} finally {
+				// Hide template again
+				shareTemplate.style.display = 'none';
+				shareBtn.querySelector('.text').textContent = originalText;
+				shareBtn.style.opacity = '1';
+			}
+		});
+	}
 </script>
 
 {relationships && relationships.length > 0 && (
@@ -475,6 +541,13 @@ const jsonLd = {
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: var(--space-md);
+		flex-wrap: wrap;
+		gap: var(--space-md);
+	}
+
+	.action-buttons {
+		display: flex;
+		gap: var(--space-sm);
 	}
 
 	.back-link {
@@ -488,7 +561,7 @@ const jsonLd = {
 		color: var(--color-accent);
 	}
 
-	.btn-save {
+	.btn-save, .btn-share {
 		background: rgba(196, 167, 125, 0.05);
 		border: 1px solid rgba(196, 167, 125, 0.2);
 		color: var(--color-text-muted);
@@ -503,7 +576,7 @@ const jsonLd = {
 		gap: 0.4rem;
 	}
 
-	.btn-save:hover {
+	.btn-save:hover, .btn-share:hover {
 		background: rgba(196, 167, 125, 0.15);
 		border-color: var(--color-accent);
 		color: var(--color-accent);
@@ -832,14 +905,91 @@ const jsonLd = {
 	.descendant-story p {
 		font-size: 1.05rem;
 		font-style: italic;
-		line-height: 1.7;
-		margin-bottom: var(--space-sm);
+		line-height: 1.6;
+		margin: 0;
 	}
 
 	.descendant-story footer {
 		font-size: 0.9rem;
+		font-weight: 500;
 		color: var(--color-accent);
-		font-weight: 600;
+	}
+
+	/* Social Media Share Card Template */
+	.share-card-template {
+		display: none;
+		position: absolute;
+		left: -9999px;
+		top: -9999px;
+		width: 1080px;
+		height: 1920px; /* Instagram Story size */
+		background: linear-gradient(135deg, #050505 0%, #1a1511 100%);
+		color: #fff;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 80px;
+		box-sizing: border-box;
+		text-align: center;
+		font-family: var(--font-body);
+	}
+
+	.sc-content {
+		border: 2px solid rgba(196, 167, 125, 0.3);
+		padding: 100px;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border-radius: 40px;
+	}
+
+	.sc-candle {
+		font-size: 8rem;
+		margin-bottom: 40px;
+		filter: drop-shadow(0 0 40px rgba(196, 167, 125, 0.5));
+	}
+
+	.sc-name {
+		font-family: var(--font-heading);
+		font-size: 6rem;
+		color: var(--color-accent);
+		margin-bottom: 30px;
+		line-height: 1.1;
+	}
+
+	.sc-dates {
+		font-size: 2.5rem;
+		color: rgba(255,255,255,0.8);
+		margin-bottom: 20px;
+	}
+
+	.sc-location {
+		font-size: 2rem;
+		color: rgba(196, 167, 125, 0.7);
+		margin-bottom: 80px;
+	}
+
+	.sc-footer {
+		position: absolute;
+		bottom: 120px;
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+	}
+
+	.sc-brand {
+		font-size: 1.8rem;
+		text-transform: uppercase;
+		letter-spacing: 4px;
+		color: var(--color-accent);
+	}
+
+	.sc-url {
+		font-size: 1.5rem;
+		color: rgba(255,255,255,0.5);
 	}
 
 	.context-panel {
