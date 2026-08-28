@@ -12,11 +12,49 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props;
 const { Content } = await render(article);
+
+// 1. Data Explorer Check
+const dataArticles = ['the-colonial-ledger', 'pricing-the-enslaved', 'profit-margins-middle-passage', 'the-rum-trade'];
+const showDataLink = dataArticles.includes(article.id);
+
+// 2. Timeline Navigation Logic
+const allArticles = await getCollection('history');
+const mappedArticles = allArticles.map(a => {
+	const yearMatch = a.id.match(/^(\d{4})-/);
+	const year = yearMatch ? parseInt(yearMatch[1], 10) : 9999;
+	return { ...a, sortYear: year };
+});
+
+mappedArticles.sort((a, b) => {
+	if (a.sortYear !== b.sortYear) return a.sortYear - b.sortYear;
+	return a.data.title.localeCompare(b.data.title);
+});
+
+const currentIndex = mappedArticles.findIndex(a => a.id === article.id);
+const nextArticle = currentIndex >= 0 && currentIndex < mappedArticles.length - 1 ? mappedArticles[currentIndex + 1] : null;
+
+// APA Citation Generation
+const currentYear = new Date().getFullYear();
+const author = article.data.author || "Nielsen, J. A. S. & Chen, S. Y. M.";
+const articleUrl = `https://danishwestindies.org/history/${article.id}`;
+const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish West Indies Research Portal. Retrieved from ${articleUrl}`;
 ---
 
 <Layout title={`${article.data.title} | History | Danish West Indies`}>
+	
+	<!-- Floating Tooltip for Footnotes -->
+	<div id="footnote-tooltip" class="footnote-tooltip hidden">
+		<div class="tooltip-content" id="tooltip-text"></div>
+		<div class="tooltip-arrow"></div>
+	</div>
+
 	<article class="history-article animate-fade-in">
-		<a href="/history" class="back-link">← Back to History Portal</a>
+		<div class="article-top-bar no-print">
+			<a href="/history" class="back-link">← Back to History Portal</a>
+			<button class="btn-print" onclick="window.print()" aria-label="Print or Save as PDF">
+				🖨️ Print / Save PDF
+			</button>
+		</div>
 
 		<header class="article-header">
 			<span class="article-date">{article.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
@@ -24,10 +62,60 @@ const { Content } = await render(article);
 			{article.data.author && <div class="article-author">By {article.data.author}</div>}
 		</header>
 
+		<!-- AUDIOBOOK TEASER UI -->
+		<div class="audio-player-wrapper no-print">
+			<div class="audio-header">
+				<span class="audio-badge">🎧 Audiobook Teaser</span>
+				<span class="audio-title">Narrated by {article.data.author || "the authors"}</span>
+			</div>
+			<div class="audio-controls">
+				<button class="btn-play" onclick="alert('The full audiobook is coming in early 2027! Sign up on the Book page to be notified.')">▶ Play Chapter</button>
+				<div class="audio-progress">
+					<div class="progress-bar"><div class="progress-fill"></div></div>
+					<div class="time-readout">0:00 / 15:30</div>
+				</div>
+			</div>
+			<a href="/thesis/book" class="audio-promo-link">Get notified when the audiobook releases →</a>
+		</div>
+
+		<!-- DATA EXPLORER INTEGRATION -->
+		{showDataLink && (
+			<div class="data-explorer-card no-print">
+				<div class="data-icon">📊</div>
+				<div class="data-info">
+					<h3>Explore the underlying data</h3>
+					<p>This article references raw economic data extracted from Rigsarkivet. View the interactive datasets in our Data Explorer.</p>
+				</div>
+				<a href="/thesis/data" class="btn-data">Open Data Explorer</a>
+			</div>
+		)}
+
 		<div class="article-content">
 			{article.data.description && <p class="lead-desc">{article.data.description}</p>}
 			<Content />
 		</div>
+		
+		<!-- AUTO-GENERATED CITATION (PRINT ONLY) -->
+		<div class="print-citation only-print">
+			<hr />
+			<h3>Citation (APA Format)</h3>
+			<p>{apaCitation}</p>
+		</div>
+
+		<!-- NEXT IN TIMELINE NAVIGATION -->
+		{nextArticle && (
+			<div class="timeline-nav no-print">
+				<span class="timeline-nav-label">Up Next in Timeline</span>
+				<a href={`/history/${nextArticle.id}`} class="timeline-next-card">
+					<div class="next-meta">
+						{nextArticle.sortYear !== 9999 ? <span class="year-badge">{nextArticle.sortYear}</span> : <span class="year-badge thematic">Thematic</span>}
+					</div>
+					<h3>{nextArticle.data.title}</h3>
+					<p>{nextArticle.data.description}</p>
+					<span class="next-arrow">Read Next →</span>
+				</a>
+			</div>
+		)}
 	</article>
 </Layout>
 
@@ -36,96 +124,253 @@ const { Content } = await render(article);
 		max-width: 800px;
 		margin: 0 auto;
 		padding-bottom: var(--space-2xl);
+		position: relative;
+	}
+
+	.article-top-bar {
+		display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg);
 	}
 
 	.back-link {
-		display: inline-block;
-		margin-bottom: var(--space-lg);
-		color: var(--color-text-muted);
-		font-size: 0.9rem;
-		transition: color var(--transition-fast);
+		color: var(--color-text-muted); font-size: 0.9rem; transition: color var(--transition-fast); text-decoration: none;
 	}
+	.back-link:hover { color: var(--color-accent); }
 
-	.back-link:hover {
-		color: var(--color-accent);
+	.btn-print {
+		background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--color-text-muted);
+		padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s;
 	}
+	.btn-print:hover { background: rgba(255,255,255,0.1); color: var(--color-text); border-color: rgba(255,255,255,0.3); }
 
 	.article-header {
-		text-align: center;
-		padding-bottom: var(--space-lg);
-		margin-bottom: var(--space-xl);
+		text-align: center; padding-bottom: var(--space-lg); margin-bottom: var(--space-xl);
 		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
 	}
 
 	.article-date {
-		display: inline-block;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 2px;
-		color: var(--color-accent);
-		background: rgba(196, 167, 125, 0.1);
-		padding: 0.3rem 0.8rem;
-		border-radius: 20px;
-		margin-bottom: var(--space-sm);
+		display: inline-block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;
+		color: var(--color-accent); background: rgba(196, 167, 125, 0.1); padding: 0.3rem 0.8rem;
+		border-radius: 20px; margin-bottom: var(--space-sm);
 	}
 
 	.article-header h1 {
-		font-size: clamp(2rem, 5vw, 3rem);
-		color: var(--color-text);
-		margin-bottom: 1rem;
-		line-height: 1.2;
+		font-family: var(--font-heading); font-size: clamp(2rem, 5vw, 3rem); color: var(--color-text);
+		margin-bottom: 1rem; line-height: 1.2;
 	}
 
-	.article-author {
-		color: var(--color-text-muted);
-		font-style: italic;
-		font-size: 1.1rem;
-	}
+	.article-author { color: var(--color-text-muted); font-style: italic; font-size: 1.1rem; }
 
+	/* =========================================
+	   AUDIO PLAYER UI
+	   ========================================= */
+	.audio-player-wrapper {
+		background: linear-gradient(135deg, rgba(30,30,30,0.8) 0%, rgba(15,15,15,0.9) 100%);
+		border: 1px solid rgba(196, 167, 125, 0.3); border-radius: 12px;
+		padding: var(--space-md) var(--space-lg); margin-bottom: var(--space-xl);
+		box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+	}
+	.audio-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+	.audio-badge { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--color-accent); font-weight: bold; }
+	.audio-title { font-size: 0.85rem; color: var(--color-text-muted); font-style: italic; }
+	.audio-controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
+	.btn-play {
+		background: var(--color-accent); color: var(--color-bg); border: none; border-radius: 50px;
+		padding: 0.6rem 1.2rem; font-weight: bold; cursor: pointer; transition: transform 0.2s;
+		display: flex; align-items: center; gap: 0.5rem;
+	}
+	.btn-play:hover { transform: scale(1.05); background: #d6b88a; }
+	.audio-progress { flex: 1; display: flex; align-items: center; gap: 1rem; }
+	.progress-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+	.progress-fill { width: 0%; height: 100%; background: var(--color-accent); }
+	.time-readout { font-family: monospace; font-size: 0.85rem; color: var(--color-text-muted); }
+	.audio-promo-link { display: block; text-align: right; font-size: 0.8rem; color: var(--color-accent); text-decoration: none; }
+	.audio-promo-link:hover { text-decoration: underline; }
+
+	/* =========================================
+	   DATA EXPLORER CARD
+	   ========================================= */
+	.data-explorer-card {
+		display: flex; align-items: center; gap: 1.5rem; background: rgba(196, 167, 125, 0.05);
+		border-left: 4px solid var(--color-accent); padding: var(--space-lg); border-radius: 0 8px 8px 0;
+		margin-bottom: var(--space-xl);
+	}
+	.data-icon { font-size: 2.5rem; }
+	.data-info { flex: 1; }
+	.data-info h3 { font-family: var(--font-heading); color: var(--color-text); margin-bottom: 0.3rem; font-size: 1.2rem; }
+	.data-info p { color: var(--color-text-muted); font-size: 0.9rem; margin: 0; line-height: 1.5; }
+	.btn-data {
+		background: transparent; border: 1px solid var(--color-accent); color: var(--color-accent);
+		padding: 0.6rem 1.2rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; font-weight: bold;
+		transition: all 0.2s; white-space: nowrap;
+	}
+	.btn-data:hover { background: var(--color-accent); color: var(--color-bg); }
+
+	/* =========================================
+	   ARTICLE CONTENT
+	   ========================================= */
 	.lead-desc {
-		font-size: 1.25rem;
-		color: rgba(255, 255, 255, 0.9);
-		font-style: italic;
-		line-height: 1.6;
-		margin-bottom: 2rem;
-		padding-left: 1rem;
-		border-left: 3px solid var(--color-accent);
+		font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-style: italic; line-height: 1.6;
+		margin-bottom: 2rem; padding-left: 1rem; border-left: 3px solid var(--color-accent);
+	}
+	.article-content { line-height: 1.8; font-size: 1.1rem; color: rgba(255, 255, 255, 0.85); }
+	.article-content :global(h1), .article-content :global(h2), .article-content :global(h3) {
+		color: var(--color-accent); font-family: var(--font-heading); margin-top: 2.5rem; margin-bottom: 1rem; line-height: 1.3;
+	}
+	.article-content :global(p) { margin-bottom: 1.5rem; }
+	.article-content :global(ul), .article-content :global(ol) { margin-bottom: 1.5rem; padding-left: 2rem; }
+	.article-content :global(li) { margin-bottom: 0.5rem; }
+	.article-content :global(strong) { color: var(--color-text); }
+	.article-content :global(em) { color: var(--color-text-muted); }
+	
+	/* Hide standard markdown footnotes at the bottom since we use tooltips */
+	.article-content :global(.footnotes) { display: none; }
+	
+	/* Style footnote references in text */
+	.article-content :global(sup[id^="fnref"]) {
+		margin-left: 2px;
+	}
+	.article-content :global(sup[id^="fnref"] a) {
+		color: var(--color-bg); background: var(--color-accent);
+		padding: 0 4px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 0.75rem;
+		transition: all 0.2s;
+	}
+	.article-content :global(sup[id^="fnref"] a:hover) {
+		background: #d6b88a; box-shadow: 0 0 5px rgba(196,167,125,0.5);
 	}
 
-	.article-content {
-		line-height: 1.8;
-		font-size: 1.1rem;
-		color: rgba(255, 255, 255, 0.85);
+	/* =========================================
+	   TOOLTIP UI
+	   ========================================= */
+	.footnote-tooltip {
+		position: absolute; z-index: 1000; max-width: 300px;
+		background: var(--color-surface); border: 1px solid var(--color-accent);
+		border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+		padding: 1rem; font-size: 0.9rem; line-height: 1.5; color: var(--color-text);
+		opacity: 0; pointer-events: none; transition: opacity 0.2s;
+	}
+	.footnote-tooltip.visible { opacity: 1; pointer-events: auto; }
+	.tooltip-arrow {
+		position: absolute; width: 0; height: 0;
+		border-left: 8px solid transparent; border-right: 8px solid transparent;
+		border-top: 8px solid var(--color-accent); bottom: -8px; left: 50%; transform: translateX(-50%);
 	}
 
-	.article-content :global(h1), 
-	.article-content :global(h2), 
-	.article-content :global(h3) {
-		color: var(--color-accent);
-		margin-top: 2.5rem;
-		margin-bottom: 1rem;
-		line-height: 1.3;
+	/* =========================================
+	   TIMELINE NAV (Up Next)
+	   ========================================= */
+	.timeline-nav {
+		margin-top: 4rem; padding-top: 2rem; border-top: 1px dashed rgba(196, 167, 125, 0.2);
+	}
+	.timeline-nav-label {
+		display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;
+		color: var(--color-text-muted); margin-bottom: 1rem; text-align: center;
+	}
+	.timeline-next-card {
+		display: block; background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0) 100%);
+		border: 1px solid rgba(196, 167, 125, 0.2); border-radius: 12px; padding: var(--space-xl);
+		text-decoration: none; transition: all 0.3s ease; text-align: center;
+	}
+	.timeline-next-card:hover {
+		border-color: rgba(196, 167, 125, 0.5); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+	}
+	.next-meta { margin-bottom: 1rem; }
+	.year-badge { background: rgba(255,255,255,0.1); padding: 0.2rem 0.6rem; border-radius: 4px; font-family: monospace; font-size: 0.85rem; color: var(--color-text); }
+	.year-badge.thematic { color: var(--color-text-muted); font-style: italic; }
+	.timeline-next-card h3 { font-family: var(--font-heading); font-size: 1.5rem; color: var(--color-accent); margin-bottom: 0.5rem; }
+	.timeline-next-card p { color: var(--color-text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
+	.next-arrow { color: var(--color-accent); font-weight: bold; transition: transform 0.2s; display: inline-block; }
+	.timeline-next-card:hover .next-arrow { transform: translateX(5px); }
+
+	/* =========================================
+	   PRINT CSS
+	   ========================================= */
+	.only-print { display: none; }
+	
+	@media print {
+		body { background: white !important; color: black !important; font-family: "Times New Roman", Times, serif; }
+		.no-print, nav, footer, .back-link, .audio-player-wrapper, .data-explorer-card, .timeline-nav { display: none !important; }
+		.only-print { display: block; margin-top: 2rem; }
+		.history-article { max-width: 100%; padding: 0; }
+		.article-header { border-bottom: 1px solid #000; padding-bottom: 1rem; margin-bottom: 2rem; }
+		.article-header h1, .article-content :global(h1), .article-content :global(h2) { color: black !important; }
+		.article-date { background: none; color: #333; padding: 0; }
+		.lead-desc { border-left: 3px solid #000; color: #333; }
+		.article-content { color: black !important; font-size: 12pt; }
+		.print-citation h3 { font-size: 11pt; margin-bottom: 0.5rem; }
+		.print-citation p { font-size: 10pt; font-style: italic; }
+		a { text-decoration: none; color: black; }
+		/* Print standard footnotes since tooltips won't work on paper */
+		.article-content :global(.footnotes) { display: block !important; margin-top: 3rem; border-top: 1px solid #ccc; padding-top: 1rem; }
 	}
 
-	.article-content :global(p) {
-		margin-bottom: 1.5rem;
-	}
-
-	.article-content :global(ul), 
-	.article-content :global(ol) {
-		margin-bottom: 1.5rem;
-		padding-left: 2rem;
-	}
-
-	.article-content :global(li) {
-		margin-bottom: 0.5rem;
-	}
-
-	.article-content :global(strong) {
-		color: var(--color-text);
-	}
-
-	.article-content :global(em) {
-		color: var(--color-text-muted);
+	/* Responsive */
+	@media (max-width: 768px) {
+		.data-explorer-card { flex-direction: column; text-align: center; }
+		.audio-controls { flex-direction: column; align-items: stretch; }
 	}
 </style>
+
+<script>
+	// ==========================================
+	// INTERACTIVE FOOTNOTES
+	// ==========================================
+	document.addEventListener('DOMContentLoaded', () => {
+		const tooltip = document.getElementById('footnote-tooltip');
+		const tooltipText = document.getElementById('tooltip-text');
+		const footnoteLinks = document.querySelectorAll('sup[id^="fnref"] a');
+		
+		footnoteLinks.forEach(link => {
+			link.addEventListener('click', (e) => {
+				e.preventDefault();
+				
+				const targetId = link.getAttribute('href')?.substring(1);
+				if (!targetId || !tooltip || !tooltipText) return;
+				
+				const targetFootnote = document.getElementById(targetId);
+				if (targetFootnote) {
+					// Clone content but remove the "return" arrow link
+					const contentClone = targetFootnote.cloneNode(true) as HTMLElement;
+					const returnLink = contentClone.querySelector('.data-footnote-backref');
+					if (returnLink) returnLink.remove();
+					
+					tooltipText.innerHTML = contentClone.innerHTML;
+					
+					// Calculate position
+					const rect = link.getBoundingClientRect();
+					const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+					const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+					
+					// Position above the link
+					const top = rect.top + scrollTop - tooltip.offsetHeight - 15;
+					// Center over link, but prevent going off screen
+					let left = rect.left + scrollLeft + (rect.width / 2) - (tooltip.offsetWidth / 2);
+					if (left < 10) left = 10;
+					if (left + tooltip.offsetWidth > window.innerWidth - 10) {
+						left = window.innerWidth - tooltip.offsetWidth - 10;
+					}
+					
+					tooltip.style.top = `${top}px`;
+					tooltip.style.left = `${left}px`;
+					tooltip.classList.add('visible');
+				}
+			});
+		});
+
+		// Close tooltip when clicking elsewhere
+		document.addEventListener('click', (e) => {
+			const target = e.target as HTMLElement;
+			if (tooltip && tooltip.classList.contains('visible')) {
+				if (!tooltip.contains(target) && !target.closest('sup[id^="fnref"]')) {
+					tooltip.classList.remove('visible');
+				}
+			}
+		});
+		
+		// Hide tooltip on scroll for better UX
+		window.addEventListener('scroll', () => {
+			if (tooltip && tooltip.classList.contains('visible')) {
+				tooltip.classList.remove('visible');
+			}
+		});
+	});
+</script>
