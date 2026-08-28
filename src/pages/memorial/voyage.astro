@@ -1,0 +1,337 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AmbientSound from '../../components/AmbientSound.astro';
+
+const ships = [
+  {
+    name: "Cron-Printz Christian",
+    year: "1708",
+    embarked: 310,
+    died: 70
+  },
+  {
+    name: "Grevinde af Laurvig",
+    year: "1717",
+    embarked: 350,
+    died: 80
+  },
+  {
+    name: "Fredensborg",
+    year: "1767",
+    embarked: 265,
+    died: 30
+  }
+];
+
+// Calculate total known loss from this small sample
+const totalLost = ships.reduce((acc, ship) => acc + ship.died, 0);
+---
+
+<Layout title="The Voyage - The Middle Passage | Danish West Indies">
+	<div class="ocean-container">
+		<!-- Ocean Wave Animation Background -->
+		<div class="wave wave1"></div>
+		<div class="wave wave2"></div>
+		<div class="wave wave3"></div>
+		
+		<div class="overlay"></div>
+
+		<div class="voyage-content">
+			<header class="voyage-header animate-fade-in">
+				<a href="/memorial" class="back-link">← Back to Register</a>
+				<h1>The Voyage</h1>
+				<p class="subtitle">Honoring those who never reached the shores.</p>
+			</header>
+
+			<section class="intro-section animate-fade-in" style="animation-delay: 1s;">
+				<p>Before the Danish West Indies, there was the ocean.</p>
+				<p>For centuries, ships of the Danish West India and Guinea Company carried captured men, women, and children across the Atlantic in the brutal journey known as the Middle Passage.</p>
+				<p>This space honors the countless souls who perished at sea—their names unrecorded, their resting place the deep.</p>
+			</section>
+
+			<div class="ships-container">
+				{ships.map((ship, index) => (
+					<article class="ship-record scrolly-item" style={`animation-delay: ${index * 0.5}s;`}>
+						<h2>Ship: <em>{ship.name}</em></h2>
+						<div class="ship-details">
+							<span class="year">Year: {ship.year}</span>
+							<div class="stats">
+								<div class="stat">
+									<span class="label">Embarked from West Africa</span>
+									<span class="value">{ship.embarked} lives</span>
+								</div>
+								<div class="stat tragic">
+									<span class="label">Lost at Sea</span>
+									<span class="value">{ship.died} souls</span>
+								</div>
+							</div>
+						</div>
+					</article>
+				))}
+			</div>
+
+			<footer class="voyage-footer scrolly-item">
+				<p class="summary">From just these three recorded voyages, <strong>{totalLost}</strong> individuals were lost to the ocean.</p>
+				<p class="summary">They are not forgotten.</p>
+				
+				<a href="/memorial" class="btn-proceed">Enter the Memorial Register</a>
+			</footer>
+		</div>
+	</div>
+
+	<AmbientSound />
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const observer = new IntersectionObserver((entries, observer) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('is-visible');
+					observer.unobserve(entry.target);
+				}
+			});
+		}, {
+			root: null,
+			rootMargin: '0px 0px -50px 0px',
+			threshold: 0.1
+		});
+
+		document.querySelectorAll('.scrolly-item').forEach(el => observer.observe(el));
+	});
+</script>
+
+<style>
+	/* Ocean Background Animation */
+	.ocean-container {
+		position: relative;
+		min-height: 100vh;
+		background: #020406;
+		overflow-x: hidden;
+		color: rgba(255, 255, 255, 0.8);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.wave {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 200%;
+		height: 100vh;
+		background-repeat: repeat-x;
+		transform-origin: center bottom;
+		opacity: 0.1;
+		z-index: 0;
+	}
+
+	.wave1 {
+		background-image: radial-gradient(circle at 50% 100%, #1a2a3a 0%, transparent 50%);
+		background-size: 50% 100%;
+		animation: wave-animation 20s infinite linear;
+		opacity: 0.15;
+	}
+
+	.wave2 {
+		background-image: radial-gradient(circle at 50% 100%, #0a1a2a 0%, transparent 50%);
+		background-size: 30% 100%;
+		animation: wave-animation 15s infinite linear reverse;
+		opacity: 0.2;
+		bottom: -10vh;
+	}
+
+	.wave3 {
+		background-image: radial-gradient(circle at 50% 100%, #05101a 0%, transparent 50%);
+		background-size: 20% 100%;
+		animation: wave-animation 10s infinite linear;
+		opacity: 0.3;
+		bottom: -20vh;
+	}
+
+	@keyframes wave-animation {
+		0% { transform: translateX(0) scaleY(1); }
+		50% { transform: translateX(-25%) scaleY(1.1); }
+		100% { transform: translateX(-50%) scaleY(1); }
+	}
+
+	.overlay {
+		position: fixed;
+		top: 0; left: 0; right: 0; bottom: 0;
+		background: linear-gradient(to bottom, #020406 0%, transparent 40%, #020406 100%);
+		z-index: 1;
+		pointer-events: none;
+	}
+
+	/* Content Styling */
+	.voyage-content {
+		position: relative;
+		z-index: 2;
+		max-width: 800px;
+		width: 100%;
+		padding: var(--space-xl) var(--space-lg);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-xl);
+		color: rgba(196, 167, 125, 0.6);
+		font-size: 0.9rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.voyage-header h1 {
+		font-size: clamp(3rem, 8vw, 5rem);
+		color: var(--color-accent);
+		margin-bottom: var(--space-xs);
+		letter-spacing: 2px;
+		font-weight: 300;
+	}
+
+	.subtitle {
+		font-size: 1.2rem;
+		font-style: italic;
+		color: rgba(255, 255, 255, 0.6);
+	}
+
+	.intro-section {
+		margin: var(--space-xl) 0 8rem 0;
+		max-width: 600px;
+	}
+
+	.intro-section p {
+		font-size: 1.2rem;
+		line-height: 1.8;
+		margin-bottom: var(--space-md);
+		color: rgba(255, 255, 255, 0.8);
+	}
+
+	.ships-container {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 6rem;
+		margin-bottom: 8rem;
+	}
+
+	.ship-record {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.1);
+		padding: var(--space-xl);
+		border-radius: 4px;
+		backdrop-filter: blur(5px);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+	}
+
+	.ship-record h2 {
+		font-size: 2rem;
+		color: #fff;
+		margin-bottom: var(--space-md);
+		font-weight: 300;
+	}
+
+	.ship-record h2 em {
+		color: var(--color-accent);
+		font-style: normal;
+	}
+
+	.year {
+		display: block;
+		font-size: 1.1rem;
+		color: rgba(196, 167, 125, 0.8);
+		margin-bottom: var(--space-lg);
+		text-transform: uppercase;
+		letter-spacing: 2px;
+	}
+
+	.stats {
+		display: flex;
+		justify-content: space-around;
+		flex-wrap: wrap;
+		gap: var(--space-lg);
+	}
+
+	.stat {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.stat .label {
+		font-size: 0.9rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		color: rgba(255, 255, 255, 0.5);
+	}
+
+	.stat .value {
+		font-size: 2.5rem;
+		font-family: var(--font-heading);
+		color: #fff;
+	}
+
+	.stat.tragic .value {
+		color: #ff4a4a;
+		text-shadow: 0 0 10px rgba(255, 74, 74, 0.3);
+	}
+
+	.voyage-footer {
+		margin-top: 4rem;
+		padding-top: 4rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.summary {
+		font-size: 1.5rem;
+		line-height: 1.6;
+		margin-bottom: var(--space-sm);
+	}
+
+	.summary strong {
+		color: #ff4a4a;
+		font-size: 2rem;
+	}
+
+	.btn-proceed {
+		display: inline-block;
+		margin-top: var(--space-xl);
+		padding: 1rem 2rem;
+		background: transparent;
+		color: var(--color-accent);
+		border: 1px solid var(--color-accent);
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-size: 1rem;
+		border-radius: 4px;
+		transition: all 1s ease;
+	}
+
+	.btn-proceed:hover {
+		background: rgba(196, 167, 125, 0.1);
+		box-shadow: 0 0 30px rgba(196, 167, 125, 0.2);
+	}
+
+	/* Scroll Animations */
+	.scrolly-item {
+		opacity: 0;
+		transform: translateY(40px);
+		transition: opacity 1.5s ease-out, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+		will-change: opacity, transform;
+	}
+
+	.scrolly-item.is-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+</style>

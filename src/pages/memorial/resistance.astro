@@ -1,0 +1,258 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AmbientSound from '../../components/AmbientSound.astro';
+import { getCollection } from 'astro:content';
+
+const memorialEntries = await getCollection('memorial');
+
+// Filter only those involved in resistance
+const resistanceTags = ["Fireburn", "1733 Revolt", "1848 Emancipation", "Rebellion"];
+const fighters = memorialEntries.filter(e => 
+  e.data.tags && e.data.tags.some(tag => resistanceTags.includes(tag))
+);
+
+// Map nodes
+const nodes = [];
+const edges = [];
+
+// Create central event nodes (the "Suns" of the constellations)
+const events = [
+  { id: "event-1733", label: "1733 St. John Revolt", group: "event" },
+  { id: "event-1848", label: "1848 Emancipation", group: "event" },
+  { id: "event-1878", label: "1878 Fireburn", group: "event" }
+];
+nodes.push(...events);
+
+// Create person nodes (the "Stars") and connect to events
+fighters.forEach(fighter => {
+  nodes.push({
+    id: fighter.id,
+    label: fighter.data.name,
+    group: "person",
+    url: `/memorial/${fighter.id}`
+  });
+
+  // Connect to the appropriate event
+  if (fighter.data.tags?.includes("1733 Revolt")) {
+    edges.push({ from: fighter.id, to: "event-1733" });
+  }
+  if (fighter.data.tags?.includes("1848 Emancipation")) {
+    edges.push({ from: fighter.id, to: "event-1848" });
+  }
+  if (fighter.data.tags?.includes("Fireburn")) {
+    edges.push({ from: fighter.id, to: "event-1878" });
+  }
+
+  // Connect to their relationships
+  if (fighter.data.relationships) {
+    fighter.data.relationships.forEach(rel => {
+      // Ensure we don't duplicate edges and only connect if the other person is in the fighters list
+      if (fighters.some(f => f.id === rel.id) && fighter.id < rel.id) {
+         edges.push({
+           from: fighter.id,
+           to: rel.id,
+           label: rel.type
+         });
+      }
+    });
+  }
+});
+---
+
+<Layout title="Constellation of Resistance | Danish West Indies">
+	<div class="resistance-page">
+		<header class="resistance-header animate-fade-in">
+			<a href="/memorial" class="back-link">← Back to Register</a>
+			<h1>The Constellation of Resistance</h1>
+			<p class="subtitle">Mapping the unbreakable spirit and the fight for freedom.</p>
+		</header>
+
+		<div class="network-container animate-fade-in" style="animation-delay: 0.5s;">
+			<div id="constellation-network" class="constellation-network"></div>
+			
+			<div class="instructions">
+				<span class="icon">✨</span> Scroll to zoom, drag to pan. Click a star to view their profile.
+			</div>
+		</div>
+	</div>
+
+	<AmbientSound />
+</Layout>
+
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js" is:inline></script>
+<script define:vars={{ nodes, edges }}>
+	document.addEventListener('DOMContentLoaded', () => {
+		const container = document.getElementById('constellation-network');
+		
+		const data = {
+			nodes: new window.vis.DataSet(nodes),
+			edges: new window.vis.DataSet(edges)
+		};
+		
+		const options = {
+			nodes: {
+				shape: 'dot',
+				font: {
+					color: '#ffffff',
+					size: 14,
+					face: 'Cinzel, serif',
+					strokeWidth: 0,
+				},
+				shadow: {
+					enabled: true,
+					color: 'rgba(196, 167, 125, 0.8)',
+					size: 20,
+					x: 0,
+					y: 0
+				}
+			},
+			edges: {
+				color: {
+					color: 'rgba(196, 167, 125, 0.3)',
+					highlight: 'rgba(196, 167, 125, 0.8)',
+					hover: 'rgba(196, 167, 125, 0.5)'
+				},
+				width: 1,
+				smooth: {
+					type: 'continuous'
+				},
+				font: {
+					color: 'rgba(255,255,255,0.5)',
+					size: 10,
+					background: 'none',
+					strokeWidth: 0
+				}
+			},
+			groups: {
+				event: {
+					color: {
+						background: '#c4a77d',
+						border: '#fff'
+					},
+					size: 30,
+					font: { size: 20, color: '#c4a77d' }
+				},
+				person: {
+					color: {
+						background: '#fff',
+						border: '#c4a77d'
+					},
+					size: 15
+				}
+			},
+			physics: {
+				forceAtlas2Based: {
+					gravitationalConstant: -100,
+					centralGravity: 0.01,
+					springLength: 200,
+					springConstant: 0.05
+				},
+				maxVelocity: 50,
+				solver: 'forceAtlas2Based',
+				timestep: 0.35,
+				stabilization: { iterations: 150 }
+			},
+			interaction: {
+				hover: true,
+				tooltipDelay: 200
+			}
+		};
+		
+		const network = new window.vis.Network(container, data, options);
+		
+		network.on("click", function (params) {
+			if (params.nodes.length > 0) {
+				const nodeId = params.nodes[0];
+				const node = nodes.find(n => n.id === nodeId);
+				if (node && node.url) {
+					window.location.href = node.url;
+				}
+			}
+		});
+	});
+</script>
+
+<style>
+	.resistance-page {
+		min-height: 100vh;
+		background: #000;
+		color: #fff;
+		display: flex;
+		flex-direction: column;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.resistance-header {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		padding: var(--space-lg);
+		z-index: 10;
+		background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
+		text-align: center;
+		pointer-events: none; /* Let clicks pass through to map except for links */
+	}
+
+	.resistance-header > * {
+		pointer-events: auto;
+	}
+
+	.back-link {
+		position: absolute;
+		left: var(--space-xl);
+		top: var(--space-lg);
+		color: rgba(196, 167, 125, 0.6);
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-size: 0.9rem;
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.resistance-header h1 {
+		font-size: clamp(2rem, 5vw, 3.5rem);
+		color: var(--color-accent);
+		margin-bottom: var(--space-xs);
+		letter-spacing: 2px;
+	}
+
+	.subtitle {
+		font-style: italic;
+		color: rgba(255, 255, 255, 0.6);
+	}
+
+	.network-container {
+		flex: 1;
+		width: 100%;
+		height: 100vh;
+		position: relative;
+	}
+
+	.constellation-network {
+		width: 100%;
+		height: 100%;
+		background-image: radial-gradient(circle at center, #050505 0%, #000 100%);
+	}
+
+	.instructions {
+		position: absolute;
+		bottom: var(--space-xl);
+		left: 50%;
+		transform: translateX(-50%);
+		background: rgba(0, 0, 0, 0.7);
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		padding: 0.8rem 1.5rem;
+		border-radius: 30px;
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.9rem;
+		pointer-events: none;
+		backdrop-filter: blur(5px);
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+</style>
