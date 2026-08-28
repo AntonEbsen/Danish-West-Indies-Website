@@ -27,7 +27,15 @@ const relatedEntries = allEntries
 
 		<header class="profile-header">
 			<InteractiveCandle id={entry.id} name={name} />
-			<h1>{name}</h1>
+			<h1>
+				{name}
+				<button class="btn-speak" id="btn-speak-name" title="Speak their name" aria-label="Speak name aloud">
+					<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+						<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+						<path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+					</svg>
+				</button>
+			</h1>
 			<div class="life-dates">
 				{yearOfBirth && <span>Born ~{yearOfBirth}</span>}
 				{yearOfBirth && yearOfDeath && <span class="separator">—</span>}
@@ -126,15 +134,74 @@ const relatedEntries = allEntries
 					</section>
 				)}
 
+				{relationships && relationships.length > 0 && (
+					<section class="tree-section">
+						<h2>Family & Connections Tree</h2>
+						<div id="family-tree-container" class="tree-container"></div>
+						<script define:vars={{ name, id: entry.id, relationships }}>
+							document.addEventListener("DOMContentLoaded", () => {
+								if (typeof vis === 'undefined') return;
+								
+								const nodes = [
+									{ id: id, label: name, group: 'center', level: 0 }
+								];
+								const edges = [];
+								
+								relationships.forEach(rel => {
+									nodes.push({ id: rel.id, label: rel.id.replace(/-/g, ' '), group: 'relation', level: 1 });
+									edges.push({ from: id, to: rel.id, label: rel.type });
+								});
+								
+								const container = document.getElementById('family-tree-container');
+								const data = { nodes, edges };
+								const options = {
+									layout: {
+										hierarchical: {
+											direction: 'UD',
+											sortMethod: 'directed',
+											levelSeparation: 100,
+											nodeSpacing: 150
+										}
+									},
+									nodes: {
+										shape: 'box',
+										font: { color: '#c4a77d', face: 'Lora, serif', size: 14 },
+										borderWidth: 2,
+										margin: 10
+									},
+									edges: {
+										font: { color: '#a0a09b', size: 12, align: 'middle' },
+										color: { color: '#555' },
+										arrows: 'to'
+									},
+									groups: {
+										center: { color: { background: '#111', border: '#c4a77d' } },
+										relation: { color: { background: '#1a2a3a', border: '#4a6a8a' } }
+									},
+									interaction: { dragNodes: false }
+								};
+								new vis.Network(container, data, options);
+							});
+						</script>
+					</section>
+				)}
+
 				{descendantStories && descendantStories.length > 0 && (
 					<section class="stories-section">
 						<h2>Descendant Testimonies</h2>
 						<div class="stories-list">
 							{descendantStories.map(story => (
-								<blockquote class="descendant-story">
-									<p>"{story.text}"</p>
-									<footer>— {story.author}</footer>
-								</blockquote>
+								<div class="story-wrapper">
+									{story.mediaUrl && (
+										<div class="media-container">
+											<iframe src={story.mediaUrl} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+										</div>
+									)}
+									<blockquote class="descendant-story">
+										<p>"{story.text}"</p>
+										<footer>— {story.author}</footer>
+									</blockquote>
+								</div>
 							))}
 						</div>
 					</section>
@@ -261,18 +328,18 @@ const relatedEntries = allEntries
 	</article>
 </Layout>
 
-<script>
+<script define:vars={{ name }}>
 	const citeBtn = document.getElementById('cite-btn');
 	const citeMsg = document.getElementById('cite-msg');
 
 	if (citeBtn && citeMsg) {
 		citeBtn.addEventListener('click', async () => {
-			const name = citeBtn.getAttribute('data-name');
+			const btnName = citeBtn.getAttribute('data-name');
 			const url = citeBtn.getAttribute('data-url');
 			const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 			
 			// Chicago style citation
-			const citation = `"${name}," The Memorial Register, Danish West Indies Website, accessed ${date}, ${url}.`;
+			const citation = `"${btnName}," The Memorial Register, Danish West Indies Website, accessed ${date}, ${url}.`;
 			
 			try {
 				await navigator.clipboard.writeText(citation);
@@ -285,7 +352,26 @@ const relatedEntries = allEntries
 			}
 		});
 	}
+
+	// Speak Name functionality
+	const speakBtn = document.getElementById('btn-speak-name');
+	if (speakBtn && 'speechSynthesis' in window) {
+		speakBtn.addEventListener('click', () => {
+			const utterance = new SpeechSynthesisUtterance(name);
+			// Try to pick a voice that might sound appropriate if possible
+			utterance.lang = 'en-US'; 
+			utterance.rate = 0.9;
+			utterance.pitch = 0.9;
+			window.speechSynthesis.speak(utterance);
+		});
+	} else if (speakBtn) {
+		speakBtn.style.display = 'none';
+	}
 </script>
+
+{relationships && relationships.length > 0 && (
+	<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js" is:inline></script>
+)}
 
 {artifact3d && (
 	<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
@@ -327,6 +413,31 @@ const relatedEntries = allEntries
 	.profile-header h1 {
 		font-size: clamp(2.5rem, 5vw, 4rem);
 		margin-bottom: var(--space-xs);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+	}
+
+	.btn-speak {
+		background: none;
+		border: none;
+		color: var(--color-accent);
+		cursor: pointer;
+		opacity: 0.7;
+		transition: all var(--transition-fast);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		width: 40px;
+		height: 40px;
+	}
+
+	.btn-speak:hover {
+		opacity: 1;
+		background: rgba(196, 167, 125, 0.1);
+		transform: scale(1.1);
 	}
 
 	.life-dates {
@@ -511,11 +622,11 @@ const relatedEntries = allEntries
 		color: var(--color-text);
 	}
 
-	.stories-section, .context-section, .location-section, .gallery-section, .artifact-section, .tributes-section {
+	.stories-section, .context-section, .location-section, .gallery-section, .artifact-section, .tributes-section, .tree-section {
 		margin-top: var(--space-lg);
 	}
 
-	.stories-section h2, .context-section h2, .artifact-section h2, .tributes-section h2 {
+	.stories-section h2, .context-section h2, .artifact-section h2, .tributes-section h2, .tree-section h2 {
 		font-size: 1.3rem;
 		margin-bottom: var(--space-md);
 		color: var(--color-accent);
@@ -527,6 +638,20 @@ const relatedEntries = allEntries
 		padding: var(--space-md);
 		margin: 0 0 var(--space-md) 0;
 		border-radius: 0 6px 6px 0;
+	}
+
+	.media-container {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		margin-bottom: var(--space-sm);
+		border-radius: 6px;
+		overflow: hidden;
+	}
+	
+	.media-container iframe {
+		width: 100%;
+		height: 100%;
+		border: none;
 	}
 
 	.descendant-story p {
@@ -561,6 +686,15 @@ const relatedEntries = allEntries
 		line-height: 1.6;
 		color: var(--color-text-muted);
 		margin: 0;
+	}
+
+	.tree-container {
+		width: 100%;
+		height: 350px;
+		background: var(--color-bg-light);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		overflow: hidden;
 	}
 
 	.model-container {

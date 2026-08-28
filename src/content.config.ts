@@ -53,7 +53,8 @@ const memorialCollection = defineCollection({
     })).optional(),
     descendantStories: z.array(z.object({
       author: z.string(),
-      text: z.string()
+      text: z.string(),
+      mediaUrl: z.string().optional()
     })).optional(),
     audioRecording: z.string().optional(),
     tributes: z.array(z.object({

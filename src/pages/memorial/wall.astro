@@ -14,6 +14,11 @@ const names = allEntries.map(e => e.data.name);
 			<h1>Wall of Names</h1>
 			<p class="wall-subtitle">In remembrance of every life.</p>
 			<p class="wall-count">{names.length} souls remembered</p>
+			
+			<button id="speak-toggle" class="btn-speak-wall" title="Read names aloud" aria-label="Toggle speaking names">
+				<span class="icon">🔊</span>
+				<span class="text">Speak Names</span>
+			</button>
 		</div>
 
 		<div class="wall-container" id="wall-container">
@@ -35,6 +40,53 @@ const names = allEntries.map(e => e.data.name);
 
 	<AmbientSound />
 </Layout>
+
+<script define:vars={{ names }}>
+	const speakToggle = document.getElementById('speak-toggle');
+	let isSpeaking = false;
+	let currentNameIndex = 0;
+
+	if (speakToggle && 'speechSynthesis' in window) {
+		speakToggle.addEventListener('click', () => {
+			if (isSpeaking) {
+				window.speechSynthesis.cancel();
+				isSpeaking = false;
+				speakToggle.classList.remove('active');
+			} else {
+				isSpeaking = true;
+				speakToggle.classList.add('active');
+				speakNextName();
+			}
+		});
+
+		function speakNextName() {
+			if (!isSpeaking) return;
+			if (currentNameIndex >= names.length) {
+				currentNameIndex = 0; // loop back
+			}
+			
+			const utterance = new SpeechSynthesisUtterance(names[currentNameIndex]);
+			utterance.lang = 'en-US';
+			utterance.rate = 0.85; // slower, more solemn
+			utterance.pitch = 0.9;
+			
+			utterance.onend = () => {
+				currentNameIndex++;
+				// slight pause between names
+				setTimeout(speakNextName, 1500); 
+			};
+			
+			window.speechSynthesis.speak(utterance);
+		}
+		
+		// Stop speaking when leaving the page
+		window.addEventListener('beforeunload', () => {
+			window.speechSynthesis.cancel();
+		});
+	} else if (speakToggle) {
+		speakToggle.style.display = 'none';
+	}
+</script>
 
 <style>
 	.wall-page {
@@ -98,6 +150,42 @@ const names = allEntries.map(e => e.data.name);
 		color: rgba(196, 167, 125, 0.6);
 		text-transform: uppercase;
 		letter-spacing: 2px;
+		margin-bottom: var(--space-md);
+	}
+
+	.btn-speak-wall {
+		background: rgba(196, 167, 125, 0.1);
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		color: var(--color-accent);
+		padding: 0.5rem 1rem;
+		border-radius: 20px;
+		cursor: pointer;
+		font-family: var(--font-body);
+		font-size: 0.9rem;
+		transition: all var(--transition-fast);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		position: relative;
+		z-index: 3;
+	}
+
+	.btn-speak-wall:hover {
+		background: rgba(196, 167, 125, 0.2);
+		border-color: var(--color-accent);
+	}
+	
+	.btn-speak-wall.active {
+		background: var(--color-accent);
+		color: #111;
+		border-color: var(--color-accent);
+		animation: pulse-border 2s infinite;
+	}
+
+	@keyframes pulse-border {
+		0% { box-shadow: 0 0 0 0 rgba(196, 167, 125, 0.7); }
+		70% { box-shadow: 0 0 0 10px rgba(196, 167, 125, 0); }
+		100% { box-shadow: 0 0 0 0 rgba(196, 167, 125, 0); }
 	}
 
 	.wall-container {
