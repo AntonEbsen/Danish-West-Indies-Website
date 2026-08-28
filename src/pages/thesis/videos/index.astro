@@ -26,13 +26,22 @@ import Layout from '../../../layouts/Layout.astro';
 			</div>
 		</header>
 
-		<section class="episodes-stack">
+		<!-- Filter Bar -->
+		<div class="filter-bar">
+			<span class="filter-label">Filter Episodes:</span>
+			<div class="filter-buttons">
+				<button class="btn-filter active" data-filter="all">All Episodes</button>
+				<button class="btn-filter" data-filter="methodology">Methodology & Data</button>
+				<button class="btn-filter" data-filter="economics">Economic History</button>
+				<button class="btn-filter" data-filter="social">Social History</button>
+			</div>
+		</div>
+
+		<section class="episodes-stack" id="episode-container">
 			
-			<!-- EPISODE 1 -->
-			<article class="episode-block">
+			<!-- EPISODE 1: Methodology -->
+			<article class="episode-block" data-category="methodology">
 				<div class="media-data-row">
-					
-					<!-- Left: Video Player -->
 					<div class="video-column">
 						<div class="video-wrapper placeholder-wrapper">
 							<!-- Replace the div below with your YouTube iframe -->
@@ -42,11 +51,9 @@ import Layout from '../../../layouts/Layout.astro';
 							</div>
 						</div>
 					</div>
-
-					<!-- Right: Title & Data Widget -->
 					<div class="data-column">
-						<span class="episode-tag">Episode 1</span>
-						<h2>The Colonial Ledger: Data and Erasure</h2>
+						<span class="episode-tag">Methodology</span>
+						<h2>Ep 1: The Colonial Ledger and Data Erasure</h2>
 						<p class="episode-desc">An introduction to our thesis methodology. How did the Danish bureaucracy reduce human lives to taxable assets, and how can we resurrect those identities through quantitative analysis?</p>
 						
 						<!-- Featured Data Widget Placeholder -->
@@ -59,18 +66,18 @@ import Layout from '../../../layouts/Layout.astro';
 								<tr><td>Children</td><td>15</td><td>1,500</td></tr>
 								<tr><td class="highlight">Total Human Capital</td><td>95</td><td class="highlight">23,600</td></tr>
 							</table>
-							<span class="widget-note">*Sample data from the Matrikel</span>
+							<span class="widget-note">*Sample data extraction from the Matrikel</span>
 						</div>
 					</div>
 				</div>
 
-				<!-- Bottom: Show Notes & Downloads -->
+				<!-- Academic Notes Row -->
 				<div class="academic-notes-row">
 					<div class="show-notes">
 						<h3>Academic Show Notes</h3>
 						<ul class="timestamp-list">
 							<li><span class="time">00:00</span> - Introduction to the Colonial Archives.</li>
-							<li><span class="time">05:22</span> - How African names were erased. Read more in <a href="/history/the-colonial-ledger">The Colonial Ledger as an Instrument of Power</a>.</li>
+							<li><span class="time">05:22</span> - How African names were erased. Read <a href="/history/the-colonial-ledger">The Colonial Ledger as an Instrument of Power</a>.</li>
 							<li><span class="time">12:15</span> - Introduction to the <a href="/thesis/data-explorer">Data Explorer</a> and methodology.</li>
 							<li><span class="time">18:40</span> - Case Study: Exploring the <a href="/memorial">Memorial Register</a>.</li>
 						</ul>
@@ -87,10 +94,32 @@ import Layout from '../../../layouts/Layout.astro';
 						</div>
 					</div>
 				</div>
+
+				<!-- Deep Dive Accordeons (Transcript & Citations) -->
+				<div class="deep-dive-row">
+					<details class="academic-accordion">
+						<summary>Read Full Transcript</summary>
+						<div class="accordion-content">
+							<p>[Transcript will appear here once the video is recorded. This text is crawled by search engines, meaning every mention of specific plantations, dates, and names will boost organic SEO for the thesis portal.]</p>
+							<p>Example: "Welcome to the first lecture in our master thesis series on the economic history of the Danish West Indies. Today we are looking at the 1803 Matrikel for Estate La Grange..."</p>
+						</div>
+					</details>
+
+					<details class="academic-accordion">
+						<summary>References & Citations</summary>
+						<div class="accordion-content">
+							<ul class="citation-list">
+								<li>Gøbel, Erik. <em>The Danish Slave Trade and Its Abolition</em>. Brill, 2016.</li>
+								<li>Rigsarkivet (Danish National Archives), <em>Vestindisk-guineisk Kompagni</em>, Matrikler for St. Croix 1803.</li>
+								<li>Rönnbäck, Klas. "The profitability of the transatlantic slave trade." <em>Journal of Economic History</em> (2018).</li>
+							</ul>
+						</div>
+					</details>
+				</div>
 			</article>
 
-			<!-- EPISODE 2 -->
-			<article class="episode-block">
+			<!-- EPISODE 2: Economic History -->
+			<article class="episode-block" data-category="economics">
 				<div class="media-data-row">
 					<div class="video-column">
 						<div class="video-wrapper placeholder-wrapper">
@@ -101,8 +130,8 @@ import Layout from '../../../layouts/Layout.astro';
 						</div>
 					</div>
 					<div class="data-column">
-						<span class="episode-tag">Episode 2</span>
-						<h2>The Sugar Beet Threat</h2>
+						<span class="episode-tag">Economic History</span>
+						<h2>Ep 2: The Sugar Beet Threat and Market Collapse</h2>
 						<p class="episode-desc">Analyzing the collapse of the Caribbean sugar economy. How European subsidized sugar beets permanently altered the profitability of the Danish West Indies.</p>
 						
 						<div class="data-widget">
@@ -117,6 +146,7 @@ import Layout from '../../../layouts/Layout.astro';
 						</div>
 					</div>
 				</div>
+				
 				<div class="academic-notes-row">
 					<div class="show-notes">
 						<h3>Academic Show Notes</h3>
@@ -139,6 +169,25 @@ import Layout from '../../../layouts/Layout.astro';
 						</div>
 					</div>
 				</div>
+
+				<div class="deep-dive-row">
+					<details class="academic-accordion">
+						<summary>Read Full Transcript</summary>
+						<div class="accordion-content">
+							<p>[Placeholder for Episode 2 Transcript]</p>
+						</div>
+					</details>
+
+					<details class="academic-accordion">
+						<summary>References & Citations</summary>
+						<div class="accordion-content">
+							<ul class="citation-list">
+								<li>Bastian, Jeannette Allis. <em>Owning Memory: How a Caribbean Community Lost Its Archives and Found Its History</em>. Libraries Unlimited, 2003.</li>
+								<li>US Virgin Islands Economic History Data Series (1840-1880).</li>
+							</ul>
+						</div>
+					</details>
+				</div>
 			</article>
 
 		</section>
@@ -155,7 +204,7 @@ import Layout from '../../../layouts/Layout.astro';
 	/* Header Styles */
 	.video-header {
 		text-align: center;
-		margin-bottom: var(--space-2xl);
+		margin-bottom: var(--space-xl);
 		padding-bottom: var(--space-xl);
 		position: relative;
 	}
@@ -169,7 +218,6 @@ import Layout from '../../../layouts/Layout.astro';
 		font-size: 0.9rem;
 		transition: color var(--transition-fast);
 	}
-
 	.back-link:hover { color: var(--color-accent); }
 
 	.label {
@@ -203,293 +251,236 @@ import Layout from '../../../layouts/Layout.astro';
 		max-width: 600px;
 		margin: 0 auto;
 	}
-
-	.promotional-links p {
-		margin-bottom: var(--space-md);
-		color: var(--color-text);
-		font-style: italic;
-	}
-
-	.link-buttons {
-		display: flex;
-		gap: var(--space-md);
-		justify-content: center;
-		flex-wrap: wrap;
-	}
-
+	.promotional-links p { margin-bottom: var(--space-md); color: var(--color-text); font-style: italic; }
+	.link-buttons { display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap; }
 	.btn-promo {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.6rem 1.2rem;
-		border-radius: 4px;
-		text-decoration: none;
-		font-weight: bold;
-		transition: all 0.3s ease;
+		display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem;
+		border-radius: 4px; text-decoration: none; font-weight: bold; transition: all 0.3s ease;
 	}
-
 	.youtube { background-color: #FF0000; color: #FFF; }
 	.youtube:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3); }
-	
 	.website { background-color: var(--color-accent); color: var(--color-bg); }
 	.website:hover { background-color: #d6b88a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(196, 167, 125, 0.3); }
 
-
-	/* EPISODE STACK LAYOUT */
-	.episodes-stack {
+	/* Filter Bar */
+	.filter-bar {
 		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xl);
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+		margin-bottom: var(--space-2xl);
+		flex-wrap: wrap;
 	}
 
+	.filter-label {
+		color: var(--color-text-muted);
+		font-family: var(--font-heading);
+		font-size: 0.9rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	.filter-buttons {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.btn-filter {
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		color: var(--color-text-muted);
+		padding: 0.4rem 1rem;
+		border-radius: 20px;
+		cursor: pointer;
+		font-family: var(--font-body);
+		font-size: 0.9rem;
+		transition: all 0.2s ease;
+	}
+
+	.btn-filter:hover {
+		border-color: rgba(196, 167, 125, 0.5);
+		color: var(--color-text);
+	}
+
+	.btn-filter.active {
+		background: rgba(196, 167, 125, 0.15);
+		border-color: var(--color-accent);
+		color: var(--color-accent);
+	}
+
+	/* EPISODE STACK LAYOUT */
+	.episodes-stack { display: flex; flex-direction: column; gap: var(--space-2xl); }
+	
 	.episode-block {
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
 		border-radius: 12px;
 		overflow: hidden;
 		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+		transition: opacity 0.3s ease, transform 0.3s ease;
+	}
+	
+	.episode-block.hidden {
+		display: none;
 	}
 
 	/* Media & Data Row */
-	.media-data-row {
-		display: grid;
-		grid-template-columns: 2fr 1.2fr;
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.video-column {
-		padding: var(--space-lg);
-		background: rgba(0,0,0,0.2);
-	}
-
+	.media-data-row { display: grid; grid-template-columns: 2fr 1.2fr; border-bottom: 1px solid var(--color-border); }
+	.video-column { padding: var(--space-lg); background: rgba(0,0,0,0.2); }
 	.video-wrapper {
-		position: relative;
-		width: 100%;
-		padding-bottom: 56.25%; /* 16:9 */
-		background: #000;
-		border-radius: 8px;
-		overflow: hidden;
-		box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+		position: relative; width: 100%; padding-bottom: 56.25%; background: #000;
+		border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 	}
-
-	.video-wrapper iframe, .video-placeholder {
-		position: absolute;
-		top: 0; left: 0; width: 100%; height: 100%;
-		border: none;
-	}
-
+	.video-wrapper iframe, .video-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 	.video-placeholder {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		color: rgba(255, 255, 255, 0.5);
-		background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-		font-family: var(--font-heading);
+		display: flex; flex-direction: column; justify-content: center; align-items: center;
+		color: rgba(255, 255, 255, 0.5); background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); font-family: var(--font-heading);
 	}
-
-	.recording-icon {
-		font-size: 2rem;
-		margin-bottom: 0.5rem;
-		animation: pulse 2s infinite;
-	}
-
+	.recording-icon { font-size: 2rem; margin-bottom: 0.5rem; animation: pulse 2s infinite; }
 	@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-	.data-column {
-		padding: var(--space-lg);
-		display: flex;
-		flex-direction: column;
-	}
-
+	.data-column { padding: var(--space-lg); display: flex; flex-direction: column; }
 	.episode-tag {
-		align-self: flex-start;
-		font-size: 0.75rem;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: var(--color-accent);
-		background: rgba(196, 167, 125, 0.1);
-		padding: 0.2rem 0.5rem;
-		border-radius: 3px;
-		margin-bottom: var(--space-sm);
+		align-self: flex-start; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;
+		color: var(--color-accent); background: rgba(196, 167, 125, 0.1); padding: 0.2rem 0.5rem; border-radius: 3px; margin-bottom: var(--space-sm);
 	}
-
-	.data-column h2 {
-		font-family: var(--font-heading);
-		font-size: 1.8rem;
-		margin-bottom: var(--space-xs);
-		color: var(--color-text);
-	}
-
-	.episode-desc {
-		color: var(--color-text-muted);
-		line-height: 1.6;
-		margin-bottom: var(--space-lg);
-	}
+	.data-column h2 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: var(--space-xs); color: var(--color-text); }
+	.episode-desc { color: var(--color-text-muted); line-height: 1.6; margin-bottom: var(--space-lg); }
 
 	/* Featured Data Widget */
-	.data-widget {
-		background: rgba(0,0,0,0.2);
-		border: 1px solid rgba(255,255,255,0.05);
-		border-radius: 8px;
-		padding: var(--space-md);
-		margin-top: auto;
-	}
-
-	.data-widget h4 {
-		font-size: 0.85rem;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: var(--color-accent);
-		margin-bottom: var(--space-sm);
-		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
-		padding-bottom: 0.3rem;
-	}
-
-	.mini-data-table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: 0.9rem;
-		margin-bottom: 0.5rem;
-	}
-
-	.mini-data-table th, .mini-data-table td {
-		text-align: left;
-		padding: 0.3rem 0;
-		border-bottom: 1px solid rgba(255,255,255,0.05);
-	}
-
+	.data-widget { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: var(--space-md); margin-top: auto; }
+	.data-widget h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--color-accent); margin-bottom: var(--space-sm); border-bottom: 1px solid rgba(196, 167, 125, 0.2); padding-bottom: 0.3rem; }
+	.mini-data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-bottom: 0.5rem; }
+	.mini-data-table th, .mini-data-table td { text-align: left; padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 	.mini-data-table th { color: var(--color-text-muted); font-weight: normal; }
 	.mini-data-table .highlight { color: var(--color-accent); font-weight: bold; }
 	.widget-note { font-size: 0.7rem; color: var(--color-text-muted); font-style: italic; }
 
-	/* Mock Chart Widget */
-	.mock-chart {
-		display: flex;
-		align-items: flex-end;
-		justify-content: space-between;
-		height: 100px;
-		padding-top: 1rem;
-	}
-
-	.bar-group {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		height: 100%;
-		width: 20%;
-	}
-
-	.bar {
-		width: 100%;
-		border-radius: 2px 2px 0 0;
-		transition: height 1s ease;
-	}
-
-	.bar-group span {
-		font-size: 0.7rem;
-		margin-top: 0.3rem;
-		color: var(--color-text-muted);
-	}
+	.mock-chart { display: flex; align-items: flex-end; justify-content: space-between; height: 100px; padding-top: 1rem; }
+	.bar-group { display: flex; flex-direction: column; align-items: center; height: 100%; width: 20%; }
+	.bar { width: 100%; border-radius: 2px 2px 0 0; transition: height 1s ease; }
+	.bar-group span { font-size: 0.7rem; margin-top: 0.3rem; color: var(--color-text-muted); }
 
 	/* Academic Notes & Downloads Row */
-	.academic-notes-row {
-		display: grid;
-		grid-template-columns: 2fr 1fr;
-		background: rgba(255,255,255,0.02);
-	}
-
-	.show-notes, .downloads-section {
-		padding: var(--space-lg);
-	}
-
-	.academic-notes-row h3 {
-		font-size: 1rem;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: var(--color-text);
-		margin-bottom: var(--space-md);
-	}
-
-	.timestamp-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-
-	.timestamp-list li {
-		margin-bottom: 0.8rem;
-		color: var(--color-text-muted);
-		line-height: 1.5;
-	}
-
-	.time {
-		font-family: monospace;
-		color: var(--color-accent);
-		background: rgba(196, 167, 125, 0.1);
-		padding: 0.1rem 0.3rem;
-		border-radius: 3px;
-		margin-right: 0.5rem;
-	}
-
-	.timestamp-list a {
-		color: var(--color-text);
-		text-decoration: none;
-		border-bottom: 1px dashed var(--color-accent);
-		transition: color var(--transition-fast);
-	}
+	.academic-notes-row { display: grid; grid-template-columns: 2fr 1fr; background: rgba(255,255,255,0.02); }
+	.show-notes, .downloads-section { padding: var(--space-lg); }
+	.academic-notes-row h3 { font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text); margin-bottom: var(--space-md); }
 	
+	.timestamp-list { list-style: none; padding: 0; margin: 0; }
+	.timestamp-list li { margin-bottom: 0.8rem; color: var(--color-text-muted); line-height: 1.5; }
+	.time { font-family: monospace; color: var(--color-accent); background: rgba(196, 167, 125, 0.1); padding: 0.1rem 0.3rem; border-radius: 3px; margin-right: 0.5rem; }
+	.timestamp-list a { color: var(--color-text); text-decoration: none; border-bottom: 1px dashed var(--color-accent); transition: color var(--transition-fast); }
 	.timestamp-list a:hover { color: var(--color-accent); }
 
-	.downloads-section {
-		border-left: 1px solid var(--color-border);
+	.downloads-section { border-left: 1px solid var(--color-border); }
+	.download-buttons { display: flex; flex-direction: column; gap: 0.8rem; }
+	.btn-download { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--color-text); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+	.btn-download:hover { background: rgba(196, 167, 125, 0.1); border-color: var(--color-accent); color: var(--color-accent); }
+
+	/* Deep Dive Accordeons */
+	.deep-dive-row {
+		border-top: 1px solid var(--color-border);
+		background: rgba(0,0,0,0.1);
 	}
 
-	.download-buttons {
-		display: flex;
-		flex-direction: column;
-		gap: 0.8rem;
+	.academic-accordion {
+		border-bottom: 1px solid rgba(255,255,255,0.05);
+	}
+	.academic-accordion:last-child {
+		border-bottom: none;
 	}
 
-	.btn-download {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.6rem 1rem;
-		background: rgba(0,0,0,0.3);
-		border: 1px solid rgba(255,255,255,0.1);
-		border-radius: 4px;
+	.academic-accordion summary {
+		padding: var(--space-md) var(--space-lg);
+		cursor: pointer;
+		font-family: var(--font-heading);
 		color: var(--color-text);
-		text-decoration: none;
+		text-transform: uppercase;
+		letter-spacing: 1px;
 		font-size: 0.9rem;
-		transition: all 0.2s ease;
+		list-style: none; /* Removes default triangle in some browsers */
+		position: relative;
+		transition: background 0.2s ease;
+	}
+	.academic-accordion summary::-webkit-details-marker { display: none; }
+	.academic-accordion summary:hover { background: rgba(255,255,255,0.02); }
+
+	/* Custom arrow for summary */
+	.academic-accordion summary::after {
+		content: "+";
+		position: absolute;
+		right: var(--space-lg);
+		top: 50%;
+		transform: translateY(-50%);
+		color: var(--color-accent);
+		font-size: 1.2rem;
+		transition: transform 0.3s ease;
+	}
+	.academic-accordion[open] summary::after {
+		content: "−";
 	}
 
-	.btn-download:hover {
-		background: rgba(196, 167, 125, 0.1);
-		border-color: var(--color-accent);
-		color: var(--color-accent);
+	.accordion-content {
+		padding: 0 var(--space-lg) var(--space-lg) var(--space-lg);
+		color: var(--color-text-muted);
+		font-size: 0.95rem;
+		line-height: 1.6;
+	}
+
+	.citation-list {
+		padding-left: 1.5rem;
+		margin: 0;
+	}
+	.citation-list li {
+		margin-bottom: 0.5rem;
 	}
 
 	/* Responsive Design */
 	@media (max-width: 900px) {
-		.media-data-row, .academic-notes-row {
-			grid-template-columns: 1fr;
-		}
-		
+		.media-data-row, .academic-notes-row { grid-template-columns: 1fr; }
 		.video-column { padding-bottom: 0; }
-		
-		.downloads-section {
-			border-left: none;
-			border-top: 1px solid var(--color-border);
-		}
+		.downloads-section { border-left: none; border-top: 1px solid var(--color-border); }
 	}
 	
 	@media (max-width: 768px) {
-		.back-link {
-			position: static;
-			display: block;
-			margin-bottom: 1rem;
-		}
+		.back-link { position: static; display: block; margin-bottom: 1rem; }
+		.filter-bar { flex-direction: column; }
 	}
 </style>
+
+<script>
+	// Episode Filtering Logic
+	const filterButtons = document.querySelectorAll('.btn-filter');
+	const episodes = document.querySelectorAll('.episode-block');
+
+	filterButtons.forEach(button => {
+		button.addEventListener('click', () => {
+			// Update active state on buttons
+			filterButtons.forEach(btn => btn.classList.remove('active'));
+			button.classList.add('active');
+
+			const selectedFilter = button.getAttribute('data-filter');
+
+			// Show/Hide episodes based on data-category
+			episodes.forEach(episode => {
+				const category = episode.getAttribute('data-category');
+				
+				if (selectedFilter === 'all' || category === selectedFilter) {
+					episode.classList.remove('hidden');
+					// Slight delay to allow display:block to apply before animating opacity
+					setTimeout(() => {
+						episode.style.opacity = '1';
+						episode.style.transform = 'translateY(0)';
+					}, 50);
+				} else {
+					episode.style.opacity = '0';
+					episode.style.transform = 'translateY(10px)';
+					setTimeout(() => {
+						episode.classList.add('hidden');
+					}, 300); // Matches transition duration
+				}
+			});
+		});
+	});
+</script>
