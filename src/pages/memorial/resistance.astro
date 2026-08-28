@@ -17,19 +17,27 @@ const edges = [];
 
 // Create central event nodes (the "Suns" of the constellations)
 const events = [
-  { id: "event-1733", label: "1733 St. John Revolt", group: "event" },
-  { id: "event-1848", label: "1848 Emancipation", group: "event" },
-  { id: "event-1878", label: "1878 Fireburn", group: "event" }
+  { id: "event-1733", label: "1733 St. John Revolt", group: "event", year: 1733, mass: 5 },
+  { id: "event-1848", label: "1848 Emancipation", group: "event", year: 1848, mass: 6 },
+  { id: "event-1878", label: "1878 Fireburn", group: "event", year: 1878, mass: 7 }
 ];
 nodes.push(...events);
 
 // Create person nodes (the "Stars") and connect to events
 fighters.forEach(fighter => {
+  // Determine their relevant year based on tags to sync with timeline
+  let year = 1917; // default max
+  if (fighter.data.tags?.includes("1733 Revolt")) year = 1733;
+  if (fighter.data.tags?.includes("1848 Emancipation")) year = 1848;
+  if (fighter.data.tags?.includes("Fireburn")) year = 1878;
+
   nodes.push({
     id: fighter.id,
     label: fighter.data.name,
     group: "person",
-    url: `/memorial/${fighter.id}`
+    url: `/memorial/${fighter.id}`,
+    year: year,
+    mass: 1
   });
 
   // Connect to the appropriate event
@@ -70,6 +78,11 @@ fighters.forEach(fighter => {
 		<div class="network-container animate-fade-in" style="animation-delay: 0.5s;">
 			<div id="constellation-network" class="constellation-network"></div>
 			
+			<div class="timeline-container">
+				<label for="year-slider">Year: <span id="year-display">1917</span></label>
+				<input type="range" id="year-slider" min="1700" max="1917" value="1917" step="1">
+			</div>
+
 			<div class="instructions">
 				<span class="icon">✨</span> Scroll to zoom, drag to pan. Click a star to view their profile.
 			</div>
@@ -83,10 +96,15 @@ fighters.forEach(fighter => {
 <script define:vars={{ nodes, edges }}>
 	document.addEventListener('DOMContentLoaded', () => {
 		const container = document.getElementById('constellation-network');
+		const yearSlider = document.getElementById('year-slider');
+		const yearDisplay = document.getElementById('year-display');
+		
+		const nodesDataSet = new window.vis.DataSet(nodes);
+		const edgesDataSet = new window.vis.DataSet(edges);
 		
 		const data = {
-			nodes: new window.vis.DataSet(nodes),
-			edges: new window.vis.DataSet(edges)
+			nodes: nodesDataSet,
+			edges: edgesDataSet
 		};
 		
 		const options = {
@@ -168,6 +186,23 @@ fighters.forEach(fighter => {
 					window.location.href = node.url;
 				}
 			}
+		});
+
+		// Timeline filtering
+		const updateNetwork = (currentYear) => {
+			const activeNodes = nodes.filter(n => n.year <= currentYear).map(n => n.id);
+			
+			// Show/Hide nodes
+			nodesDataSet.update(nodes.map(n => ({
+				id: n.id,
+				hidden: n.year > currentYear
+			})));
+		};
+
+		yearSlider?.addEventListener('input', (e) => {
+			const year = parseInt(e.target.value);
+			if (yearDisplay) yearDisplay.textContent = year;
+			updateNetwork(year);
 		});
 	});
 </script>
@@ -254,5 +289,39 @@ fighters.forEach(fighter => {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
+	}
+
+	.timeline-container {
+		position: absolute;
+		bottom: 120px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 80%;
+		max-width: 600px;
+		background: rgba(0, 0, 0, 0.7);
+		padding: 1rem 2rem;
+		border-radius: 30px;
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		backdrop-filter: blur(5px);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		z-index: 10;
+	}
+
+	.timeline-container label {
+		font-family: var(--font-heading);
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+		font-size: 1.2rem;
+	}
+
+	.timeline-container input[type="range"] {
+		width: 100%;
+		accent-color: var(--color-accent);
+		background: rgba(255,255,255,0.1);
+		height: 4px;
+		border-radius: 2px;
+		outline: none;
 	}
 </style>

@@ -27,6 +27,9 @@ const descendants = [
 ];
 ---
 
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
 <Layout title="Descendants' Voices | Danish West Indies">
 	<div class="descendants-page">
 		<header class="page-header animate-fade-in">
@@ -35,10 +38,24 @@ const descendants = [
 			<p class="subtitle">Voices of the descendants, proving that their lineage survived and thrived.</p>
 		</header>
 
+		<section class="diaspora-map-section animate-fade-in" style="animation-delay: 0.2s;">
+			<h2>Map of the Diaspora</h2>
+			<p>See where the descendants of the Danish West Indies reside today.</p>
+			<div id="diaspora-map" class="diaspora-map"></div>
+		</section>
+
 		<div class="gallery-container">
 			{descendants.map((person, index) => (
 				<article class="descendant-card animate-fade-in" style={`animation-delay: ${index * 0.2}s;`}>
 					<div class="card-image" style={`background-image: url('${person.image}')`}>
+						<!-- Audio Visualizer Overlay -->
+						<div class="audio-visualizer hidden">
+							<div class="bar"></div>
+							<div class="bar"></div>
+							<div class="bar"></div>
+							<div class="bar"></div>
+							<div class="bar"></div>
+						</div>
 						<button class="btn-play-audio" title="Play Testimony" aria-label="Play Testimony">
 							<span class="icon">▶</span>
 						</button>
@@ -63,6 +80,71 @@ const descendants = [
 
 	<AmbientSound />
 </Layout>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Initialize Diaspora Map
+		const mapContainer = document.getElementById('diaspora-map');
+		if (mapContainer && typeof window !== 'undefined' && window.L) {
+			// Center somewhere in the Atlantic to show US/Caribbean/Europe
+			const map = window.L.map('diaspora-map').setView([35, -40], 3);
+			
+			// Dark theme map tiles
+			window.L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+				subdomains: 'abcd',
+				maxZoom: 20
+			}).addTo(map);
+
+			// Add some placeholder markers
+			const locations = [
+				{ name: "St. Croix, USVI", coords: [17.7246, -64.8317] },
+				{ name: "Copenhagen, Denmark", coords: [55.6761, 12.5683] },
+				{ name: "St. John, USVI", coords: [18.3368, -64.7281] },
+				{ name: "New York, USA", coords: [40.7128, -74.0060] }
+			];
+
+			locations.forEach(loc => {
+				window.L.circleMarker(loc.coords, {
+					color: '#c4a77d',
+					fillColor: '#c4a77d',
+					fillOpacity: 0.5,
+					radius: 8
+				}).addTo(map).bindPopup(`<b>${loc.name}</b>`);
+			});
+		}
+
+		// Audio Play Button Logic
+		document.querySelectorAll('.btn-play-audio').forEach(btn => {
+			btn.addEventListener('click', (e) => {
+				const currentBtn = e.currentTarget as HTMLButtonElement;
+				const icon = currentBtn.querySelector('.icon');
+				const visualizer = currentBtn.parentElement?.querySelector('.audio-visualizer');
+				
+				if (currentBtn.classList.contains('playing')) {
+					currentBtn.classList.remove('playing');
+					if(icon) icon.textContent = '▶';
+					visualizer?.classList.add('hidden');
+				} else {
+					// Stop all others
+					document.querySelectorAll('.btn-play-audio.playing').forEach(otherBtn => {
+						otherBtn.classList.remove('playing');
+						const otherIcon = otherBtn.querySelector('.icon');
+						if(otherIcon) otherIcon.textContent = '▶';
+						otherBtn.parentElement?.querySelector('.audio-visualizer')?.classList.add('hidden');
+					});
+
+					// Play this one
+					currentBtn.classList.add('playing');
+					if(icon) icon.textContent = '⏸';
+					visualizer?.classList.remove('hidden');
+				}
+			});
+		});
+	});
+</script>
 
 <style>
 	.descendants-page {
@@ -138,6 +220,43 @@ const descendants = [
 		position: absolute;
 		top: 0; left: 0; right: 0; bottom: 0;
 		background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.8) 100%);
+	}
+
+	/* Audio Visualizer */
+	.audio-visualizer {
+		position: absolute;
+		top: 0; left: 0; right: 0; bottom: 0;
+		background: rgba(0, 0, 0, 0.7);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		z-index: 1;
+		transition: opacity var(--transition-fast);
+	}
+
+	.audio-visualizer.hidden {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.audio-visualizer .bar {
+		width: 8px;
+		height: 10px;
+		background: var(--color-accent);
+		border-radius: 4px;
+		animation: eq 1s ease-in-out infinite alternate;
+	}
+
+	.audio-visualizer .bar:nth-child(1) { animation-delay: 0.1s; }
+	.audio-visualizer .bar:nth-child(2) { animation-delay: 0.3s; }
+	.audio-visualizer .bar:nth-child(3) { animation-delay: 0.0s; }
+	.audio-visualizer .bar:nth-child(4) { animation-delay: 0.4s; }
+	.audio-visualizer .bar:nth-child(5) { animation-delay: 0.2s; }
+
+	@keyframes eq {
+		0% { height: 10px; }
+		100% { height: 80px; }
 	}
 
 	.btn-play-audio {
@@ -244,5 +363,30 @@ const descendants = [
 	.btn-primary:hover {
 		background: #d4b88f;
 		transform: translateY(-2px);
+	}
+
+	/* Diaspora Map Styles */
+	.diaspora-map-section {
+		margin-bottom: var(--space-xl);
+		text-align: center;
+	}
+	
+	.diaspora-map-section h2 {
+		color: var(--color-accent);
+		font-size: 2rem;
+		margin-bottom: var(--space-xs);
+	}
+
+	.diaspora-map-section p {
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-md);
+	}
+
+	.diaspora-map {
+		width: 100%;
+		height: 400px;
+		border-radius: 8px;
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		z-index: 1; /* Keep leaflet below modals/headers */
 	}
 </style>

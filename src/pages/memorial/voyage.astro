@@ -25,6 +25,12 @@ const ships = [
 
 // Calculate total known loss from this small sample
 const totalLost = ships.reduce((acc, ship) => acc + ship.died, 0);
+
+const shipModals = {
+  "Cron-Printz Christian": "Manifest Log (1708): 'Provisions running low. Sickness spreading rapidly among the cargo in the hold. We have been forced to jettison several souls to the sea.'",
+  "Grevinde af Laurvig": "Captain's Log (1717): 'A fierce storm delayed our crossing by three weeks. The mortality rate is unacceptable for the company's margins.'",
+  "Fredensborg": "Excerpt from the surviving manifest (1767): 'Embarked 265 slaves at Osu Castle. Arrived at St. Croix with 235 remaining. The loss is regrettable but expected on this route.'"
+};
 ---
 
 <Layout title="The Voyage - The Middle Passage | Danish West Indies">
@@ -35,6 +41,12 @@ const totalLost = ships.reduce((acc, ship) => acc + ship.died, 0);
 		<div class="wave wave3"></div>
 		
 		<div class="overlay"></div>
+
+		<!-- Audio Initializer Overlay -->
+		<div id="audio-start-overlay" class="audio-start-overlay">
+			<button id="btn-start-voyage" class="btn-start-voyage">Begin the Journey</button>
+			<p>Please ensure your sound is on.</p>
+		</div>
 
 		<div class="voyage-content">
 			<header class="voyage-header animate-fade-in">
@@ -51,7 +63,7 @@ const totalLost = ships.reduce((acc, ship) => acc + ship.died, 0);
 
 			<div class="ships-container">
 				{ships.map((ship, index) => (
-					<article class="ship-record scrolly-item" style={`animation-delay: ${index * 0.5}s;`}>
+					<button class="ship-record scrolly-item" style={`animation-delay: ${index * 0.5}s;`} data-ship={ship.name} data-quote={shipModals[ship.name as keyof typeof shipModals]}>
 						<h2>Ship: <em>{ship.name}</em></h2>
 						<div class="ship-details">
 							<span class="year">Year: {ship.year}</span>
@@ -66,7 +78,8 @@ const totalLost = ships.reduce((acc, ship) => acc + ship.died, 0);
 								</div>
 							</div>
 						</div>
-					</article>
+						<div class="click-hint">Click to read archival notes</div>
+					</button>
 				))}
 			</div>
 
@@ -79,11 +92,26 @@ const totalLost = ships.reduce((acc, ship) => acc + ship.died, 0);
 		</div>
 	</div>
 
+	<!-- Ship Modal -->
+	<dialog id="ship-modal" class="ship-modal">
+		<div class="modal-inner">
+			<button id="close-modal" class="close-modal">&times;</button>
+			<h3 id="modal-title">Ship Name</h3>
+			<div class="modal-body">
+				<p id="modal-quote">Quote goes here...</p>
+			</div>
+			<div class="modal-footer">
+				<span>Source: Royal Danish Archives</span>
+			</div>
+		</div>
+	</dialog>
+
 	<AmbientSound />
 </Layout>
 
-<script>
+	<script>
 	document.addEventListener('DOMContentLoaded', () => {
+		// Scrollytelling setup
 		const observer = new IntersectionObserver((entries, observer) => {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
@@ -98,6 +126,104 @@ const totalLost = ships.reduce((acc, ship) => acc + ship.died, 0);
 		});
 
 		document.querySelectorAll('.scrolly-item').forEach(el => observer.observe(el));
+
+		// Audio API Setup
+		let audioCtx: AudioContext | null = null;
+		let gainNode: GainNode | null = null;
+		const startBtn = document.getElementById('btn-start-voyage');
+		const overlay = document.getElementById('audio-start-overlay');
+
+		startBtn?.addEventListener('click', () => {
+			if (!audioCtx) {
+				audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+				
+				// Create the "heartbeat" oscillator
+				const osc = audioCtx.createOscillator();
+				osc.type = 'sine';
+				osc.frequency.setValueAtTime(40, audioCtx.currentTime); // Low frequency thrum
+				
+				// Create gain node for volume control via scroll
+				gainNode = audioCtx.createGain();
+				gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+				
+				osc.connect(gainNode);
+				gainNode.connect(audioCtx.destination);
+				osc.start();
+
+				// Setup heartbeat pulsing using another oscillator to modulate amplitude
+				const lfo = audioCtx.createOscillator();
+				lfo.type = 'sine';
+				lfo.frequency.setValueAtTime(1.2, audioCtx.currentTime); // ~72 beats per minute
+				
+				const lfoGain = audioCtx.createGain();
+				lfoGain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+				
+				lfo.connect(lfoGain);
+				// We can't directly connect lfo to gainNode.gain, but we can simulate the effect 
+				// visually or keep it simple. Actually, connecting lfo to gain.gain works:
+				lfoGain.connect(gainNode.gain);
+				lfo.start();
+			}
+			
+			// Hide overlay and start scrolling
+			if (overlay) overlay.style.display = 'none';
+			document.body.style.overflow = 'auto'; // allow scroll
+		});
+
+		// By default, prevent scroll until audio is started
+		document.body.style.overflow = 'hidden';
+
+		// Update audio volume on scroll
+		window.addEventListener('scroll', () => {
+			if (audioCtx && gainNode) {
+				// Calculate scroll percentage
+				const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+				let scrollPercent = window.scrollY / scrollHeight;
+				
+				// Cap max volume so it doesn't get distorted
+				const maxVolume = 0.3; 
+				const currentGain = Math.min(scrollPercent * maxVolume, maxVolume);
+				
+				// Smoothly ramp the volume
+				gainNode.gain.setTargetAtTime(currentGain, audioCtx.currentTime, 0.1);
+			}
+		});
+
+		// Modal Logic
+		const modal = document.getElementById('ship-modal') as HTMLDialogElement;
+		const closeBtn = document.getElementById('close-modal');
+		const modalTitle = document.getElementById('modal-title');
+		const modalQuote = document.getElementById('modal-quote');
+
+		document.querySelectorAll('.ship-record').forEach(btn => {
+			btn.addEventListener('click', (e) => {
+				const target = e.currentTarget as HTMLElement;
+				const name = target.getAttribute('data-ship');
+				const quote = target.getAttribute('data-quote');
+				
+				if (modalTitle && name) modalTitle.textContent = name;
+				if (modalQuote && quote) modalQuote.textContent = quote;
+				
+				modal.showModal();
+			});
+		});
+
+		closeBtn?.addEventListener('click', () => {
+			modal.close();
+		});
+
+		// Close modal on outside click
+		modal?.addEventListener('click', (e) => {
+			const dialogDimensions = modal.getBoundingClientRect()
+			if (
+				e.clientX < dialogDimensions.left ||
+				e.clientX > dialogDimensions.right ||
+				e.clientY < dialogDimensions.top ||
+				e.clientY > dialogDimensions.bottom
+			) {
+				modal.close();
+			}
+		});
 	});
 </script>
 
@@ -176,6 +302,44 @@ const totalLost = ships.reduce((acc, ship) => acc + ship.died, 0);
 		text-align: center;
 	}
 
+	/* Audio Overlay */
+	.audio-start-overlay {
+		position: fixed;
+		top: 0; left: 0; right: 0; bottom: 0;
+		background: rgba(2, 4, 6, 0.95);
+		z-index: 100;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		backdrop-filter: blur(10px);
+	}
+
+	.btn-start-voyage {
+		background: transparent;
+		color: var(--color-accent);
+		border: 1px solid var(--color-accent);
+		padding: 1rem 3rem;
+		font-size: 1.5rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		cursor: pointer;
+		border-radius: 4px;
+		margin-bottom: var(--space-md);
+		transition: all 1s ease;
+		font-family: var(--font-heading);
+	}
+
+	.btn-start-voyage:hover {
+		background: rgba(196, 167, 125, 0.1);
+		box-shadow: 0 0 30px rgba(196, 167, 125, 0.4);
+	}
+
+	.audio-start-overlay p {
+		color: rgba(255, 255, 255, 0.5);
+		font-style: italic;
+	}
+
 	.back-link {
 		display: inline-block;
 		margin-bottom: var(--space-xl);
@@ -231,6 +395,29 @@ const totalLost = ships.reduce((acc, ship) => acc + ship.died, 0);
 		border-radius: 4px;
 		backdrop-filter: blur(5px);
 		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+		width: 100%;
+		cursor: pointer;
+		text-align: center;
+		transition: transform var(--transition-normal), border-color var(--transition-normal);
+		font-family: var(--font-body);
+	}
+
+	.ship-record:hover {
+		transform: translateY(-5px);
+		border-color: rgba(196, 167, 125, 0.4);
+	}
+
+	.click-hint {
+		margin-top: var(--space-lg);
+		font-size: 0.8rem;
+		color: var(--color-accent);
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		opacity: 0.5;
+	}
+
+	.ship-record:hover .click-hint {
+		opacity: 1;
 	}
 
 	.ship-record h2 {
@@ -333,5 +520,67 @@ const totalLost = ships.reduce((acc, ship) => acc + ship.died, 0);
 	.scrolly-item.is-visible {
 		opacity: 1;
 		transform: translateY(0);
+	}
+
+	/* Modal Styling */
+	.ship-modal {
+		background: transparent;
+		border: none;
+		margin: auto;
+		max-width: 600px;
+		width: 90%;
+	}
+
+	.ship-modal::backdrop {
+		background: rgba(0, 0, 0, 0.8);
+		backdrop-filter: blur(5px);
+	}
+
+	.modal-inner {
+		background: #f4ecd8; /* Aged paper look */
+		color: #2b2520; /* Dark ink */
+		padding: var(--space-xl);
+		border-radius: 4px;
+		position: relative;
+		border: 1px solid #d4c5a3;
+		box-shadow: inset 0 0 50px rgba(0,0,0,0.1), 0 10px 30px rgba(0,0,0,0.5);
+	}
+
+	.close-modal {
+		position: absolute;
+		top: 10px;
+		right: 15px;
+		background: transparent;
+		border: none;
+		font-size: 2rem;
+		color: #2b2520;
+		cursor: pointer;
+		opacity: 0.5;
+	}
+	
+	.close-modal:hover { opacity: 1; }
+
+	#modal-title {
+		font-family: var(--font-heading);
+		font-size: 2rem;
+		margin-bottom: var(--space-md);
+		border-bottom: 2px solid rgba(43, 37, 32, 0.2);
+		padding-bottom: 0.5rem;
+	}
+
+	.modal-body {
+		font-family: "Times New Roman", Times, serif;
+		font-size: 1.2rem;
+		font-style: italic;
+		line-height: 1.6;
+		margin-bottom: var(--space-lg);
+	}
+
+	.modal-footer {
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		color: rgba(43, 37, 32, 0.6);
+		text-align: right;
 	}
 </style>

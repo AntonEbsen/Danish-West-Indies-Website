@@ -32,7 +32,28 @@ import AmbientSound from '../../components/AmbientSound.astro';
 						<label for="d-message">Your Dedication</label>
 						<textarea id="d-message" rows="3" required placeholder="May your names be remembered..."></textarea>
 					</div>
-					<button type="submit" class="btn-primary">Leave Dedication</button>
+					<div class="form-group">
+						<label>Select an Offering</label>
+						<div class="offerings-selector">
+							<label class="offering-option">
+								<input type="radio" name="d-offering" value="🌺" checked>
+								<span class="icon">🌺</span>
+							</label>
+							<label class="offering-option">
+								<input type="radio" name="d-offering" value="🐚">
+								<span class="icon">🐚</span>
+							</label>
+							<label class="offering-option">
+								<input type="radio" name="d-offering" value="🕯️">
+								<span class="icon">🕯️</span>
+							</label>
+							<label class="offering-option">
+								<input type="radio" name="d-offering" value="🥁">
+								<span class="icon">🥁</span>
+							</label>
+						</div>
+					</div>
+					<button type="submit" id="btn-submit" class="btn-primary">Leave Dedication</button>
 				</form>
 			</div>
 		</div>
@@ -59,50 +80,83 @@ import AmbientSound from '../../components/AmbientSound.astro';
 		const grid = document.getElementById('dedications-grid');
 		const nameInput = document.getElementById('d-name') as HTMLInputElement;
 		const msgInput = document.getElementById('d-message') as HTMLTextAreaElement;
+		const submitBtn = document.getElementById('btn-submit') as HTMLButtonElement;
 
-		// Load existing dedications from local storage
-		const loadDedications = () => {
-			const saved = JSON.parse(localStorage.getItem('dwi_dedications') || '[]');
-			saved.forEach((dedication: { text: string, author: string, date: string }) => {
-				addDedicationToDOM(dedication.text, dedication.author, dedication.date);
-			});
+		// Mock API Configuration
+		const API_ENDPOINT = 'https://api.mock-dwi.local/v1/dedications'; // Placeholder for Firebase/Supabase URL
+
+		// Load existing dedications (Mock Fetch)
+		const loadDedications = async () => {
+			try {
+				// Simulate network delay
+				await new Promise(resolve => setTimeout(resolve, 500));
+				
+				// For now, we still pull from localStorage to simulate the DB state persisting between reloads
+				const saved = JSON.parse(localStorage.getItem('dwi_dedications') || '[]');
+				saved.forEach((dedication: { text: string, author: string, date: string, offering: string }) => {
+					addDedicationToDOM(dedication.text, dedication.author, dedication.date, dedication.offering);
+				});
+			} catch (e) {
+				console.error("Failed to load dedications from " + API_ENDPOINT, e);
+			}
 		};
 
-		const addDedicationToDOM = (text: string, author: string, date: string) => {
+		const addDedicationToDOM = (text: string, author: string, date: string, offering: string = '🕯️') => {
 			const card = document.createElement('div');
 			card.className = 'dedication-card animate-fade-in';
 			card.innerHTML = `
-				<p class="d-text">"${text}"</p>
-				<div class="d-meta">
-					<span class="d-author">— ${author || 'Anonymous'}</span>
-					<span class="d-date">${new Date(date).toLocaleDateString()}</span>
+				<div class="d-offering">${offering}</div>
+				<div class="d-content">
+					<p class="d-text">"${text}"</p>
+					<div class="d-meta">
+						<span class="d-author">— ${author || 'Anonymous'}</span>
+						<span class="d-date">${new Date(date).toLocaleDateString()}</span>
+					</div>
 				</div>
 			`;
 			grid?.prepend(card);
 		};
 
-		form.addEventListener('submit', (e) => {
+		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
 			const text = msgInput.value.trim();
 			const author = nameInput.value.trim() || 'Anonymous';
 			const date = new Date().toISOString();
+			
+			const offeringRadio = document.querySelector('input[name="d-offering"]:checked') as HTMLInputElement;
+			const offering = offeringRadio ? offeringRadio.value : '🕯️';
 
 			if (text) {
-				// Save to local storage
-				const saved = JSON.parse(localStorage.getItem('dwi_dedications') || '[]');
-				saved.push({ text, author, date });
-				localStorage.setItem('dwi_dedications', JSON.stringify(saved));
+				submitBtn.textContent = "Offering...";
+				submitBtn.disabled = true;
 
-				// Add to DOM
-				addDedicationToDOM(text, author, date);
+				try {
+					// Simulate Async POST request to Global Database
+					await new Promise(resolve => setTimeout(resolve, 800));
 
-				// Reset form
-				form.reset();
-				
-				// Optional: Trigger a visual "flare" on the candle
-				const flame = document.querySelector('.flame');
-				flame?.classList.add('flare');
-				setTimeout(() => flame?.classList.remove('flare'), 1000);
+					// Save to local storage (Simulating the successful DB insert)
+					const saved = JSON.parse(localStorage.getItem('dwi_dedications') || '[]');
+					saved.push({ text, author, date, offering });
+					localStorage.setItem('dwi_dedications', JSON.stringify(saved));
+
+					// Add to DOM
+					addDedicationToDOM(text, author, date, offering);
+
+					// Reset form
+					form.reset();
+					
+					// Optional: Trigger a visual "flare" on the candle
+					const flame = document.querySelector('.flame');
+					flame?.classList.add('flare');
+					setTimeout(() => flame?.classList.remove('flare'), 1000);
+
+				} catch (error) {
+					console.error("Failed to post dedication to " + API_ENDPOINT, error);
+					alert("Failed to leave dedication. Please try again.");
+				} finally {
+					submitBtn.textContent = "Leave Dedication";
+					submitBtn.disabled = false;
+				}
 			}
 		});
 
@@ -290,6 +344,50 @@ import AmbientSound from '../../components/AmbientSound.astro';
 		border-color: var(--color-accent);
 	}
 
+	/* Offerings Selector */
+	.offerings-selector {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		margin-top: 0.5rem;
+	}
+
+	.offering-option {
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background: rgba(0,0,0,0.5);
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		transition: all var(--transition-fast);
+	}
+
+	.offering-option input {
+		display: none;
+	}
+
+	.offering-option .icon {
+		font-size: 1.2rem;
+		transition: transform 0.2s;
+	}
+
+	.offering-option:hover {
+		border-color: var(--color-accent);
+	}
+
+	.offering-option:has(input:checked) {
+		background: rgba(196, 167, 125, 0.2);
+		border-color: var(--color-accent);
+		box-shadow: 0 0 15px rgba(196, 167, 125, 0.5);
+	}
+
+	.offering-option:has(input:checked) .icon {
+		transform: scale(1.2);
+	}
+
 	.btn-primary {
 		width: 100%;
 		background: var(--color-accent);
@@ -337,6 +435,26 @@ import AmbientSound from '../../components/AmbientSound.astro';
 		border-left: 3px solid var(--color-accent);
 		padding: var(--space-lg);
 		border-radius: 0 4px 4px 0;
+		display: flex;
+		gap: 1rem;
+		align-items: flex-start;
+	}
+
+	:global(.d-offering) {
+		font-size: 2rem;
+		background: rgba(0,0,0,0.3);
+		width: 50px;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		flex-shrink: 0;
+		box-shadow: inset 0 0 10px rgba(196,167,125,0.2);
+	}
+
+	:global(.d-content) {
+		flex: 1;
 	}
 
 	:global(.d-text) {

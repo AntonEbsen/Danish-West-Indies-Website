@@ -16,6 +16,25 @@ memorialEntries.sort((a, b) => a.data.name.localeCompare(b.data.name));
 			<p class="subtitle">A reflection of the archives. This is how colonial systems quantified human lives.</p>
 		</header>
 
+		<div class="ledger-toolbar animate-fade-in" style="animation-delay: 0.3s;">
+			<div class="toolbar-group">
+				<label for="sort-select">Sort By:</label>
+				<select id="sort-select">
+					<option value="name">Name (A-Z)</option>
+					<option value="year-asc">Birth Year (Oldest)</option>
+					<option value="year-desc">Birth Year (Newest)</option>
+				</select>
+			</div>
+			
+			<div class="toolbar-group">
+				<label class="toggle-switch">
+					<input type="checkbox" id="font-toggle">
+					<span class="slider"></span>
+					<span class="toggle-label">View Original Script</span>
+				</label>
+			</div>
+		</div>
+
 		<div class="ledger-container animate-fade-in" style="animation-delay: 0.5s;">
 			<div class="ledger-paper">
 				<table class="ledger-table">
@@ -30,9 +49,9 @@ memorialEntries.sort((a, b) => a.data.name.localeCompare(b.data.name));
 							<th>Archival Notes</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="ledger-body">
 						{memorialEntries.map((entry) => (
-							<tr>
+							<tr class="ledger-row" data-name={entry.data.name} data-year={entry.data.yearOfBirth || 9999}>
 								<td class="col-id">{entry.id}</td>
 								<td class="col-name"><a href={`/memorial/${entry.id}`}>{entry.data.name}</a></td>
 								<td>{entry.data.origin || 'Unknown'}</td>
@@ -54,6 +73,52 @@ memorialEntries.sort((a, b) => a.data.name.localeCompare(b.data.name));
 
 	<AmbientSound />
 </Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+		const tbody = document.getElementById('ledger-body');
+		const fontToggle = document.getElementById('font-toggle') as HTMLInputElement;
+		const table = document.querySelector('.ledger-table');
+
+		// Sorting Logic
+		sortSelect?.addEventListener('change', (e) => {
+			if (!tbody) return;
+			const target = e.target as HTMLSelectElement;
+			const rows = Array.from(tbody.querySelectorAll('.ledger-row')) as HTMLElement[];
+			
+			rows.sort((a, b) => {
+				if (target.value === 'name') {
+					const nameA = a.getAttribute('data-name') || '';
+					const nameB = b.getAttribute('data-name') || '';
+					return nameA.localeCompare(nameB);
+				} else if (target.value === 'year-asc') {
+					const yearA = parseInt(a.getAttribute('data-year') || '9999');
+					const yearB = parseInt(b.getAttribute('data-year') || '9999');
+					return yearA - yearB;
+				} else if (target.value === 'year-desc') {
+					const yearA = parseInt(a.getAttribute('data-year') || '0');
+					const yearB = parseInt(b.getAttribute('data-year') || '0');
+					return yearB - yearA;
+				}
+				return 0;
+			});
+
+			// Re-append in sorted order
+			rows.forEach(row => tbody.appendChild(row));
+		});
+
+		// Font Toggle Logic
+		fontToggle?.addEventListener('change', (e) => {
+			const target = e.target as HTMLInputElement;
+			if (target.checked) {
+				table?.classList.add('cursive-mode');
+			} else {
+				table?.classList.remove('cursive-mode');
+			}
+		});
+	});
+</script>
 
 <style>
 	.ledger-page {
@@ -178,6 +243,108 @@ memorialEntries.sort((a, b) => a.data.name.localeCompare(b.data.name));
 		font-style: italic;
 		font-size: 1.05rem;
 		max-width: 300px;
+	}
+
+	/* Cursive Mode */
+	.ledger-table.cursive-mode {
+		font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+		font-size: 1.3rem;
+		opacity: 0.8;
+	}
+
+	.ledger-table.cursive-mode .col-notes {
+		font-family: inherit;
+		font-size: 1.4rem;
+	}
+
+	.ledger-table.cursive-mode th {
+		font-family: "Courier New", Courier, monospace; /* Keep headers readable */
+		opacity: 1;
+	}
+
+	/* Toolbar */
+	.ledger-toolbar {
+		display: flex;
+		gap: var(--space-xl);
+		margin-bottom: var(--space-lg);
+		background: rgba(255, 255, 255, 0.05);
+		padding: 1rem 2rem;
+		border-radius: 8px;
+		border: 1px solid rgba(196, 167, 125, 0.2);
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.toolbar-group {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.toolbar-group label {
+		color: var(--color-accent);
+		text-transform: uppercase;
+		font-size: 0.85rem;
+		letter-spacing: 1px;
+	}
+
+	select {
+		background: rgba(0,0,0,0.5);
+		color: #fff;
+		border: 1px solid rgba(196, 167, 125, 0.5);
+		padding: 0.5rem;
+		border-radius: 4px;
+		font-family: var(--font-body);
+	}
+
+	/* Toggle Switch */
+	.toggle-switch {
+		position: relative;
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+	}
+
+	.toggle-switch input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.slider {
+		position: relative;
+		display: inline-block;
+		width: 40px;
+		height: 20px;
+		background-color: rgba(255,255,255,0.2);
+		border-radius: 20px;
+		transition: .4s;
+		margin-right: 10px;
+	}
+
+	.slider:before {
+		position: absolute;
+		content: "";
+		height: 16px;
+		width: 16px;
+		left: 2px;
+		bottom: 2px;
+		background-color: white;
+		border-radius: 50%;
+		transition: .4s;
+	}
+
+	input:checked + .slider {
+		background-color: var(--color-accent);
+	}
+
+	input:checked + .slider:before {
+		transform: translateX(20px);
+		background-color: #000;
+	}
+
+	.toggle-label {
+		color: rgba(255,255,255,0.8) !important;
 	}
 
 	.ledger-caption {
