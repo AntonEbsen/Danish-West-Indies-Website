@@ -8,26 +8,130 @@ import Layout from '../../layouts/Layout.astro';
 			<a href="/about" class="back-link">← Back to About</a>
 			<h1>Anton Meier Ebsen Jørgensen</h1>
 			<p class="subtitle">Master's Student & Researcher</p>
+			
+			<div class="connect-links">
+				<a href="#" class="connect-btn" title="LinkedIn"><span class="icon">🔗</span> LinkedIn</a>
+				<a href="#" class="connect-btn" title="GitHub"><span class="icon">💻</span> GitHub</a>
+				<a href="#" class="connect-btn" title="Email"><span class="icon">✉️</span> Contact</a>
+			</div>
 		</header>
 
 		<section class="profile-content animate-fade-in" style="animation-delay: 0.2s;">
 			<div class="avatar-large">A</div>
 			
-			<div class="bio-card">
-				<h2>About</h2>
-				<p>
-					I am a Master's student in Economic History at the University of Copenhagen. 
-					My research focuses on the history of the Danish West Indies, the transatlantic slave trade, and 
-					the structural economics of colonialism. This project is a collaborative effort to restore humanity 
-					to those whose lives were reduced to colonial statistics.
-				</p>
+			<div class="audio-player">
+				<button id="btn-play-intro" class="btn-play">
+					<span class="icon">▶</span>
+					<span>Listen to Audio Introduction</span>
+				</button>
+				<audio id="audio-intro" src="https://actions.google.com/sounds/v1/human_voices/human_breathing.ogg" preload="auto"></audio>
+			</div>
+		</section>
+
+		<!-- Research Focus Tabs (Idea 3) -->
+		<section class="tabs-section animate-fade-in" style="animation-delay: 0.3s;">
+			<div class="tabs-header">
+				<button class="tab-btn active" data-target="tab-thesis">The Thesis</button>
+				<button class="tab-btn" data-target="tab-data">Data Processing</button>
+				<button class="tab-btn" data-target="tab-platform">The Platform</button>
+			</div>
+			
+			<div class="tabs-content">
+				<div class="tab-pane active" id="tab-thesis">
+					<h3>Economic History at UCPH</h3>
+					<p>My research focuses on the history of the Danish West Indies, the transatlantic slave trade, and the structural economics of colonialism. This project is a collaborative effort to restore humanity to those whose lives were reduced to colonial statistics.</p>
+				</div>
+				<div class="tab-pane" id="tab-data">
+					<h3>Archival Extraction</h3>
+					<p>Working with records from the Danish National Archives (Rigsarkivet), we meticulously translated and digitized 18th and 19th-century census data, uncovering the hidden identities of enslaved individuals.</p>
+				</div>
+				<div class="tab-pane" id="tab-platform">
+					<h3>Digital Humanities</h3>
+					<p>By leveraging modern web technologies, we transformed raw spreadsheets into an interactive, museum-quality memorial that honors the ancestors and serves as an educational resource.</p>
+				</div>
+			</div>
+		</section>
+
+		<div class="two-column-layout">
+			<!-- Curator's Highlights (Idea 1) -->
+			<section class="highlights-section animate-fade-in" style="animation-delay: 0.4s;">
+				<h2>Curator's Highlights</h2>
+				<p class="section-desc">Historical figures that resonated deeply during the research process.</p>
 				
-				<div class="audio-player">
-					<button id="btn-play-intro" class="btn-play">
-						<span class="icon">▶</span>
-						<span>Listen to Audio Introduction</span>
-					</button>
-					<audio id="audio-intro" src="https://actions.google.com/sounds/v1/human_voices/human_breathing.ogg" preload="auto"></audio>
+				<a href="/memorial/queen-mary" class="highlight-card">
+					<div class="highlight-icon">🔥</div>
+					<div class="highlight-text">
+						<h3>Queen Mary (Mary Thomas)</h3>
+						<p>A fearless leader of the 1878 Fireburn rebellion. Her refusal to accept the oppressive post-emancipation labor conditions remains a profound symbol of resistance.</p>
+					</div>
+				</a>
+				
+				<a href="/memorial/hans-jonathan" class="highlight-card">
+					<div class="highlight-icon">⚓</div>
+					<div class="highlight-text">
+						<h3>Hans Jonathan</h3>
+						<p>"The man who stole himself." His daring escape from Copenhagen to Iceland showcases the incredible lengths taken to secure freedom.</p>
+					</div>
+				</a>
+			</section>
+
+			<!-- Academic Timeline (Idea 5) -->
+			<section class="timeline-section animate-fade-in" style="animation-delay: 0.5s;">
+				<h2>Academic Journey</h2>
+				<div class="timeline">
+					<div class="timeline-item">
+						<div class="timeline-dot"></div>
+						<div class="timeline-content">
+							<span class="timeline-date">2024</span>
+							<h4>Enrolled in Master's Program</h4>
+							<p>Began studies in Economic History at the University of Copenhagen (UCPH).</p>
+						</div>
+					</div>
+					<div class="timeline-item">
+						<div class="timeline-dot"></div>
+						<div class="timeline-content">
+							<span class="timeline-date">Early 2025</span>
+							<h4>Archival Research Begins</h4>
+							<p>Commenced intensive data extraction from Rigsarkivet's colonial collections.</p>
+						</div>
+					</div>
+					<div class="timeline-item">
+						<div class="timeline-dot"></div>
+						<div class="timeline-content">
+							<span class="timeline-date">2026</span>
+							<h4>Platform Launch</h4>
+							<p>Released the Danish West Indies Memorial Register to the public.</p>
+						</div>
+					</div>
+					<div class="timeline-item">
+						<div class="timeline-dot"></div>
+						<div class="timeline-content">
+							<span class="timeline-date">Upcoming</span>
+							<h4>Thesis Defense</h4>
+							<p>Final presentation and defense of the Master's thesis.</p>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<!-- Behind the Scenes Gallery (Idea 2) -->
+		<section class="gallery-section animate-fade-in" style="animation-delay: 0.6s;">
+			<h2>Behind the Scenes</h2>
+			<p class="section-desc">A glimpse into the analog and digital work required to build this project.</p>
+			
+			<div class="masonry-grid">
+				<div class="gallery-item placeholder-img">
+					<span>Studying Ledgers at Rigsarkivet</span>
+				</div>
+				<div class="gallery-item placeholder-img">
+					<span>Whiteboarding the Database</span>
+				</div>
+				<div class="gallery-item placeholder-img">
+					<span>Coding the Web Application</span>
+				</div>
+				<div class="gallery-item placeholder-img">
+					<span>Presenting at UCPH</span>
 				</div>
 			</div>
 		</section>
@@ -36,6 +140,7 @@ import Layout from '../../layouts/Layout.astro';
 
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
+		// Audio Intro Logic
 		const btnPlay = document.getElementById('btn-play-intro');
 		const audio = document.getElementById('audio-intro') as HTMLAudioElement;
 		
@@ -57,14 +162,33 @@ import Layout from '../../layouts/Layout.astro';
 			if (icon) icon.textContent = '▶';
 			btnPlay?.classList.remove('playing');
 		});
+
+		// Tabs Logic
+		const tabBtns = document.querySelectorAll('.tab-btn');
+		const tabPanes = document.querySelectorAll('.tab-pane');
+
+		tabBtns.forEach(btn => {
+			btn.addEventListener('click', () => {
+				// Remove active from all
+				tabBtns.forEach(b => b.classList.remove('active'));
+				tabPanes.forEach(p => p.classList.remove('active'));
+				
+				// Add active to clicked
+				btn.classList.add('active');
+				const targetId = btn.getAttribute('data-target');
+				if(targetId) {
+					document.getElementById(targetId)?.classList.add('active');
+				}
+			});
+		});
 	});
 </script>
 
 <style>
 	.profile-page {
-		max-width: 800px;
+		max-width: 1000px;
 		margin: 0 auto;
-		padding-bottom: var(--space-xl);
+		padding-bottom: var(--space-2xl);
 	}
 
 	.page-header {
@@ -97,13 +221,43 @@ import Layout from '../../layouts/Layout.astro';
 		color: var(--color-text-muted);
 		font-size: 1.2rem;
 		font-style: italic;
+		margin-bottom: 1.5rem;
 	}
 
+	/* Connect Links */
+	.connect-links {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+	}
+
+	.connect-btn {
+		background: rgba(255,255,255,0.05);
+		border: 1px solid rgba(196, 167, 125, 0.2);
+		padding: 0.5rem 1rem;
+		border-radius: 20px;
+		color: var(--color-text);
+		text-decoration: none;
+		font-size: 0.9rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		transition: all 0.2s;
+	}
+
+	.connect-btn:hover {
+		background: rgba(196, 167, 125, 0.1);
+		border-color: var(--color-accent);
+		color: var(--color-accent);
+	}
+
+	/* Profile Content */
 	.profile-content {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: var(--space-xl);
+		gap: var(--space-lg);
+		margin-bottom: var(--space-2xl);
 	}
 
 	.avatar-large {
@@ -118,27 +272,6 @@ import Layout from '../../layouts/Layout.astro';
 		font-size: 5rem;
 		font-family: var(--font-heading);
 		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-	}
-
-	.bio-card {
-		background: rgba(255, 255, 255, 0.02);
-		border: 1px solid rgba(196, 167, 125, 0.15);
-		padding: var(--space-xl);
-		border-radius: 8px;
-		width: 100%;
-	}
-
-	.bio-card h2 {
-		color: var(--color-accent);
-		margin-bottom: var(--space-md);
-		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
-		padding-bottom: 0.5rem;
-	}
-
-	.bio-card p {
-		color: rgba(255, 255, 255, 0.85);
-		line-height: 1.7;
-		margin-bottom: var(--space-xl);
 	}
 
 	.audio-player {
@@ -167,5 +300,219 @@ import Layout from '../../layouts/Layout.astro';
 	.btn-play.playing {
 		background: var(--color-accent);
 		color: #000;
+	}
+
+	/* Tabs */
+	.tabs-section {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		border-radius: 8px;
+		overflow: hidden;
+		margin-bottom: var(--space-2xl);
+	}
+
+	.tabs-header {
+		display: flex;
+		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
+	}
+
+	.tab-btn {
+		flex: 1;
+		background: transparent;
+		border: none;
+		padding: 1rem;
+		color: var(--color-text-muted);
+		font-family: var(--font-heading);
+		font-size: 1.1rem;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.tab-btn:hover {
+		background: rgba(255, 255, 255, 0.05);
+		color: var(--color-text);
+	}
+
+	.tab-btn.active {
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.05);
+		border-bottom: 2px solid var(--color-accent);
+	}
+
+	.tabs-content {
+		padding: var(--space-xl);
+	}
+
+	.tab-pane {
+		display: none;
+		animation: fadeIn 0.3s ease;
+	}
+
+	.tab-pane.active {
+		display: block;
+	}
+
+	.tab-pane h3 {
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+	}
+
+	.tab-pane p {
+		color: rgba(255, 255, 255, 0.85);
+		line-height: 1.7;
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; transform: translateY(5px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	/* Two Column Layout */
+	.two-column-layout {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-xl);
+		margin-bottom: var(--space-2xl);
+	}
+
+	@media (max-width: 768px) {
+		.two-column-layout {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	h2 {
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
+		padding-bottom: 0.5rem;
+	}
+
+	.section-desc {
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		margin-bottom: var(--space-lg);
+	}
+
+	/* Highlights */
+	.highlight-card {
+		display: flex;
+		gap: 1rem;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.1);
+		padding: 1rem;
+		border-radius: 8px;
+		text-decoration: none;
+		color: var(--color-text);
+		margin-bottom: 1rem;
+		transition: all 0.2s;
+	}
+
+	.highlight-card:hover {
+		border-color: var(--color-accent);
+		transform: translateY(-2px);
+		background: rgba(196, 167, 125, 0.05);
+	}
+
+	.highlight-icon {
+		font-size: 2rem;
+		background: rgba(0,0,0,0.5);
+		width: 50px;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		flex-shrink: 0;
+	}
+
+	.highlight-text h3 {
+		color: var(--color-accent);
+		font-size: 1.1rem;
+		margin-bottom: 0.25rem;
+	}
+
+	.highlight-text p {
+		font-size: 0.9rem;
+		color: rgba(255,255,255,0.7);
+		line-height: 1.4;
+	}
+
+	/* Timeline */
+	.timeline {
+		position: relative;
+		padding-left: 20px;
+	}
+
+	.timeline::before {
+		content: '';
+		position: absolute;
+		top: 0; left: 6px;
+		width: 2px;
+		height: 100%;
+		background: rgba(196, 167, 125, 0.3);
+	}
+
+	.timeline-item {
+		position: relative;
+		margin-bottom: 1.5rem;
+	}
+
+	.timeline-dot {
+		position: absolute;
+		top: 5px; left: -20px;
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		background: var(--color-bg);
+		border: 2px solid var(--color-accent);
+	}
+
+	.timeline-date {
+		font-size: 0.8rem;
+		color: var(--color-accent);
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		display: block;
+		margin-bottom: 0.2rem;
+	}
+
+	.timeline-content h4 {
+		font-size: 1.1rem;
+		margin-bottom: 0.25rem;
+	}
+
+	.timeline-content p {
+		font-size: 0.9rem;
+		color: rgba(255,255,255,0.7);
+	}
+
+	/* Gallery */
+	.masonry-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1rem;
+	}
+
+	.placeholder-img {
+		background: linear-gradient(45deg, #1a1613, #2b2520);
+		border: 1px dashed rgba(196, 167, 125, 0.3);
+		height: 150px;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		padding: 1rem;
+		color: rgba(196, 167, 125, 0.5);
+		font-style: italic;
+		font-size: 0.9rem;
+		transition: all 0.3s ease;
+	}
+
+	.placeholder-img:hover {
+		border-color: var(--color-accent);
+		color: var(--color-accent);
+		background: linear-gradient(45deg, #2b2520, #1a1613);
 	}
 </style>
