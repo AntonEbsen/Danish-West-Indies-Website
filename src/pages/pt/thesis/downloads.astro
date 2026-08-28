@@ -1,0 +1,211 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout title="Open Science & Downloads | Master Thesis | Danish West Indies">
+	<div class="page-container animate-fade-in">
+		<a href="/thesis" class="back-link">← Back to Thesis Portal</a>
+
+		<header class="page-header">
+			<span class="label">Open Science</span>
+			<h1>Downloads & Replication</h1>
+			<p class="subtitle">Access the full thesis PDF, raw archival datasets, and econometric replication scripts.</p>
+		</header>
+
+		<div class="downloads-grid">
+			
+			<!-- Thesis Document -->
+			<div class="download-section">
+				<h2>Thesis Documents</h2>
+				<a href="#" class="download-card" onclick="alert('PDF will be available after defense.'); return false;">
+					<div class="icon-box icon-pdf">PDF</div>
+					<div class="dl-info">
+						<h3>Master's Thesis (Final)</h3>
+						<p>The complete, defended academic manuscript.</p>
+					</div>
+					<div class="dl-action">↓</div>
+				</a>
+				<a href="#" class="download-card" onclick="alert('Slides will be available after defense.'); return false;">
+					<div class="icon-box icon-ppt">PPT</div>
+					<div class="dl-info">
+						<h3>Defense Presentation</h3>
+						<p>Slide deck from the oral defense.</p>
+					</div>
+					<div class="dl-action">↓</div>
+				</a>
+			</div>
+
+			<!-- Datasets -->
+			<div class="download-section">
+				<h2>Archival Datasets</h2>
+				<a href="/api/dataset.csv" class="download-card" download>
+					<div class="icon-box icon-csv">CSV</div>
+					<div class="dl-info">
+						<h3>Master Demographic Dataset</h3>
+						<p>Compiled population data from St. Croix (1750-1848).</p>
+					</div>
+					<div class="dl-action">↓</div>
+				</a>
+				<a href="#" class="download-card" onclick="alert('Additional datasets coming soon.'); return false;">
+					<div class="icon-box icon-csv">CSV</div>
+					<div class="dl-info">
+						<h3>Sugar Production Ledgers</h3>
+						<p>Annual sugar yields cross-referenced with estate sizes.</p>
+					</div>
+					<div class="dl-action">↓</div>
+				</a>
+			</div>
+
+			<!-- Replication Code -->
+			<div class="download-section">
+				<h2>Replication Scripts</h2>
+				<a href="#" class="download-card" onclick="alert('Code repository will be linked shortly.'); return false;">
+					<div class="icon-box icon-code">R</div>
+					<div class="dl-info">
+						<h3>Econometric Models (R)</h3>
+						<p>R scripts containing the regression models used in Chapter 15.</p>
+					</div>
+					<div class="dl-action">↓</div>
+				</a>
+				<a href="#" class="download-card" onclick="alert('Code repository will be linked shortly.'); return false;">
+					<div class="icon-box icon-code">PY</div>
+					<div class="dl-info">
+						<h3>Data Cleaning (Python)</h3>
+						<p>Scripts used to scrape and clean the raw archival XML files.</p>
+					</div>
+					<div class="dl-action">↓</div>
+				</a>
+			</div>
+
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.page-container {
+		max-width: 900px;
+		margin: 0 auto;
+		padding-bottom: var(--space-2xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-lg);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover { color: var(--color-accent); }
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-2xl);
+	}
+
+	.label {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1);
+		padding: 0.3rem 0.8rem;
+		border-radius: 20px;
+		margin-bottom: var(--space-sm);
+	}
+
+	.page-header h1 {
+		color: var(--color-accent);
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.1rem;
+		font-style: italic;
+	}
+
+	.downloads-grid {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xl);
+	}
+
+	.download-section h2 {
+		color: var(--color-text);
+		margin-bottom: 1rem;
+		font-size: 1.5rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		padding-bottom: 0.5rem;
+	}
+
+	.download-card {
+		display: flex;
+		align-items: center;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(255, 255, 255, 0.05);
+		border-radius: 8px;
+		padding: 1.2rem;
+		margin-bottom: 1rem;
+		text-decoration: none;
+		transition: all 0.3s ease;
+	}
+
+	.download-card:hover {
+		transform: translateY(-2px);
+		background: rgba(196, 167, 125, 0.05);
+		border-color: rgba(196, 167, 125, 0.3);
+	}
+
+	.icon-box {
+		width: 50px;
+		height: 50px;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: bold;
+		font-family: monospace;
+		font-size: 1.1rem;
+		margin-right: 1.5rem;
+		flex-shrink: 0;
+	}
+
+	.icon-pdf { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+	.icon-ppt { background: rgba(249, 115, 22, 0.1); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.2); }
+	.icon-csv { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+	.icon-code { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
+
+	.dl-info {
+		flex-grow: 1;
+	}
+
+	.dl-info h3 {
+		color: var(--color-text);
+		margin: 0 0 0.3rem 0;
+		font-size: 1.2rem;
+		transition: color 0.3s;
+	}
+
+	.download-card:hover .dl-info h3 { color: var(--color-accent); }
+
+	.dl-info p {
+		color: var(--color-text-muted);
+		margin: 0;
+		font-size: 0.95rem;
+	}
+
+	.dl-action {
+		font-size: 1.5rem;
+		color: rgba(255, 255, 255, 0.3);
+		margin-left: 1rem;
+		transition: all 0.3s;
+	}
+
+	.download-card:hover .dl-action {
+		color: var(--color-accent);
+		transform: translateY(2px);
+	}
+</style>

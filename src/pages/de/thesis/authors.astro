@@ -1,0 +1,197 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout title="Authors & Division of Labor | Master Thesis | Danish West Indies">
+	<div class="page-container animate-fade-in">
+		<a href="/thesis" class="back-link">← Back to Thesis Portal</a>
+
+		<header class="page-header">
+			<span class="label">The Team</span>
+			<h1>Authors & Division of Labor</h1>
+			<p class="subtitle">An overview of the collaborative effort behind this Master's Thesis.</p>
+		</header>
+
+		<div class="intro-text">
+			<p>This thesis represents a joint academic endeavor by three graduate students at the University of Copenhagen. While the theoretical framework and final manuscript were collaboratively authored, the empirical and technical heavy lifting was divided according to our respective specializations.</p>
+		</div>
+
+		<div class="authors-grid">
+			
+			<div class="author-card">
+				<div class="author-header">
+					<div class="author-avatar">AM</div>
+					<h2>Anton Meier Ebsen Jørgensen</h2>
+				</div>
+				<div class="author-role">Primary Focus: Data Architecture & Web Development</div>
+				<p>Anton spearheaded the digital humanities aspect of the project, constructing the interactive web portal and ensuring the historical datasets were structurally sound and accessible. He also led the architectural design of the historical databases.</p>
+			</div>
+
+			<div class="author-card">
+				<div class="author-header">
+					<div class="author-avatar">JA</div>
+					<h2>Jonas Amasa Skov Nielsen</h2>
+				</div>
+				<div class="author-role">Primary Focus: Archival Research & Historical Context</div>
+				<p>Jonas dedicated his time to navigating the complex colonial archives at Rigsarkivet. His work focused on interpreting 18th-century Danish and Gothic script, extracting qualitative context that informed the theoretical framework.</p>
+			</div>
+
+			<div class="author-card">
+				<div class="author-header">
+					<div class="author-avatar">SC</div>
+					<h2>Sheng Ye Michael Chen</h2>
+				</div>
+				<div class="author-role">Primary Focus: Econometrics & Quantitative Analysis</div>
+				<p>Michael was responsible for the rigorous econometric modeling applied in the empirical chapters. He developed the scripts used to clean the raw census data and ran the regression analyses to test the core hypotheses of the thesis.</p>
+			</div>
+
+		</div>
+
+		<div class="co-authorship-statement">
+			<h3>Co-Authorship Declaration</h3>
+			<p>In accordance with the guidelines set by the University of Copenhagen, a formal co-authorship declaration detailing the exact percentage of contribution per chapter will be appended to the final thesis submission.</p>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.page-container {
+		max-width: 900px;
+		margin: 0 auto;
+		padding-bottom: var(--space-2xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-lg);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover { color: var(--color-accent); }
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.label {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1);
+		padding: 0.3rem 0.8rem;
+		border-radius: 20px;
+		margin-bottom: var(--space-sm);
+	}
+
+	.page-header h1 {
+		color: var(--color-accent);
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.1rem;
+		font-style: italic;
+	}
+
+	.intro-text {
+		text-align: center;
+		color: rgba(255, 255, 255, 0.9);
+		line-height: 1.6;
+		margin-bottom: var(--space-2xl);
+		max-width: 700px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.authors-grid {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xl);
+		margin-bottom: var(--space-2xl);
+	}
+
+	.author-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.2);
+		border-radius: 12px;
+		padding: var(--space-xl);
+		transition: transform 0.3s ease, border-color 0.3s ease;
+	}
+
+	.author-card:hover {
+		transform: translateY(-3px);
+		border-color: var(--color-accent);
+	}
+
+	.author-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 1rem;
+	}
+
+	.author-avatar {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		background: linear-gradient(135deg, var(--color-accent) 0%, #8a7350 100%);
+		color: #000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: bold;
+		font-size: 1.2rem;
+		font-family: var(--font-heading);
+		margin-right: 1.5rem;
+		flex-shrink: 0;
+	}
+
+	.author-header h2 {
+		color: var(--color-text);
+		margin: 0;
+		font-size: 1.5rem;
+	}
+
+	.author-role {
+		color: var(--color-accent);
+		font-weight: bold;
+		font-size: 0.95rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		margin-bottom: 1rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.author-card p {
+		color: rgba(255, 255, 255, 0.8);
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	.co-authorship-statement {
+		background: rgba(196, 167, 125, 0.05);
+		border-radius: 8px;
+		padding: var(--space-xl);
+		text-align: center;
+		border: 1px dashed rgba(196, 167, 125, 0.3);
+	}
+
+	.co-authorship-statement h3 {
+		color: var(--color-text);
+		margin-bottom: 1rem;
+	}
+
+	.co-authorship-statement p {
+		color: var(--color-text-muted);
+		font-size: 0.95rem;
+		line-height: 1.5;
+		margin: 0;
+	}
+</style>

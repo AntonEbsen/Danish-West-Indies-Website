@@ -16,8 +16,38 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 				<p>Anton Meier Ebsen Jørgensen, Jonas Amasa Skov Nielsen & Sheng Ye Michael Chen</p>
 			</div>
 		</header>
-		
-		<section class="thesis-content animate-fade-in" style="animation-delay: 0.2s;">
+		<section class="portal-features animate-fade-in" style="animation-delay: 0.2s;">
+			<h2>Interactive Features</h2>
+			<div class="features-grid">
+				<a href="/thesis/data-explorer" class="feature-card">
+					<div class="fc-icon">📊</div>
+					<h3>Data Explorer</h3>
+					<p>Interactive visualizations of empirical datasets.</p>
+				</a>
+				<a href="/thesis/interactive-maps" class="feature-card">
+					<div class="fc-icon">🗺️</div>
+					<h3>Historical GIS</h3>
+					<p>Spatial analysis of plantations and rebellions.</p>
+				</a>
+				<a href="/thesis/downloads" class="feature-card">
+					<div class="fc-icon">⬇️</div>
+					<h3>Downloads</h3>
+					<p>Access raw datasets, code, and thesis PDFs.</p>
+				</a>
+				<a href="/thesis/defense" class="feature-card">
+					<div class="fc-icon">🎓</div>
+					<h3>Thesis Defense</h3>
+					<p>Oral examination documentation and slides.</p>
+				</a>
+				<a href="/thesis/authors" class="feature-card">
+					<div class="fc-icon">👥</div>
+					<h3>The Authors</h3>
+					<p>Biographies and division of academic labor.</p>
+				</a>
+			</div>
+		</section>
+
+		<section class="thesis-content animate-fade-in" style="animation-delay: 0.3s;">
 			<h2>Thesis Chapters</h2>
 			<div class="chapter-list">
 				{thesisChapters.map((chapter) => (
@@ -82,10 +112,59 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 		letter-spacing: 0.5px;
 	}
 
-	.thesis-content h2 {
+	.portal-features {
+		margin-bottom: var(--space-2xl);
+		padding-bottom: var(--space-xl);
+		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+	}
+
+	.portal-features h2, .thesis-content h2 {
 		text-align: center;
 		margin-bottom: var(--space-xl);
 		font-size: 2rem;
+	}
+
+	.features-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+		gap: 1rem;
+	}
+
+	.feature-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.2);
+		border-radius: 8px;
+		padding: 1.5rem 1rem;
+		text-align: center;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.feature-card:hover {
+		transform: translateY(-5px);
+		border-color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.05);
+	}
+
+	.fc-icon {
+		font-size: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	.feature-card h3 {
+		color: var(--color-accent);
+		font-size: 1.1rem;
+		margin: 0 0 0.5rem 0;
+	}
+
+	.feature-card p {
+		color: var(--color-text-muted);
+		font-size: 0.85rem;
+		margin: 0;
+		line-height: 1.4;
 	}
 
 	.chapter-list {

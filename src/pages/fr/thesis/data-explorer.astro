@@ -1,0 +1,258 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout title="Data Explorer | Master Thesis | Danish West Indies">
+	<div class="page-container animate-fade-in">
+		<a href="/thesis" class="back-link">← Back to Thesis Portal</a>
+
+		<header class="page-header">
+			<span class="label">Interactive Feature</span>
+			<h1>Data & Methodology Explorer</h1>
+			<p class="subtitle">Interact with the datasets constructed for the empirical analysis of the Master's Thesis.</p>
+		</header>
+
+		<div class="explorer-grid">
+			<!-- Chart 1 -->
+			<div class="chart-card">
+				<h2>Enslaved Population Demographics (1750-1848)</h2>
+				<p class="chart-desc">A visualization of the population growth across the three islands leading up to the 1848 Emancipation.</p>
+				<div class="canvas-container">
+					<canvas id="populationChart"></canvas>
+				</div>
+			</div>
+
+			<!-- Chart 2 -->
+			<div class="chart-card">
+				<h2>Sugar Production vs Mortality Rates (1790-1840)</h2>
+				<p class="chart-desc">Correlation between peak sugar output and enslaved mortality rates on St. Croix.</p>
+				<div class="canvas-container">
+					<canvas id="sugarChart"></canvas>
+				</div>
+			</div>
+		</div>
+		
+		<div class="data-methodology">
+			<h2>Methodological Notes</h2>
+			<p>The data presented above is compiled from raw archival ledgers (matrikler) and Moravian missionary censuses housed at the Danish National Archives (Rigsarkivet). The empirical chapters of the thesis employ econometric models to control for missing data points in the early 18th century.</p>
+			<a href="/thesis/downloads" class="btn-primary">Download Raw Datasets</a>
+		</div>
+	</div>
+</Layout>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Common Chart.js Defaults
+		Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
+		Chart.defaults.font.family = '"Inter", sans-serif';
+
+		// Chart 1: Population
+		const ctxPop = document.getElementById('populationChart');
+		if (ctxPop) {
+			new Chart(ctxPop, {
+				type: 'line',
+				data: {
+					labels: ['1750', '1770', '1790', '1810', '1830', '1848'],
+					datasets: [
+						{
+							label: 'St. Croix',
+							data: [8000, 18000, 22000, 26000, 22000, 19000],
+							borderColor: '#c4a77d',
+							backgroundColor: 'rgba(196, 167, 125, 0.1)',
+							tension: 0.4,
+							fill: true
+						},
+						{
+							label: 'St. Thomas',
+							data: [3500, 4200, 4800, 5500, 6000, 5000],
+							borderColor: '#38bdf8',
+							tension: 0.4
+						},
+						{
+							label: 'St. John',
+							data: [2000, 2300, 2100, 2400, 2200, 2000],
+							borderColor: '#a78bfa',
+							tension: 0.4
+						}
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: { position: 'top' }
+					},
+					scales: {
+						y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+						x: { grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+					}
+				}
+			});
+		}
+
+		// Chart 2: Sugar vs Mortality
+		const ctxSugar = document.getElementById('sugarChart');
+		if (ctxSugar) {
+			new Chart(ctxSugar, {
+				type: 'bar',
+				data: {
+					labels: ['1790', '1800', '1810', '1820', '1830', '1840'],
+					datasets: [
+						{
+							label: 'Sugar Production (Tons)',
+							data: [12000, 15000, 14000, 11000, 9000, 7500],
+							backgroundColor: 'rgba(196, 167, 125, 0.8)',
+							yAxisID: 'y'
+						},
+						{
+							label: 'Mortality Rate (%)',
+							data: [4.5, 5.2, 4.8, 3.5, 3.2, 2.9],
+							type: 'line',
+							borderColor: '#f87171',
+							backgroundColor: '#f87171',
+							yAxisID: 'y1'
+						}
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						y: {
+							type: 'linear',
+							display: true,
+							position: 'left',
+							grid: { color: 'rgba(255, 255, 255, 0.1)' }
+						},
+						y1: {
+							type: 'linear',
+							display: true,
+							position: 'right',
+							grid: { drawOnChartArea: false }
+						},
+						x: { grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+					}
+				}
+			});
+		}
+	});
+</script>
+
+<style>
+	.page-container {
+		max-width: 1000px;
+		margin: 0 auto;
+		padding-bottom: var(--space-2xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-lg);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover { color: var(--color-accent); }
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-2xl);
+	}
+
+	.label {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1);
+		padding: 0.3rem 0.8rem;
+		border-radius: 20px;
+		margin-bottom: var(--space-sm);
+	}
+
+	.page-header h1 {
+		color: var(--color-accent);
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.1rem;
+		font-style: italic;
+	}
+
+	.explorer-grid {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xl);
+		margin-bottom: var(--space-2xl);
+	}
+
+	.chart-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.2);
+		border-radius: 12px;
+		padding: var(--space-xl);
+	}
+
+	.chart-card h2 {
+		color: var(--color-text);
+		margin-bottom: 0.5rem;
+	}
+
+	.chart-desc {
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-lg);
+		font-size: 0.95rem;
+	}
+
+	.canvas-container {
+		position: relative;
+		height: 400px;
+		width: 100%;
+	}
+
+	.data-methodology {
+		text-align: center;
+		background: rgba(196, 167, 125, 0.05);
+		border-radius: 12px;
+		padding: var(--space-xl);
+		border: 1px dashed rgba(196, 167, 125, 0.3);
+	}
+
+	.data-methodology h2 {
+		color: var(--color-accent);
+		margin-bottom: 1rem;
+	}
+
+	.data-methodology p {
+		color: rgba(255, 255, 255, 0.8);
+		line-height: 1.7;
+		margin-bottom: 1.5rem;
+		max-width: 700px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.btn-primary {
+		display: inline-block;
+		background: var(--color-accent);
+		color: #000;
+		font-family: var(--font-heading);
+		font-weight: bold;
+		padding: 0.8rem 2rem;
+		border-radius: 4px;
+		text-decoration: none;
+		transition: all 0.3s;
+	}
+
+	.btn-primary:hover {
+		background: #d4b88f;
+		transform: translateY(-2px);
+		box-shadow: 0 5px 15px rgba(196, 167, 125, 0.3);
+	}
+</style>

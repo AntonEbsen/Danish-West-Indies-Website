@@ -7,7 +7,12 @@ const langs = ['da', 'es', 'fr', 'nl', 'ak', 'de', 'nh', 'yo', 'ig', 'kg', 'sv',
 const filesToCopy = [
   { src: 'src/pages/resources/index.astro', dest: 'resources/index.astro' },
   { src: 'src/pages/thesis/index.astro', dest: 'thesis/index.astro' },
-  { src: 'src/pages/thesis/[slug].astro', dest: 'thesis/[slug].astro' }
+  { src: 'src/pages/thesis/[slug].astro', dest: 'thesis/[slug].astro' },
+  { src: 'src/pages/thesis/data-explorer.astro', dest: 'thesis/data-explorer.astro' },
+  { src: 'src/pages/thesis/interactive-maps.astro', dest: 'thesis/interactive-maps.astro' },
+  { src: 'src/pages/thesis/downloads.astro', dest: 'thesis/downloads.astro' },
+  { src: 'src/pages/thesis/defense.astro', dest: 'thesis/defense.astro' },
+  { src: 'src/pages/thesis/authors.astro', dest: 'thesis/authors.astro' }
 ];
 
 filesToCopy.forEach(file => {
