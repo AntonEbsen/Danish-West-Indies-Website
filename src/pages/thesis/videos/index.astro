@@ -1,0 +1,308 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout 
+	title="Thesis Video Series | Danish West Indies"
+	description="Watch our master thesis video series on the economic history of the Danish West Indies. Featuring Anton Meier Ebsen Jørgensen."
+>
+	<div class="page-container animate-fade-in">
+		<header class="video-header">
+			<a href="/thesis" class="back-link">← Back to Thesis Portal</a>
+			<span class="label">Academic Portal</span>
+			<h1>Thesis Video Series</h1>
+			<p class="subtitle">Exploring the Economic History of the Danish West Indies</p>
+			
+			<div class="promotional-links">
+				<p>Presented by the authors. For more historical economics content, connect with Anton:</p>
+				<div class="link-buttons">
+					<a href="https://www.youtube.com/@thewanderingeconomist" target="_blank" rel="noopener noreferrer" class="btn-promo youtube">
+						<span class="icon">▶</span> Subscribe on YouTube
+					</a>
+					<a href="https://www.antonebsen.dk" target="_blank" rel="noopener noreferrer" class="btn-promo website">
+						<span class="icon">🌐</span> Visit AntonEbsen.dk
+					</a>
+				</div>
+			</div>
+		</header>
+
+		<section class="video-grid-section">
+			<div class="section-header">
+				<h2>Upcoming Episodes</h2>
+				<p class="section-desc">We are currently recording our thesis breakdown series. Check back soon for the premiere, or subscribe on YouTube to be notified when the first episodes drop.</p>
+			</div>
+
+			<div class="video-grid">
+				<!-- Placeholder Video 1 -->
+				<div class="video-card">
+					<div class="video-wrapper placeholder-wrapper">
+						<!-- INSTRUCTIONS: To add a real video, replace the <div class="video-placeholder"> block below with your YouTube embed iframe code. Make sure the iframe has class="yt-iframe" if needed, though standard width="100%" height="100%" in inline styles works well. -->
+						<div class="video-placeholder">
+							<span class="recording-icon">🔴</span>
+							<span>Recording in Progress</span>
+						</div>
+					</div>
+					<div class="video-info">
+						<span class="episode-tag">Episode 1</span>
+						<h3>The Colonial Ledger: Data and Erasure</h3>
+						<p>An introduction to our thesis methodology. How did the Danish bureaucracy reduce human lives to taxable assets, and how can we resurrect those identities?</p>
+					</div>
+				</div>
+
+				<!-- Placeholder Video 2 -->
+				<div class="video-card">
+					<div class="video-wrapper placeholder-wrapper">
+						<div class="video-placeholder">
+							<span class="recording-icon">🔴</span>
+							<span>Recording in Progress</span>
+						</div>
+					</div>
+					<div class="video-info">
+						<span class="episode-tag">Episode 2</span>
+						<h3>The Sugar Beet Threat</h3>
+						<p>Analyzing the collapse of the Caribbean sugar economy and the rise of European subsidized sugar beets that altered the course of the colony.</p>
+					</div>
+				</div>
+
+				<!-- Placeholder Video 3 -->
+				<div class="video-card">
+					<div class="video-wrapper placeholder-wrapper">
+						<div class="video-placeholder">
+							<span class="recording-icon">🔴</span>
+							<span>Recording in Progress</span>
+						</div>
+					</div>
+					<div class="video-info">
+						<span class="episode-tag">Episode 3</span>
+						<h3>Mortality and Capital Loss</h3>
+						<p>A deep dive into the horrific economic calculus of the "seasoning" period and the disease environment of St. Croix.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<style>
+	.page-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding-bottom: var(--space-2xl);
+	}
+
+	.video-header {
+		text-align: center;
+		margin-bottom: var(--space-2xl);
+		padding-bottom: var(--space-xl);
+		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+		position: relative;
+	}
+
+	.back-link {
+		position: absolute;
+		left: 0;
+		top: 0;
+		color: var(--color-text-muted);
+		text-decoration: none;
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.label {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-accent);
+		margin-bottom: var(--space-sm);
+	}
+
+	.video-header h1 {
+		font-family: var(--font-heading);
+		font-size: 3rem;
+		margin-bottom: var(--space-xs);
+		color: var(--color-text);
+	}
+
+	.subtitle {
+		font-size: 1.2rem;
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-xl);
+	}
+
+	/* Promotional Links */
+	.promotional-links {
+		background: rgba(196, 167, 125, 0.05);
+		border: 1px solid rgba(196, 167, 125, 0.2);
+		border-radius: 8px;
+		padding: var(--space-lg);
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.promotional-links p {
+		margin-bottom: var(--space-md);
+		color: var(--color-text);
+		font-style: italic;
+	}
+
+	.link-buttons {
+		display: flex;
+		gap: var(--space-md);
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.btn-promo {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.6rem 1.2rem;
+		border-radius: 4px;
+		text-decoration: none;
+		font-weight: bold;
+		transition: all 0.3s ease;
+	}
+
+	.youtube {
+		background-color: #FF0000;
+		color: #FFF;
+	}
+
+	.youtube:hover {
+		background-color: #CC0000;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+	}
+
+	.website {
+		background-color: var(--color-accent);
+		color: var(--color-bg);
+	}
+
+	.website:hover {
+		background-color: #d6b88a;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(196, 167, 125, 0.3);
+	}
+
+	/* Video Section */
+	.section-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.section-header h2 {
+		font-family: var(--font-heading);
+		color: var(--color-text);
+		font-size: 2rem;
+	}
+
+	.section-desc {
+		color: var(--color-text-muted);
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.video-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+		gap: var(--space-xl);
+	}
+
+	.video-card {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		overflow: hidden;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.video-card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+		border-color: rgba(196, 167, 125, 0.4);
+	}
+
+	/* Aspect Ratio 16:9 for Video/Placeholder */
+	.video-wrapper {
+		position: relative;
+		width: 100%;
+		padding-bottom: 56.25%; /* 16:9 aspect ratio */
+		background: #000;
+	}
+
+	.video-wrapper iframe, .video-placeholder {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border: none;
+	}
+
+	.video-placeholder {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		color: rgba(255, 255, 255, 0.5);
+		background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+		font-family: var(--font-heading);
+		letter-spacing: 1px;
+	}
+
+	.recording-icon {
+		font-size: 2rem;
+		margin-bottom: 0.5rem;
+		animation: pulse 2s infinite;
+	}
+
+	@keyframes pulse {
+		0% { opacity: 0.3; }
+		50% { opacity: 1; }
+		100% { opacity: 0.3; }
+	}
+
+	.video-info {
+		padding: var(--space-md);
+	}
+
+	.episode-tag {
+		display: inline-block;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1);
+		padding: 0.2rem 0.5rem;
+		border-radius: 3px;
+		margin-bottom: var(--space-sm);
+	}
+
+	.video-info h3 {
+		font-size: 1.2rem;
+		color: var(--color-text);
+		margin: 0 0 var(--space-xs) 0;
+		line-height: 1.3;
+	}
+
+	.video-info p {
+		color: var(--color-text-muted);
+		font-size: 0.95rem;
+		margin: 0;
+		line-height: 1.5;
+	}
+	
+	@media (max-width: 768px) {
+		.back-link {
+			position: static;
+			display: block;
+			margin-bottom: 1rem;
+		}
+	}
+</style>
