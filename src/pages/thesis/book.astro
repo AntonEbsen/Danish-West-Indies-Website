@@ -70,6 +70,105 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 			</div>
 		</section>
 
+		<!-- WHO IS THIS BOOK FOR? -->
+		<section class="audience-section">
+			<h2>Who Is This Book For?</h2>
+			<div class="audience-grid">
+				<div class="audience-card">
+					<div class="audience-icon">📈</div>
+					<h3>Economic Historians</h3>
+					<p>Rigorous econometric analysis of plantation profitability, labor costs, and the financial architecture of the transatlantic slave trade. Includes original datasets extracted from primary sources at Rigsarkivet.</p>
+				</div>
+				<div class="audience-card">
+					<div class="audience-icon">🌴</div>
+					<h3>Caribbean Studies Students</h3>
+					<p>A deep dive into the social, cultural, and economic history of St. Thomas, St. John, and St. Croix — from the arrival of the first Danish colonists in 1672 to the 1917 Transfer to the United States.</p>
+				</div>
+				<div class="audience-card">
+					<div class="audience-icon">🇩🇰</div>
+					<h3>Danish Heritage Researchers</h3>
+					<p>A crucial resource for understanding Denmark's often-overlooked colonial past. Ideal for genealogists, museum professionals, and educators working to integrate colonial history into the Danish national narrative.</p>
+				</div>
+				<div class="audience-card">
+					<div class="audience-icon">📚</div>
+					<h3>General Readers</h3>
+					<p>Written to be accessible beyond academia. If you are interested in how colonialism shaped the modern world — and how the numbers reveal what the narratives often hide — this book is for you.</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- WEBSITE VS BOOK COMPARISON -->
+		<section class="comparison-section">
+			<h2>Website vs. Book</h2>
+			<p class="comparison-intro">The research portal you are browsing is free and open. The book goes further.</p>
+			<div class="comparison-table-wrapper">
+				<table class="comparison-table">
+					<thead>
+						<tr>
+							<th>Feature</th>
+							<th>Website <span class="free-tag">Free</span></th>
+							<th>Book <span class="book-tag">Purchase</span></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td>Full thesis chapters</td><td class="check">✓</td><td class="check">✓</td></tr>
+						<tr><td>Interactive Data Explorer</td><td class="check">✓</td><td class="dash">—</td></tr>
+						<tr><td>Memorial Register</td><td class="check">✓</td><td class="dash">—</td></tr>
+						<tr><td>Video Lectures</td><td class="check">✓</td><td class="dash">—</td></tr>
+						<tr><td>Exclusive Foreword</td><td class="dash">—</td><td class="check">✓</td></tr>
+						<tr><td>Extended Analysis & Commentary</td><td class="dash">—</td><td class="check">✓</td></tr>
+						<tr><td>High-Resolution Archival Images</td><td class="dash">—</td><td class="check">✓</td></tr>
+						<tr><td>Comprehensive Printed Bibliography</td><td class="dash">—</td><td class="check">✓</td></tr>
+						<tr><td>Formatted for Academic Citation</td><td class="dash">—</td><td class="check">✓</td></tr>
+						<tr><td>Physical Keepsake</td><td class="dash">—</td><td class="check">✓</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<!-- FAQ -->
+		<section class="faq-section">
+			<h2>Frequently Asked Questions</h2>
+			<div class="faq-list">
+				<details class="faq-item">
+					<summary>When will the book be published?</summary>
+					<div class="faq-answer">
+						<p>We are currently finalizing the manuscript following our thesis defense. The expected publication date is early 2027. Sign up for the waitlist above to be notified the moment it becomes available.</p>
+					</div>
+				</details>
+				<details class="faq-item">
+					<summary>What formats will it be available in?</summary>
+					<div class="faq-answer">
+						<p>We plan to offer the book in three formats: a premium hardcover edition, a paperback, and a digital PDF/eBook. Pricing will be announced closer to the publication date.</p>
+					</div>
+				</details>
+				<details class="faq-item">
+					<summary>Can I cite this book in academic work?</summary>
+					<div class="faq-answer">
+						<p>Yes. The self-published book will include an ISBN and will be formatted for proper academic citation (Chicago, APA, etc.). We will provide a recommended citation format on this page upon publication.</p>
+					</div>
+				</details>
+				<details class="faq-item">
+					<summary>Will there be a Danish edition?</summary>
+					<div class="faq-answer">
+						<p>The initial publication will be in English. A Danish-language edition is under consideration depending on demand. If you would like to see a Danish edition, please let us know via the <a href="/contact">contact page</a>.</p>
+					</div>
+				</details>
+				<details class="faq-item">
+					<summary>How is the book different from the free online thesis?</summary>
+					<div class="faq-answer">
+						<p>The book includes an exclusive foreword, extended analysis and commentary not found on the website, high-resolution archival images, and a comprehensive printed bibliography. It is also formatted as a cohesive, citable academic publication rather than a collection of web pages. See the comparison table above for a full breakdown.</p>
+					</div>
+				</details>
+				<details class="faq-item">
+					<summary>Where can I buy it?</summary>
+					<div class="faq-answer">
+						<p>The book will be available for purchase directly through this website and through major online retailers. Distribution details will be announced upon publication.</p>
+					</div>
+				</details>
+			</div>
+		</section>
+
 		<!-- ENDORSEMENTS -->
 		<section class="endorsements-section">
 			<h2>Endorsements</h2>
@@ -429,6 +528,158 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 	.website:hover { background-color: #d6b88a; transform: translateY(-2px); }
 
 	/* =========================================
+	   AUDIENCE CARDS
+	   ========================================= */
+	.audience-section {
+		margin-bottom: var(--space-2xl);
+		padding-bottom: var(--space-2xl);
+		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+	}
+	.audience-section h2 {
+		font-family: var(--font-heading); font-size: 2rem;
+		color: var(--color-text); margin-bottom: var(--space-lg);
+		text-align: center;
+	}
+	.audience-grid {
+		display: grid; grid-template-columns: 1fr 1fr;
+		gap: var(--space-lg);
+	}
+	.audience-card {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 8px; padding: var(--space-lg);
+		transition: all 0.3s ease;
+	}
+	.audience-card:hover {
+		border-color: rgba(196, 167, 125, 0.4);
+		transform: translateY(-3px);
+		box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+	}
+	.audience-icon {
+		font-size: 2rem; margin-bottom: 0.8rem;
+	}
+	.audience-card h3 {
+		font-family: var(--font-heading); font-size: 1.2rem;
+		color: var(--color-accent); margin-bottom: 0.5rem;
+	}
+	.audience-card p {
+		color: var(--color-text-muted); font-size: 0.9rem;
+		line-height: 1.5; margin: 0;
+	}
+
+	/* =========================================
+	   COMPARISON TABLE
+	   ========================================= */
+	.comparison-section {
+		margin-bottom: var(--space-2xl);
+		padding-bottom: var(--space-2xl);
+		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+	}
+	.comparison-section h2 {
+		font-family: var(--font-heading); font-size: 2rem;
+		color: var(--color-text); margin-bottom: var(--space-sm);
+		text-align: center;
+	}
+	.comparison-intro {
+		text-align: center; color: var(--color-text-muted);
+		margin-bottom: var(--space-xl); font-style: italic;
+	}
+	.comparison-table-wrapper {
+		max-width: 700px; margin: 0 auto;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 8px; overflow: hidden;
+	}
+	.comparison-table {
+		width: 100%; border-collapse: collapse;
+	}
+	.comparison-table th {
+		padding: 1rem; text-align: center;
+		background: rgba(0,0,0,0.2);
+		color: var(--color-text);
+		font-family: var(--font-heading);
+		font-size: 1rem;
+	}
+	.comparison-table th:first-child { text-align: left; }
+	.free-tag {
+		display: inline-block; font-size: 0.65rem;
+		background: rgba(76, 175, 80, 0.15); color: #4caf50;
+		padding: 0.1rem 0.4rem; border-radius: 10px;
+		text-transform: uppercase; letter-spacing: 1px;
+		margin-left: 0.3rem; font-family: var(--font-body);
+	}
+	.book-tag {
+		display: inline-block; font-size: 0.65rem;
+		background: rgba(196, 167, 125, 0.15); color: var(--color-accent);
+		padding: 0.1rem 0.4rem; border-radius: 10px;
+		text-transform: uppercase; letter-spacing: 1px;
+		margin-left: 0.3rem; font-family: var(--font-body);
+	}
+	.comparison-table td {
+		padding: 0.7rem 1rem;
+		border-bottom: 1px solid rgba(255,255,255,0.03);
+		color: var(--color-text-muted); font-size: 0.95rem;
+	}
+	.comparison-table td:not(:first-child) { text-align: center; }
+	.comparison-table td.check { color: var(--color-accent); font-size: 1.1rem; }
+	.comparison-table td.dash { color: rgba(255,255,255,0.15); }
+	.comparison-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+	/* =========================================
+	   FAQ
+	   ========================================= */
+	.faq-section {
+		margin-bottom: var(--space-2xl);
+		padding-bottom: var(--space-2xl);
+		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+	}
+	.faq-section h2 {
+		font-family: var(--font-heading); font-size: 2rem;
+		color: var(--color-text); margin-bottom: var(--space-lg);
+		text-align: center;
+	}
+	.faq-list {
+		max-width: 750px; margin: 0 auto;
+		display: flex; flex-direction: column; gap: 0.5rem;
+	}
+	.faq-item {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 6px;
+		overflow: hidden;
+	}
+	.faq-item summary {
+		padding: 1rem var(--space-lg);
+		cursor: pointer; list-style: none;
+		color: var(--color-text);
+		font-size: 1rem; font-weight: 500;
+		transition: background 0.2s ease;
+		position: relative;
+	}
+	.faq-item summary::-webkit-details-marker { display: none; }
+	.faq-item summary:hover { background: rgba(255,255,255,0.02); }
+	.faq-item summary::after {
+		content: "+"; position: absolute; right: var(--space-lg);
+		top: 50%; transform: translateY(-50%);
+		color: var(--color-accent); font-size: 1.2rem;
+	}
+	.faq-item[open] summary::after { content: "−"; }
+	.faq-item[open] summary {
+		border-bottom: 1px solid rgba(255,255,255,0.05);
+	}
+	.faq-answer {
+		padding: var(--space-md) var(--space-lg);
+	}
+	.faq-answer p {
+		color: var(--color-text-muted); font-size: 0.95rem;
+		line-height: 1.6; margin: 0;
+	}
+	.faq-answer a {
+		color: var(--color-accent); text-decoration: none;
+		border-bottom: 1px dashed var(--color-accent);
+	}
+
+	/* =========================================
 	   RESPONSIVE
 	   ========================================= */
 	@media (max-width: 900px) {
@@ -436,6 +687,7 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 		.hero-cta { justify-content: center; }
 		.key-facts { grid-template-columns: repeat(2, 1fr); }
 		.endorsement-grid { grid-template-columns: 1fr; }
+		.audience-grid { grid-template-columns: 1fr; }
 	}
 	@media (max-width: 600px) {
 		.key-facts { grid-template-columns: 1fr; }
