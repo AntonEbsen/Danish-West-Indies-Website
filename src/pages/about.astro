@@ -9,23 +9,40 @@ import Layout from '../layouts/Layout.astro';
 			<p class="subtitle">Preserving the memory of the Danish West Indies.</p>
 		</header>
 
-		<!-- Personal Intro (Idea 3) -->
+		<!-- Team Section -->
 		<section class="intro-section animate-fade-in" style="animation-delay: 0.2s;">
-			<div class="creator-profile">
-				<div class="avatar-placeholder">A</div>
-				<div class="intro-text">
-					<h2>The Creator</h2>
-					<p>
-						My name is <strong>Anton Meier Ebsen Jørgensen</strong>. This project is part of my ongoing Master's thesis in Economic History at the University of Copenhagen. 
-					</p>
-					<div class="audio-player">
-						<button id="btn-play-intro" class="btn-play">
-							<span class="icon">▶</span>
-							<span>Listen to the Introduction</span>
-						</button>
-						<audio id="audio-intro" src="https://actions.google.com/sounds/v1/human_voices/human_breathing.ogg" preload="auto"></audio>
+			<div class="team-header text-center">
+				<h2>The Research Team</h2>
+				<p>This project is a collaborative effort developed as part of our Master's thesis in Economic History at the University of Copenhagen.</p>
+			</div>
+
+			<div class="team-grid">
+				<!-- Anton -->
+				<a href="/team/anton" class="team-card">
+					<div class="avatar-placeholder">A</div>
+					<div class="team-info">
+						<h3>Anton Meier Ebsen Jørgensen</h3>
+						<p>Master's Student & Researcher</p>
 					</div>
-				</div>
+				</a>
+
+				<!-- Jonas -->
+				<a href="/team/jonas" class="team-card">
+					<div class="avatar-placeholder">J</div>
+					<div class="team-info">
+						<h3>Jonas Amasa Skov Nielsen</h3>
+						<p>Master's Student & Researcher</p>
+					</div>
+				</a>
+
+				<!-- Sheng -->
+				<a href="/team/sheng" class="team-card">
+					<div class="avatar-placeholder">S</div>
+					<div class="team-info">
+						<h3>Sheng Ye Michael Chen</h3>
+						<p>Master's Student & Researcher</p>
+					</div>
+				</a>
 			</div>
 		</section>
 
@@ -106,28 +123,8 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
-		// Audio Intro Logic
-		const btnPlay = document.getElementById('btn-play-intro');
-		const audio = document.getElementById('audio-intro') as HTMLAudioElement;
-		
-		btnPlay?.addEventListener('click', () => {
-			const icon = btnPlay.querySelector('.icon');
-			if (audio.paused) {
-				audio.play();
-				if (icon) icon.textContent = '⏸';
-				btnPlay.classList.add('playing');
-			} else {
-				audio.pause();
-				if (icon) icon.textContent = '▶';
-				btnPlay.classList.remove('playing');
-			}
-		});
+		// Audio Intro Logic (Removed from main page, moved to individual team pages)
 
-		audio?.addEventListener('ended', () => {
-			const icon = btnPlay?.querySelector('.icon');
-			if (icon) icon.textContent = '▶';
-			btnPlay?.classList.remove('playing');
-		});
 
 		// Form Logic
 		const form = document.getElementById('contribute-form') as HTMLFormElement;
@@ -168,65 +165,73 @@ import Layout from '../layouts/Layout.astro';
 		margin-bottom: var(--space-2xl);
 	}
 
-	.creator-profile {
+	.team-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.team-header h2 {
+		color: var(--color-accent);
+		font-size: 2.2rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.team-header p {
+		color: rgba(255, 255, 255, 0.8);
+		font-size: 1.1rem;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.team-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: var(--space-lg);
+	}
+
+	.team-card {
 		display: flex;
-		gap: var(--space-xl);
+		flex-direction: column;
 		align-items: center;
+		text-align: center;
 		background: rgba(255, 255, 255, 0.02);
 		border: 1px solid rgba(196, 167, 125, 0.15);
 		padding: var(--space-xl);
 		border-radius: 8px;
+		text-decoration: none;
+		transition: all 0.3s ease;
+	}
+
+	.team-card:hover {
+		transform: translateY(-5px);
+		border-color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.05);
 	}
 
 	.avatar-placeholder {
-		width: 120px;
-		height: 120px;
+		width: 100px;
+		height: 100px;
 		border-radius: 50%;
 		background: var(--color-accent);
 		color: #000;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 4rem;
+		font-size: 3rem;
 		font-family: var(--font-heading);
-		flex-shrink: 0;
+		margin-bottom: var(--space-md);
+		box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 	}
 
-	.intro-text h2 {
+	.team-info h3 {
 		color: var(--color-accent);
 		margin-bottom: 0.5rem;
+		font-size: 1.2rem;
 	}
 
-	.intro-text p {
-		margin-bottom: 1.5rem;
-		line-height: 1.6;
-	}
-
-	.audio-player {
-		display: inline-block;
-	}
-
-	.btn-play {
-		background: rgba(196, 167, 125, 0.1);
-		border: 1px solid var(--color-accent);
-		color: var(--color-accent);
-		padding: 0.8rem 1.5rem;
-		border-radius: 30px;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		font-family: var(--font-heading);
-		transition: all 0.3s ease;
-	}
-
-	.btn-play:hover {
-		background: rgba(196, 167, 125, 0.2);
-	}
-
-	.btn-play.playing {
-		background: var(--color-accent);
-		color: #000;
+	.team-info p {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.95rem;
 	}
 
 	/* Anatomy Section */

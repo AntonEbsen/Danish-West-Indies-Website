@@ -1,0 +1,171 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Sheng Ye Michael Chen | Team | Danish West Indies">
+	<div class="profile-page">
+		<header class="page-header animate-fade-in">
+			<a href="/about" class="back-link">← Back to About</a>
+			<h1>Sheng Ye Michael Chen</h1>
+			<p class="subtitle">Master's Student & Researcher</p>
+		</header>
+
+		<section class="profile-content animate-fade-in" style="animation-delay: 0.2s;">
+			<div class="avatar-large">S</div>
+			
+			<div class="bio-card">
+				<h2>About</h2>
+				<p>
+					I am a Master's student in Economic History at the University of Copenhagen. 
+					My research focuses on the history of the Danish West Indies, the transatlantic slave trade, and 
+					the structural economics of colonialism. This project is a collaborative effort to restore humanity 
+					to those whose lives were reduced to colonial statistics.
+				</p>
+				
+				<div class="audio-player">
+					<button id="btn-play-intro" class="btn-play">
+						<span class="icon">▶</span>
+						<span>Listen to Audio Introduction</span>
+					</button>
+					<audio id="audio-intro" src="https://actions.google.com/sounds/v1/human_voices/human_breathing.ogg" preload="auto"></audio>
+				</div>
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const btnPlay = document.getElementById('btn-play-intro');
+		const audio = document.getElementById('audio-intro') as HTMLAudioElement;
+		
+		btnPlay?.addEventListener('click', () => {
+			const icon = btnPlay.querySelector('.icon');
+			if (audio.paused) {
+				audio.play();
+				if (icon) icon.textContent = '⏸';
+				btnPlay.classList.add('playing');
+			} else {
+				audio.pause();
+				if (icon) icon.textContent = '▶';
+				btnPlay.classList.remove('playing');
+			}
+		});
+
+		audio?.addEventListener('ended', () => {
+			const icon = btnPlay?.querySelector('.icon');
+			if (icon) icon.textContent = '▶';
+			btnPlay?.classList.remove('playing');
+		});
+	});
+</script>
+
+<style>
+	.profile-page {
+		max-width: 800px;
+		margin: 0 auto;
+		padding-bottom: var(--space-xl);
+	}
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-md);
+		color: var(--color-accent);
+		text-decoration: none;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-size: 0.85rem;
+		transition: color 0.3s;
+	}
+
+	.back-link:hover {
+		color: #d4b88f;
+	}
+
+	.page-header h1 {
+		color: var(--color-accent);
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.2rem;
+		font-style: italic;
+	}
+
+	.profile-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--space-xl);
+	}
+
+	.avatar-large {
+		width: 150px;
+		height: 150px;
+		border-radius: 50%;
+		background: var(--color-accent);
+		color: #000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 5rem;
+		font-family: var(--font-heading);
+		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+	}
+
+	.bio-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		padding: var(--space-xl);
+		border-radius: 8px;
+		width: 100%;
+	}
+
+	.bio-card h2 {
+		color: var(--color-accent);
+		margin-bottom: var(--space-md);
+		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
+		padding-bottom: 0.5rem;
+	}
+
+	.bio-card p {
+		color: rgba(255, 255, 255, 0.85);
+		line-height: 1.7;
+		margin-bottom: var(--space-xl);
+	}
+
+	.audio-player {
+		display: flex;
+		justify-content: center;
+	}
+
+	.btn-play {
+		background: rgba(196, 167, 125, 0.1);
+		border: 1px solid var(--color-accent);
+		color: var(--color-accent);
+		padding: 0.8rem 1.5rem;
+		border-radius: 30px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-family: var(--font-heading);
+		transition: all 0.3s ease;
+	}
+
+	.btn-play:hover {
+		background: rgba(196, 167, 125, 0.2);
+	}
+
+	.btn-play.playing {
+		background: var(--color-accent);
+		color: #000;
+	}
+</style>
