@@ -25,6 +25,7 @@ export const ui = {
     'nav.about': 'About',
     'nav.languages': 'Languages',
     'nav.contact': 'Contact',
+    'nav.faq': 'FAQ & Q&A',
   },
   da: {
     'nav.history': 'Historie',
@@ -34,6 +35,7 @@ export const ui = {
     'nav.about': 'Om Projektet',
     'nav.languages': 'Sprog',
     'nav.contact': 'Kontakt',
+    'nav.faq': 'FAQ & Q&A',
   },
   es: {
     'nav.history': 'Historia',
@@ -43,6 +45,7 @@ export const ui = {
     'nav.about': 'Acerca de',
     'nav.languages': 'Idiomas',
     'nav.contact': 'Contacto',
+    'nav.faq': 'FAQ & Q&A',
   },
   fr: {
     'nav.history': 'Histoire',
@@ -52,6 +55,7 @@ export const ui = {
     'nav.about': 'À Propos',
     'nav.languages': 'Langues',
     'nav.contact': 'Contact',
+    'nav.faq': 'FAQ & Q&A',
   },
   nl: {
     'nav.history': 'Geschiedenis',
@@ -61,6 +65,7 @@ export const ui = {
     'nav.about': 'Over',
     'nav.languages': 'Talen',
     'nav.contact': 'Contact',
+    'nav.faq': 'FAQ & Q&A',
   },
   ak: {
     'nav.history': 'Abakɔsɛm',
@@ -70,6 +75,7 @@ export const ui = {
     'nav.about': 'Ho Asɛm',
     'nav.languages': 'Kasa',
     'nav.contact': 'Nkitahodi',
+    'nav.faq': 'FAQ & Q&A',
   },
   de: {
     'nav.history': 'Geschichte',
@@ -79,6 +85,7 @@ export const ui = {
     'nav.about': 'Über',
     'nav.languages': 'Sprachen',
     'nav.contact': 'Kontakt',
+    'nav.faq': 'FAQ & Q&A',
   },
   nh: {
     'nav.history': 'Histori',
@@ -88,6 +95,7 @@ export const ui = {
     'nav.about': 'Onda',
     'nav.languages': 'Tael',
     'nav.contact': 'Kontak',
+    'nav.faq': 'FAQ & Q&A',
   },
   yo: {
     'nav.history': 'Itan',
@@ -97,6 +105,7 @@ export const ui = {
     'nav.about': 'Nipa',
     'nav.languages': 'Ede',
     'nav.contact': 'Olubasọrọ',
+    'nav.faq': 'FAQ & Q&A',
   },
   ig: {
     'nav.history': 'Akụkọ ihe mere eme',
@@ -106,6 +115,7 @@ export const ui = {
     'nav.about': 'Banyere',
     'nav.languages': 'Asụsụ',
     'nav.contact': 'Kpọtụrụ',
+    'nav.faq': 'FAQ & Q&A',
   },
   kg: {
     'nav.history': 'Kinkulu',
@@ -115,6 +125,7 @@ export const ui = {
     'nav.about': 'Sambu na',
     'nav.languages': 'Ndinga',
     'nav.contact': 'Kontakiti',
+    'nav.faq': 'FAQ & Q&A',
   },
   sv: {
     'nav.history': 'Historia',
@@ -124,6 +135,7 @@ export const ui = {
     'nav.about': 'Om',
     'nav.languages': 'Språk',
     'nav.contact': 'Kontakt',
+    'nav.faq': 'FAQ & Q&A',
   },
   pt: {
     'nav.history': 'História',
@@ -133,5 +145,6 @@ export const ui = {
     'nav.about': 'Sobre',
     'nav.languages': 'Idiomas',
     'nav.contact': 'Contato',
+    'nav.faq': 'FAQ & Q&A',
   },
 } as const;
