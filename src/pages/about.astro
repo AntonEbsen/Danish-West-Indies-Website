@@ -9,37 +9,139 @@ import Layout from '../layouts/Layout.astro';
 			<p class="subtitle">Preserving the memory of the Danish West Indies.</p>
 		</header>
 
-		<div class="content-sections animate-fade-in" style="animation-delay: 0.2s;">
-			<section class="card">
-				<h2>The Mission</h2>
-				<p>
-					The <strong>Danish West Indies Memorial Register</strong> is a digital humanities project dedicated to remembering and honoring the tens of thousands of enslaved individuals who lived and died under Danish colonial rule in the Caribbean (1672–1917). 
-				</p>
-				<p>
-					For centuries, these individuals were reduced to mere statistics in colonial ledgers, crop reports, and tax documents. This platform aims to restore their humanity by transforming those sterile archives into a living, searchable, and dignified memorial. 
-				</p>
-			</section>
+		<!-- Personal Intro (Idea 3) -->
+		<section class="intro-section animate-fade-in" style="animation-delay: 0.2s;">
+			<div class="creator-profile">
+				<div class="avatar-placeholder">A</div>
+				<div class="intro-text">
+					<h2>The Creator</h2>
+					<p>
+						My name is <strong>Anton Meier Ebsen Jørgensen</strong>. This project is part of my ongoing Master's thesis in Economic History at the University of Copenhagen. 
+					</p>
+					<div class="audio-player">
+						<button id="btn-play-intro" class="btn-play">
+							<span class="icon">▶</span>
+							<span>Listen to the Introduction</span>
+						</button>
+						<audio id="audio-intro" src="https://actions.google.com/sounds/v1/human_voices/human_breathing.ogg" preload="auto"></audio>
+					</div>
+				</div>
+			</div>
+		</section>
 
-			<section class="card">
-				<h2>The Creator</h2>
-				<p>
-					This project was created by <strong>Anton Meier Ebsen Jørgensen</strong> as part of an ongoing Master's thesis in Economic History at the University of Copenhagen. By combining deep archival research with modern web technologies, the project seeks to make the complex and tragic history of the Danish West Indies accessible to the public, educators, and descendants worldwide.
-				</p>
-			</section>
+		<!-- Anatomy of an Archive (Idea 1) -->
+		<section class="anatomy-section animate-fade-in" style="animation-delay: 0.4s;">
+			<h2>Anatomy of an Archive</h2>
+			<p>Hover over the document below to see how we extract humanity from colonial ledgers.</p>
+			
+			<div class="archive-interactive">
+				<img src="/images/colonial_ledger.jpg" alt="18th Century Colonial Ledger" class="ledger-img" />
+				
+				<!-- Interactive Pins -->
+				<div class="pin" style="top: 30%; left: 35%;">
+					<span class="pin-dot"></span>
+					<div class="tooltip">
+						<h4>The Numbers</h4>
+						<p>Colonial officials recorded individuals as sheer numbers for tax purposes, dehumanizing their existence.</p>
+					</div>
+				</div>
 
-			<section class="card">
-				<h2>The Data</h2>
-				<p>
-					The core data driving the Memorial Register is derived from historical censuses, church records, and plantation ledgers preserved in the Danish National Archives (Rigsarkivet). Because colonial record-keeping prioritized property over humanity, the data is often incomplete. We encourage descendants and historians to contribute oral histories and archival discoveries to help us complete these stories.
-				</p>
-			</section>
-		</div>
+				<div class="pin" style="top: 55%; left: 75%;">
+					<span class="pin-dot"></span>
+					<div class="tooltip">
+						<h4>The Names</h4>
+						<p>When names were recorded, they were often colonial names forced upon them. We aim to recover original identities where possible.</p>
+					</div>
+				</div>
+
+				<div class="pin" style="top: 80%; left: 45%;">
+					<span class="pin-dot"></span>
+					<div class="tooltip">
+						<h4>The Margins</h4>
+						<p>Often, the most profound stories of resistance or tragedy are found scribbled hastily in the margins of these ledgers.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Contribution Form (Idea 5) -->
+		<section class="contribute-section animate-fade-in" style="animation-delay: 0.6s;">
+			<div class="card">
+				<h2>Contribute to the Thesis</h2>
+				<p>Because colonial record-keeping prioritized property over humanity, the data is often incomplete. If you have access to oral histories, or wish to help transcribe 18th-century Danish cursive, please reach out.</p>
+				
+				<form id="contribute-form" class="contribute-form">
+					<div class="form-group">
+						<label for="c-name">Name</label>
+						<input type="text" id="c-name" required placeholder="Your Name" />
+					</div>
+					<div class="form-group">
+						<label for="c-email">Email</label>
+						<input type="email" id="c-email" required placeholder="you@example.com" />
+					</div>
+					<div class="form-group">
+						<label for="c-message">How can you help?</label>
+						<textarea id="c-message" rows="4" required placeholder="I have family records..."></textarea>
+					</div>
+					<button type="submit" class="btn-primary">Send Message</button>
+				</form>
+			</div>
+		</section>
+
+		<!-- Institutional Authority (Idea 4) -->
+		<section class="partners-section animate-fade-in" style="animation-delay: 0.8s;">
+			<div class="partners-logos">
+				<div class="partner">
+					<span class="partner-icon">🏛️</span>
+					<span>University of Copenhagen</span>
+				</div>
+				<div class="partner">
+					<span class="partner-icon">📜</span>
+					<span>Rigsarkivet (National Archives)</span>
+				</div>
+			</div>
+		</section>
 	</div>
 </Layout>
 
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Audio Intro Logic
+		const btnPlay = document.getElementById('btn-play-intro');
+		const audio = document.getElementById('audio-intro') as HTMLAudioElement;
+		
+		btnPlay?.addEventListener('click', () => {
+			const icon = btnPlay.querySelector('.icon');
+			if (audio.paused) {
+				audio.play();
+				if (icon) icon.textContent = '⏸';
+				btnPlay.classList.add('playing');
+			} else {
+				audio.pause();
+				if (icon) icon.textContent = '▶';
+				btnPlay.classList.remove('playing');
+			}
+		});
+
+		audio?.addEventListener('ended', () => {
+			const icon = btnPlay?.querySelector('.icon');
+			if (icon) icon.textContent = '▶';
+			btnPlay?.classList.remove('playing');
+		});
+
+		// Form Logic
+		const form = document.getElementById('contribute-form') as HTMLFormElement;
+		form?.addEventListener('submit', (e) => {
+			e.preventDefault();
+			alert('Thank you for your interest! A researcher will be in touch shortly.');
+			form.reset();
+		});
+	});
+</script>
+
 <style>
 	.about-page {
-		max-width: 800px;
+		max-width: 1000px;
 		margin: 0 auto;
 		padding-bottom: var(--space-xl);
 	}
@@ -61,10 +163,178 @@ import Layout from '../layouts/Layout.astro';
 		font-style: italic;
 	}
 
-	.content-sections {
+	/* Intro Section */
+	.intro-section {
+		margin-bottom: var(--space-2xl);
+	}
+
+	.creator-profile {
 		display: flex;
-		flex-direction: column;
-		gap: var(--space-lg);
+		gap: var(--space-xl);
+		align-items: center;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		padding: var(--space-xl);
+		border-radius: 8px;
+	}
+
+	.avatar-placeholder {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		background: var(--color-accent);
+		color: #000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 4rem;
+		font-family: var(--font-heading);
+		flex-shrink: 0;
+	}
+
+	.intro-text h2 {
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+	}
+
+	.intro-text p {
+		margin-bottom: 1.5rem;
+		line-height: 1.6;
+	}
+
+	.audio-player {
+		display: inline-block;
+	}
+
+	.btn-play {
+		background: rgba(196, 167, 125, 0.1);
+		border: 1px solid var(--color-accent);
+		color: var(--color-accent);
+		padding: 0.8rem 1.5rem;
+		border-radius: 30px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-family: var(--font-heading);
+		transition: all 0.3s ease;
+	}
+
+	.btn-play:hover {
+		background: rgba(196, 167, 125, 0.2);
+	}
+
+	.btn-play.playing {
+		background: var(--color-accent);
+		color: #000;
+	}
+
+	/* Anatomy Section */
+	.anatomy-section {
+		margin-bottom: var(--space-2xl);
+		text-align: center;
+	}
+
+	.anatomy-section h2 {
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+	}
+
+	.anatomy-section > p {
+		margin-bottom: var(--space-lg);
+		color: var(--color-text-muted);
+	}
+
+	.archive-interactive {
+		position: relative;
+		display: inline-block;
+		max-width: 100%;
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		border-radius: 8px;
+		overflow: hidden;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+	}
+
+	.ledger-img {
+		display: block;
+		width: 100%;
+		height: auto;
+		max-height: 500px;
+		object-fit: cover;
+		filter: contrast(1.1) sepia(0.2);
+	}
+
+	.pin {
+		position: absolute;
+		width: 30px;
+		height: 30px;
+		transform: translate(-50%, -50%);
+		cursor: pointer;
+		z-index: 10;
+	}
+
+	.pin-dot {
+		display: block;
+		width: 20px;
+		height: 20px;
+		background: var(--color-accent);
+		border-radius: 50%;
+		box-shadow: 0 0 10px rgba(0,0,0,0.8);
+		position: relative;
+		margin: 5px auto;
+		transition: transform 0.2s;
+	}
+
+	.pin-dot::after {
+		content: '';
+		position: absolute;
+		top: -5px; left: -5px; right: -5px; bottom: -5px;
+		border: 2px solid var(--color-accent);
+		border-radius: 50%;
+		animation: pulse 2s infinite;
+	}
+
+	@keyframes pulse {
+		0% { transform: scale(1); opacity: 1; }
+		100% { transform: scale(2); opacity: 0; }
+	}
+
+	.tooltip {
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%) translateY(10px);
+		background: rgba(0, 0, 0, 0.9);
+		border: 1px solid var(--color-accent);
+		padding: 1rem;
+		width: 250px;
+		border-radius: 4px;
+		opacity: 0;
+		pointer-events: none;
+		transition: all 0.3s ease;
+		text-align: left;
+		box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+	}
+
+	.pin:hover .tooltip {
+		opacity: 1;
+		transform: translateX(-50%) translateY(5px);
+	}
+
+	.tooltip h4 {
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+		font-family: var(--font-heading);
+	}
+
+	.tooltip p {
+		font-size: 0.85rem;
+		line-height: 1.5;
+	}
+
+	/* Contribute Section */
+	.contribute-section {
+		margin-bottom: var(--space-2xl);
 	}
 
 	.card {
@@ -72,7 +342,6 @@ import Layout from '../layouts/Layout.astro';
 		border: 1px solid rgba(196, 167, 125, 0.15);
 		padding: var(--space-xl);
 		border-radius: 8px;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 	}
 
 	.card h2 {
@@ -81,14 +350,100 @@ import Layout from '../layouts/Layout.astro';
 		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
 		padding-bottom: 0.5rem;
 	}
-
+	
 	.card p {
-		color: rgba(255, 255, 255, 0.85);
-		line-height: 1.7;
-		margin-bottom: var(--space-md);
+		margin-bottom: var(--space-lg);
+		color: rgba(255, 255, 255, 0.8);
 	}
 
-	.card p:last-child {
-		margin-bottom: 0;
+	.contribute-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.form-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.form-group label {
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+	}
+
+	.form-group input, .form-group textarea {
+		padding: 0.8rem;
+		background: rgba(0, 0, 0, 0.3);
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		border-radius: 4px;
+		color: #fff;
+		font-family: var(--font-body);
+	}
+
+	.form-group input:focus, .form-group textarea:focus {
+		outline: none;
+		border-color: var(--color-accent);
+	}
+
+	.btn-primary {
+		background: var(--color-accent);
+		color: #000;
+		border: none;
+		padding: 1rem;
+		font-size: 1.1rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		border-radius: 4px;
+		cursor: pointer;
+		font-family: var(--font-heading);
+		transition: background 0.3s ease;
+	}
+
+	.btn-primary:hover {
+		background: #d4b88f;
+	}
+
+	/* Partners */
+	.partners-section {
+		border-top: 1px solid rgba(196, 167, 125, 0.2);
+		padding-top: var(--space-xl);
+	}
+
+	.partners-logos {
+		display: flex;
+		justify-content: center;
+		gap: 3rem;
+		flex-wrap: wrap;
+	}
+
+	.partner {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		color: rgba(255, 255, 255, 0.5);
+		font-size: 1.2rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-family: var(--font-heading);
+		filter: grayscale(100%);
+		transition: all 0.3s ease;
+	}
+
+	.partner:hover {
+		filter: grayscale(0%);
+		color: var(--color-accent);
+	}
+
+	.partner-icon {
+		font-size: 2rem;
+	}
+
+	@media (max-width: 768px) {
+		.creator-profile {
+			flex-direction: column;
+			text-align: center;
+		}
 	}
 </style>
