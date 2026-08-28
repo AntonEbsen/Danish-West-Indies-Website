@@ -1,0 +1,194 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const glossaryTerms = [
+  { term: 'Amina (Akwamu)', def: 'An ethnic group from the Gold Coast (modern-day Ghana), many of whom were enslaved in the Danish West Indies. Known for leading the 1733 St. John Slave Rebellion.' },
+  { term: 'Dansk Vestindien', def: 'The Danish West Indies, the former name of the colonial territory covering St. Croix, St. Thomas, and St. John before the 1917 transfer to the United States.' },
+  { term: 'Frikulørte', def: 'Free People of Color. A distinct social class in the Danish West Indies consisting of emancipated individuals of African or mixed descent prior to the general emancipation of 1848.' },
+  { term: 'Matrikel (pl. Matrikler)', def: 'Historical land and tax ledgers maintained by the colonial administration. These are critical archival sources for tracing property ownership, sugar production, and the enslaved populations on specific estates.' },
+  { term: 'Moravian Brethren', def: 'A Protestant denomination (Herrnhutere) that established early missions in the Danish West Indies. They kept extensive censuses and diaries which provide vital historical context.' },
+  { term: 'Rigsdaler', def: 'The official currency of Denmark and the Danish West Indies until the introduction of the Krone in the late 19th century.' },
+  { term: 'Rigsarkivet', def: 'The Danish National Archives in Copenhagen, which houses the vast majority of original documents, ledgers, and correspondence from the Danish colonial era.' },
+  { term: 'Stückgut', def: 'A term used in customs and shipping ledgers referring to general cargo or piecemeal goods.' },
+  { term: 'Transfer Day', def: 'March 31, 1917. The official date when sovereignty of the Danish West Indies was transferred to the United States for $25 million in gold.' },
+  { term: 'Vestindisk-Guineisk Kompagni', def: 'The Danish West India and Guinea Company. A chartered company that initially colonized St. Thomas and St. John and controlled the transatlantic slave trade until the Crown took over in 1754.' }
+];
+
+// Sort alphabetically
+glossaryTerms.sort((a, b) => a.term.localeCompare(b.term));
+---
+
+<Layout title="Historical Glossary | Master Thesis | Danish West Indies">
+	<div class="page-container animate-fade-in">
+		<a href="/thesis" class="back-link">← Back to Thesis Portal</a>
+
+		<header class="page-header">
+			<span class="label">Reference Library</span>
+			<h1>Historical Glossary</h1>
+			<p class="subtitle">A searchable dictionary of 18th and 19th-century colonial terminology utilized throughout the thesis.</p>
+		</header>
+
+		<div class="search-container">
+			<input type="text" id="glossarySearch" placeholder="Search for a term (e.g., Matrikel)..." />
+		</div>
+
+		<div class="glossary-grid" id="glossaryGrid">
+			{glossaryTerms.map(item => (
+				<div class="glossary-card">
+					<h2>{item.term}</h2>
+					<p>{item.def}</p>
+				</div>
+			))}
+		</div>
+		
+		<div id="noResults" class="no-results hidden">
+			<p>No terms found matching your search.</p>
+		</div>
+	</div>
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const searchInput = document.getElementById('glossarySearch');
+		const cards = document.querySelectorAll('.glossary-card');
+		const noResults = document.getElementById('noResults');
+
+		if (searchInput) {
+			searchInput.addEventListener('input', (e) => {
+				const query = (e.target as HTMLInputElement).value.toLowerCase();
+				let visibleCount = 0;
+
+				cards.forEach(card => {
+					const term = card.querySelector('h2')?.textContent?.toLowerCase() || '';
+					const def = card.querySelector('p')?.textContent?.toLowerCase() || '';
+					
+					if (term.includes(query) || def.includes(query)) {
+						(card as HTMLElement).style.display = 'block';
+						visibleCount++;
+					} else {
+						(card as HTMLElement).style.display = 'none';
+					}
+				});
+
+				if (visibleCount === 0) {
+					noResults?.classList.remove('hidden');
+				} else {
+					noResults?.classList.add('hidden');
+				}
+			});
+		}
+	});
+</script>
+
+<style>
+	.page-container {
+		max-width: 900px;
+		margin: 0 auto;
+		padding-bottom: var(--space-2xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-lg);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover { color: var(--color-accent); }
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.label {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1);
+		padding: 0.3rem 0.8rem;
+		border-radius: 20px;
+		margin-bottom: var(--space-sm);
+	}
+
+	.page-header h1 {
+		color: var(--color-accent);
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.1rem;
+		font-style: italic;
+	}
+
+	.search-container {
+		margin-bottom: var(--space-2xl);
+	}
+
+	#glossarySearch {
+		width: 100%;
+		padding: 1rem 1.5rem;
+		font-size: 1.1rem;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		border-radius: 8px;
+		color: var(--color-text);
+		font-family: var(--font-body);
+		transition: all 0.3s;
+	}
+
+	#glossarySearch:focus {
+		outline: none;
+		border-color: var(--color-accent);
+		background: rgba(255, 255, 255, 0.08);
+		box-shadow: 0 0 0 2px rgba(196, 167, 125, 0.2);
+	}
+
+	.glossary-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.glossary-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(255, 255, 255, 0.05);
+		border-left: 4px solid var(--color-accent);
+		border-radius: 8px;
+		padding: 1.5rem;
+		transition: all 0.3s;
+	}
+
+	.glossary-card:hover {
+		background: rgba(196, 167, 125, 0.05);
+	}
+
+	.glossary-card h2 {
+		color: var(--color-text);
+		margin-top: 0;
+		margin-bottom: 0.5rem;
+		font-size: 1.4rem;
+	}
+
+	.glossary-card p {
+		color: rgba(255, 255, 255, 0.8);
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	.no-results {
+		text-align: center;
+		padding: var(--space-2xl);
+		color: var(--color-text-muted);
+		font-style: italic;
+	}
+
+	.hidden {
+		display: none;
+	}
+</style>

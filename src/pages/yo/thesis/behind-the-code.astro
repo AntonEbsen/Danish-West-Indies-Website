@@ -1,0 +1,249 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { Code } from 'astro:components';
+
+const dataCleaningScript = `
+import pandas as pd
+import numpy as np
+from bs4 import BeautifulSoup
+import re
+
+def parse_moravian_census(file_path):
+    """
+    Parses XML transcriptions of the 18th-century Moravian censuses,
+    extracting demographic data on enslaved individuals.
+    """
+    with open(file_path, 'r', encoding='utf-8') as f:
+        soup = BeautifulSoup(f, 'xml')
+        
+    records = []
+    # Find all <person> tags in the TEI-XML
+    for person in soup.find_all('person'):
+        name = person.find('name').text if person.find('name') else 'Unknown'
+        
+        # Extract origin (e.g., Amina, Creole)
+        origin_tag = person.find('trait', type='origin')
+        origin = origin_tag.text if origin_tag else 'Not Recorded'
+        
+        # Calculate age if birth year is present
+        birth_tag = person.find('birth')
+        birth_year = int(birth_tag['when'][:4]) if birth_tag and 'when' in birth_tag.attrs else np.nan
+        
+        records.append({
+            'name': name,
+            'origin': origin,
+            'birth_year': birth_year
+        })
+        
+    df = pd.DataFrame(records)
+    
+    # Clean string data
+    df['origin'] = df['origin'].apply(lambda x: re.sub(r'[^a-zA-Z\\s]', '', x).strip())
+    
+    # Handle missing values using temporal interpolation
+    df['birth_year'] = df['birth_year'].interpolate(method='linear')
+    
+    return df
+
+if __name__ == '__main__':
+    raw_data_path = './data/raw/st_croix_1790.xml'
+    clean_df = parse_moravian_census(raw_data_path)
+    clean_df.to_csv('./data/processed/st_croix_1790_clean.csv', index=False)
+    print(f"Successfully processed {len(clean_df)} archival records.")
+`;
+
+const networkAnalysisScript = `
+import networkx as nx
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def build_plantation_network(census_df):
+    """
+    Constructs a spatial network of plantations based on marriage 
+    and family ties spanning across different estates.
+    """
+    G = nx.Graph()
+    
+    # census_df contains columns: ['person_id', 'estate_id', 'spouse_estate_id']
+    for _, row in census_df.dropna(subset=['spouse_estate_id']).iterrows():
+        source = row['estate_id']
+        target = row['spouse_estate_id']
+        
+        if G.has_edge(source, target):
+            G[source][target]['weight'] += 1
+        else:
+            G.add_edge(source, target, weight=1)
+            
+    return G
+
+def calculate_centrality(G):
+    # Compute degree centrality to find the most interconnected estates
+    centrality = nx.degree_centrality(G)
+    return sorted(centrality.items(), key=lambda x: x[1], reverse=True)
+`;
+---
+
+<Layout title="Behind the Code | Master Thesis | Danish West Indies">
+	<div class="page-container animate-fade-in">
+		<a href="/thesis" class="back-link">← Back to Thesis Portal</a>
+
+		<header class="page-header">
+			<span class="label">Methodology</span>
+			<h1>Behind the Code</h1>
+			<p class="subtitle">A look into the Python architecture powering the data extraction and network analysis of the thesis.</p>
+		</header>
+
+		<div class="methodology-intro">
+			<p>Transforming 18th-century handwritten gothic ledgers into a structured, queryable database requires significant programmatic intervention. We utilized <strong>Python</strong> exclusively for data extraction, natural language processing, and spatial network analysis. Below are excerpts of the core scripts used to process the raw archival XML.</p>
+		</div>
+
+		<section class="code-section">
+			<div class="section-header">
+				<h2>1. Archival Data Extraction</h2>
+				<p>This script parses TEI-XML transcriptions of the Moravian censuses, extracting demographic traits and handling missing temporal data via linear interpolation.</p>
+			</div>
+			<div class="code-block-wrapper">
+				<div class="code-header">
+					<span class="filename">extract_census.py</span>
+					<span class="language">Python</span>
+				</div>
+				<Code code={dataCleaningScript.trim()} lang="python" theme="github-dark" />
+			</div>
+		</section>
+
+		<section class="code-section">
+			<div class="section-header">
+				<h2>2. Spatial Network Analysis</h2>
+				<p>Using the <code>networkx</code> library, this script constructs an interconnected graph of plantations on St. Croix based on cross-estate family and marriage ties.</p>
+			</div>
+			<div class="code-block-wrapper">
+				<div class="code-header">
+					<span class="filename">network_analysis.py</span>
+					<span class="language">Python</span>
+				</div>
+				<Code code={networkAnalysisScript.trim()} lang="python" theme="github-dark" />
+			</div>
+		</section>
+
+	</div>
+</Layout>
+
+<style>
+	.page-container {
+		max-width: 900px;
+		margin: 0 auto;
+		padding-bottom: var(--space-2xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-lg);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover { color: var(--color-accent); }
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.label {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1);
+		padding: 0.3rem 0.8rem;
+		border-radius: 20px;
+		margin-bottom: var(--space-sm);
+	}
+
+	.page-header h1 {
+		color: var(--color-accent);
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.1rem;
+		font-style: italic;
+	}
+
+	.methodology-intro {
+		background: rgba(196, 167, 125, 0.05);
+		border: 1px dashed rgba(196, 167, 125, 0.3);
+		border-radius: 8px;
+		padding: var(--space-xl);
+		margin-bottom: var(--space-2xl);
+		text-align: center;
+	}
+
+	.methodology-intro p {
+		color: rgba(255, 255, 255, 0.9);
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	.code-section {
+		margin-bottom: var(--space-2xl);
+	}
+
+	.section-header h2 {
+		color: var(--color-text);
+		margin-bottom: 0.5rem;
+	}
+
+	.section-header p {
+		color: var(--color-text-muted);
+		margin-bottom: 1rem;
+		line-height: 1.5;
+	}
+
+	.code-block-wrapper {
+		background: #0d1117; /* GitHub Dark bg */
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 8px;
+		overflow: hidden;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	}
+
+	.code-header {
+		display: flex;
+		justify-content: space-between;
+		padding: 0.8rem 1rem;
+		background: rgba(255, 255, 255, 0.05);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		font-family: monospace;
+		font-size: 0.9rem;
+	}
+
+	.filename {
+		color: rgba(255, 255, 255, 0.8);
+	}
+
+	.language {
+		color: var(--color-accent);
+		text-transform: uppercase;
+		font-size: 0.8rem;
+		letter-spacing: 1px;
+	}
+
+	/* Target Astro Code block */
+	.code-block-wrapper :global(pre) {
+		margin: 0 !important;
+		padding: 1.5rem !important;
+		background: transparent !important;
+		overflow-x: auto;
+	}
+
+	.code-block-wrapper :global(code) {
+		font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+		font-size: 0.95rem;
+		line-height: 1.5;
+	}
+</style>

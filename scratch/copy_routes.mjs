@@ -12,7 +12,9 @@ const filesToCopy = [
   { src: 'src/pages/thesis/interactive-maps.astro', dest: 'thesis/interactive-maps.astro' },
   { src: 'src/pages/thesis/downloads.astro', dest: 'thesis/downloads.astro' },
   { src: 'src/pages/thesis/defense.astro', dest: 'thesis/defense.astro' },
-  { src: 'src/pages/thesis/authors.astro', dest: 'thesis/authors.astro' }
+  { src: 'src/pages/thesis/authors.astro', dest: 'thesis/authors.astro' },
+  { src: 'src/pages/thesis/glossary.astro', dest: 'thesis/glossary.astro' },
+  { src: 'src/pages/thesis/behind-the-code.astro', dest: 'thesis/behind-the-code.astro' }
 ];
 
 filesToCopy.forEach(file => {
