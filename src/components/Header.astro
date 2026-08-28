@@ -1,16 +1,34 @@
 ---
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+import { languages } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const currentPath = Astro.url.pathname;
+const cleanPath = currentPath.replace(/^\/(en|da)/, '');
+
+const enUrl = cleanPath === '' ? '/' : cleanPath;
+const daUrl = '/da' + (cleanPath === '/' ? '' : cleanPath);
 ---
 <header class="site-header">
   <div class="container header-container">
-    <a href="/" class="logo">Danish West Indies</a>
+    <a href={translatePath('/')} class="logo">Danish West Indies</a>
     <nav class="main-nav">
       <ul>
-        <li><a href="/history">History</a></li>
-        <li><a href="/memorial">Memorial</a></li>
-        <li><a href="/resources">Resources</a></li>
-        <li><a href="/thesis">Thesis</a></li>
-        <li><a href="/about">About</a></li>
+        <li><a href={translatePath('/history')}>{t('nav.history')}</a></li>
+        <li><a href={translatePath('/memorial')}>{t('nav.memorial')}</a></li>
+        <li><a href={translatePath('/resources')}>{t('nav.resources')}</a></li>
+        <li><a href={translatePath('/thesis')}>{t('nav.thesis')}</a></li>
+        <li><a href={translatePath('/about')}>{t('nav.about')}</a></li>
       </ul>
+      
+      <div class="lang-switcher">
+        <a href={enUrl} class={lang === 'en' ? 'active' : ''}>EN</a>
+        <span class="divider">|</span>
+        <a href={daUrl} class={lang === 'da' ? 'active' : ''}>DA</a>
+      </div>
     </nav>
   </div>
 </header>
@@ -33,12 +51,21 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--color-text);
+    text-decoration: none;
   }
   
+  .main-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
   .main-nav ul {
     list-style: none;
     display: flex;
     gap: var(--space-md);
+    margin: 0;
+    padding: 0;
   }
   
   .main-nav a {
@@ -47,9 +74,41 @@
     text-transform: uppercase;
     font-size: 0.85rem;
     letter-spacing: 1px;
+    text-decoration: none;
   }
   
   .main-nav a:hover {
     color: var(--color-accent);
+  }
+
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-family: var(--font-heading);
+    background: rgba(255,255,255,0.05);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    border: 1px solid rgba(196,167,125,0.2);
+  }
+
+  .lang-switcher a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .lang-switcher a.active {
+    color: var(--color-accent);
+    font-weight: bold;
+  }
+
+  .lang-switcher a:hover {
+    color: #fff;
+  }
+
+  .divider {
+    color: rgba(255,255,255,0.3);
   }
 </style>
