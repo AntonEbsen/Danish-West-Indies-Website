@@ -18,23 +18,30 @@ Individuals entered the Free Colored class through several avenues:
 2. **Wills and Testaments:** Occasionally, planters freed specific enslaved people (often their own unacknowledged, mixed-race children) upon their death.
 3. **Militia Service:** The Danish state sometimes granted freedom to Black men who served in the colonial militia (the Free Colored Corps), which was tasked with hunting down runaway slaves—a deliberate strategy by the Danes to sow division among the Black population.
 
-## Life in the "Middle"
+## The Economic Reality of the "In-Between" Class
 
-Freedom did not mean equality. The Free Colored population faced severe legal and social restrictions designed to keep them subordinate to the white minority.
-*   They were forced to wear a specific cockade (a knot of ribbons) on their hats to visually distinguish them from the enslaved population.
-*   They were often barred from holding high public office or owning large plantations.
-*   They were subject to curfews and could be thrown back into slavery if they could not produce their "freedom papers" on demand.
+Freedom did not mean social equality, but it did open the door to economic mobility. The Free Colored population faced severe legal restrictions—they were forced to wear a specific cockade (a knot of ribbons) to visually distinguish them from the enslaved, and were subject to curfews and harassment. 
 
-Despite these oppressive restrictions, the Free Colored population thrived economically, particularly in the towns of Christiansted and Charlotte Amalie. They became the backbone of the urban economy, working as highly skilled carpenters, masons, seamstresses, shopkeepers, and merchants.
+Despite this, they became the economic backbone of the urban centers, particularly Charlotte Amalie on St. Thomas and Christiansted on St. Croix. They dominated skilled trades:
+*   **The Artisans:** Free Colored men were the primary carpenters, masons, coopers, and shipwrights of the colony.
+*   **The Mercantile Class:** Free Colored women often ran boarding houses, taverns, and retail shops. Many dominated the Sunday markets, leveraging their trading networks to accumulate significant cash reserves.
+
+### Property and Slave Ownership
+
+One of the most complex and underexplored aspects of the Free Colored population is their participation in the slave economy. As they accumulated wealth, they invested it in the primary assets available in the colony: real estate and human beings.
+
+Economic data from the early 19th century reveals a startling reality: a significant percentage of urban properties in Charlotte Amalie and Christiansted were owned by Free People of Color, and **many of these property owners were also slave owners.**
+
+This was not necessarily due to cruelty, but to the inescapable economic logic of the colonial Caribbean. Enslaved labor was the foundation of all wealth and status. For a Free Colored artisan to run a successful cooperage, or a Free Colored woman to run a profitable boarding house, they purchased enslaved laborers. In some heartbreaking cases, Free Colored individuals purchased their own family members (spouses or children) when they could not legally manumit them due to strict bureaucratic fees.
 
 ## Anna Heegaard and the Fight for Equality
 
 As the Free Colored class grew in wealth and education, they began aggressively petitioning the Danish Crown for civil rights.
 
-One of the most influential figures of this era was **Anna Heegaard**, a wealthy, free woman of color who owned her own property and, paradoxically, enslaved people. She became the common-law wife of Governor General Peter von Scholten. Through her influence and the relentless petitioning of Free Colored leaders, von Scholten was pushed to reform the racial laws.
+One of the most influential figures of this era was **Anna Heegaard**, a wealthy, free woman of color who owned significant property and enslaved people. She became the common-law wife of Governor General Peter von Scholten. Through her influence, her lavish social gatherings that forced white elites to mingle with Free Colored elites, and the relentless petitioning of Free Colored leaders, von Scholten was pushed to reform the racial laws.
 
 In **1830**, the Danish Crown issued a decree granting "full equality" to Free People of Color. However, it was a deeply elitist reform: it tied civil rights to wealth and property ownership, meaning only the richest Free Colored individuals actually gained equal footing with whites. 
 
 ## A Divided Legacy
 
-The existence of the Free People of Color complicated the colonial hierarchy. The Danish administration intentionally utilized them as a buffer class, granting them just enough privilege to separate them from the enslaved population, but not enough to threaten white supremacy. This created complex racial and class dynamics that profoundly shaped the culture of the Virgin Islands long after the colonial era ended.
+The existence of the Free People of Color complicated the colonial hierarchy. The Danish administration intentionally utilized them as a buffer class, granting them just enough economic privilege to separate them from the enslaved population, but maintaining social barriers to prevent them from threatening white supremacy. This created complex racial and class dynamics—including colorism and wealth stratification within the Black community—that profoundly shaped the culture of the Virgin Islands long after the colonial era ended.
