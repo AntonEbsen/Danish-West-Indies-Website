@@ -126,6 +126,32 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 			</div>
 		</section>
 
+		<!-- FORMATS & EDITIONS -->
+		<section class="formats-section">
+			<h2>Formats & Editions</h2>
+			<p class="formats-intro">Choose the format that suits your reading style.</p>
+			<div class="formats-grid">
+				<div class="format-card">
+					<div class="format-icon">📕</div>
+					<h3>Hardcover</h3>
+					<p class="format-desc">A premium clothbound edition with gold foil lettering, high-resolution archival images, and a printed bibliography. A keepsake for your shelf.</p>
+					<span class="format-price">Price TBA</span>
+				</div>
+				<div class="format-card">
+					<div class="format-icon">📱</div>
+					<h3>eBook</h3>
+					<p class="format-desc">A digital edition available as PDF and ePub. Fully searchable, with clickable cross-references and hyperlinked bibliography. Read on any device.</p>
+					<span class="format-price">Price TBA</span>
+				</div>
+				<div class="format-card">
+					<div class="format-icon">🎧</div>
+					<h3>Audiobook</h3>
+					<p class="format-desc">A narrated edition bringing the colonial archives to life. Hear the data, the diary entries, and the economic analysis read aloud by the authors themselves.</p>
+					<span class="format-price">Price TBA</span>
+				</div>
+			</div>
+		</section>
+
 		<!-- FAQ -->
 		<section class="faq-section">
 			<h2>Frequently Asked Questions</h2>
@@ -139,7 +165,7 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 				<details class="faq-item">
 					<summary>What formats will it be available in?</summary>
 					<div class="faq-answer">
-						<p>We plan to offer the book in three formats: a premium hardcover edition, a paperback, and a digital PDF/eBook. Pricing will be announced closer to the publication date.</p>
+						<p>We plan to offer the book in three formats: a premium hardcover edition, a digital eBook (PDF & ePub), and a narrated audiobook read by the authors. See the Formats & Editions section above for details. Pricing will be announced closer to the publication date.</p>
 					</div>
 				</details>
 				<details class="faq-item">
@@ -441,6 +467,59 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 	}
 
 	/* =========================================
+	   FORMATS & EDITIONS
+	   ========================================= */
+	.formats-section {
+		margin-bottom: var(--space-2xl);
+		padding-bottom: var(--space-2xl);
+		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+	}
+	.formats-section h2 {
+		font-family: var(--font-heading); font-size: 2rem;
+		color: var(--color-text); margin-bottom: var(--space-sm);
+		text-align: center;
+	}
+	.formats-intro {
+		text-align: center; color: var(--color-text-muted);
+		margin-bottom: var(--space-xl); font-style: italic;
+	}
+	.formats-grid {
+		display: grid; grid-template-columns: repeat(3, 1fr);
+		gap: var(--space-lg);
+	}
+	.format-card {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 8px; padding: var(--space-xl);
+		text-align: center;
+		transition: all 0.3s ease;
+	}
+	.format-card:hover {
+		border-color: rgba(196, 167, 125, 0.4);
+		transform: translateY(-5px);
+		box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+	}
+	.format-icon {
+		font-size: 2.5rem; margin-bottom: 1rem;
+	}
+	.format-card h3 {
+		font-family: var(--font-heading); font-size: 1.3rem;
+		color: var(--color-accent); margin-bottom: 0.5rem;
+	}
+	.format-desc {
+		color: var(--color-text-muted); font-size: 0.9rem;
+		line-height: 1.5; margin-bottom: 1rem;
+	}
+	.format-price {
+		display: inline-block;
+		font-family: var(--font-heading); font-size: 0.85rem;
+		text-transform: uppercase; letter-spacing: 1px;
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1);
+		padding: 0.3rem 0.8rem; border-radius: 20px;
+	}
+
+	/* =========================================
 	   WAITLIST / PRE-ORDER
 	   ========================================= */
 	.waitlist-section {
@@ -688,6 +767,7 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 		.key-facts { grid-template-columns: repeat(2, 1fr); }
 		.endorsement-grid { grid-template-columns: 1fr; }
 		.audience-grid { grid-template-columns: 1fr; }
+		.formats-grid { grid-template-columns: 1fr; }
 	}
 	@media (max-width: 600px) {
 		.key-facts { grid-template-columns: 1fr; }
