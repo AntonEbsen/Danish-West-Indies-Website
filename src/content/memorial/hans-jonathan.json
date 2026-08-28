@@ -1,0 +1,18 @@
+{
+  "name": "Hans Jonathan",
+  "yearOfBirth": 1784,
+  "yearOfDeath": 1827,
+  "origin": "St. Croix / African-Danish descent",
+  "location": "Constitution Hill Plantation, St. Croix / Copenhagen / Djúpivogur, Iceland",
+  "mapLat": 17.7246,
+  "mapLng": -64.8317,
+  "story": "Hans Jonathan, often called 'the man who stole himself', was born into slavery on the Constitution Hill plantation on St. Croix. He was taken to Copenhagen in 1789 by the Schimmelmann family. After fighting bravely in the Battle of Copenhagen (1801), he believed he had earned his freedom. When the Danish court ruled against him in 1802, ordering him back to the Caribbean, he fled Denmark entirely. He settled in Djúpivogur, Iceland, becoming the first known person of African descent to live there, marrying and living as a free man.",
+  "notes": "His remarkable life was pieced together by historians and geneticists in the book 'The Man Who Stole Himself'.",
+  "tags": ["Self-Liberated", "Iceland", "Resistance"],
+  "relationships": [
+    {
+      "id": "emilia-regina",
+      "type": "Son of"
+    }
+  ]
+}
