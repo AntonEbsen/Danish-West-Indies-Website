@@ -26,59 +26,121 @@ import Layout from '../../../layouts/Layout.astro';
 			</div>
 		</header>
 
-		<section class="video-grid-section">
-			<div class="section-header">
-				<h2>Upcoming Episodes</h2>
-				<p class="section-desc">We are currently recording our thesis breakdown series. Check back soon for the premiere, or subscribe on YouTube to be notified when the first episodes drop.</p>
-			</div>
-
-			<div class="video-grid">
-				<!-- Placeholder Video 1 -->
-				<div class="video-card">
-					<div class="video-wrapper placeholder-wrapper">
-						<!-- INSTRUCTIONS: To add a real video, replace the <div class="video-placeholder"> block below with your YouTube embed iframe code. Make sure the iframe has class="yt-iframe" if needed, though standard width="100%" height="100%" in inline styles works well. -->
-						<div class="video-placeholder">
-							<span class="recording-icon">🔴</span>
-							<span>Recording in Progress</span>
+		<section class="episodes-stack">
+			
+			<!-- EPISODE 1 -->
+			<article class="episode-block">
+				<div class="media-data-row">
+					
+					<!-- Left: Video Player -->
+					<div class="video-column">
+						<div class="video-wrapper placeholder-wrapper">
+							<!-- Replace the div below with your YouTube iframe -->
+							<div class="video-placeholder">
+								<span class="recording-icon">🔴</span>
+								<span>Recording in Progress</span>
+							</div>
 						</div>
 					</div>
-					<div class="video-info">
+
+					<!-- Right: Title & Data Widget -->
+					<div class="data-column">
 						<span class="episode-tag">Episode 1</span>
-						<h3>The Colonial Ledger: Data and Erasure</h3>
-						<p>An introduction to our thesis methodology. How did the Danish bureaucracy reduce human lives to taxable assets, and how can we resurrect those identities?</p>
+						<h2>The Colonial Ledger: Data and Erasure</h2>
+						<p class="episode-desc">An introduction to our thesis methodology. How did the Danish bureaucracy reduce human lives to taxable assets, and how can we resurrect those identities through quantitative analysis?</p>
+						
+						<!-- Featured Data Widget Placeholder -->
+						<div class="data-widget">
+							<h4>Featured Data: Estate La Grange (1803)</h4>
+							<table class="mini-data-table">
+								<tr><th>Category</th><th>Count</th><th>Value (Rdl)</th></tr>
+								<tr><td>Capable Men</td><td>42</td><td>12,600</td></tr>
+								<tr><td>Capable Women</td><td>38</td><td>9,500</td></tr>
+								<tr><td>Children</td><td>15</td><td>1,500</td></tr>
+								<tr><td class="highlight">Total Human Capital</td><td>95</td><td class="highlight">23,600</td></tr>
+							</table>
+							<span class="widget-note">*Sample data from the Matrikel</span>
+						</div>
 					</div>
 				</div>
 
-				<!-- Placeholder Video 2 -->
-				<div class="video-card">
-					<div class="video-wrapper placeholder-wrapper">
-						<div class="video-placeholder">
-							<span class="recording-icon">🔴</span>
-							<span>Recording in Progress</span>
+				<!-- Bottom: Show Notes & Downloads -->
+				<div class="academic-notes-row">
+					<div class="show-notes">
+						<h3>Academic Show Notes</h3>
+						<ul class="timestamp-list">
+							<li><span class="time">00:00</span> - Introduction to the Colonial Archives.</li>
+							<li><span class="time">05:22</span> - How African names were erased. Read more in <a href="/history/the-colonial-ledger">The Colonial Ledger as an Instrument of Power</a>.</li>
+							<li><span class="time">12:15</span> - Introduction to the <a href="/thesis/data-explorer">Data Explorer</a> and methodology.</li>
+							<li><span class="time">18:40</span> - Case Study: Exploring the <a href="/memorial">Memorial Register</a>.</li>
+						</ul>
+					</div>
+					<div class="downloads-section">
+						<h3>Supplemental Resources</h3>
+						<div class="download-buttons">
+							<a href="#" class="btn-download">
+								<span class="icon">📄</span> Slide Deck (PDF)
+							</a>
+							<a href="/thesis/behind-the-code" class="btn-download">
+								<span class="icon">💻</span> View Python Extraction Script
+							</a>
 						</div>
 					</div>
-					<div class="video-info">
+				</div>
+			</article>
+
+			<!-- EPISODE 2 -->
+			<article class="episode-block">
+				<div class="media-data-row">
+					<div class="video-column">
+						<div class="video-wrapper placeholder-wrapper">
+							<div class="video-placeholder">
+								<span class="recording-icon">🔴</span>
+								<span>Recording in Progress</span>
+							</div>
+						</div>
+					</div>
+					<div class="data-column">
 						<span class="episode-tag">Episode 2</span>
-						<h3>The Sugar Beet Threat</h3>
-						<p>Analyzing the collapse of the Caribbean sugar economy and the rise of European subsidized sugar beets that altered the course of the colony.</p>
-					</div>
-				</div>
-
-				<!-- Placeholder Video 3 -->
-				<div class="video-card">
-					<div class="video-wrapper placeholder-wrapper">
-						<div class="video-placeholder">
-							<span class="recording-icon">🔴</span>
-							<span>Recording in Progress</span>
+						<h2>The Sugar Beet Threat</h2>
+						<p class="episode-desc">Analyzing the collapse of the Caribbean sugar economy. How European subsidized sugar beets permanently altered the profitability of the Danish West Indies.</p>
+						
+						<div class="data-widget">
+							<h4>Featured Data: Sugar Price Collapse (1840-1880)</h4>
+							<div class="mock-chart">
+								<!-- Simple CSS Mock Chart -->
+								<div class="bar-group"><div class="bar" style="height: 100%; background: #c4a77d;"></div><span>1840</span></div>
+								<div class="bar-group"><div class="bar" style="height: 80%; background: #c4a77d;"></div><span>1850</span></div>
+								<div class="bar-group"><div class="bar" style="height: 40%; background: #c4a77d;"></div><span>1860</span></div>
+								<div class="bar-group"><div class="bar" style="height: 15%; background: #c4a77d;"></div><span>1870</span></div>
+							</div>
 						</div>
 					</div>
-					<div class="video-info">
-						<span class="episode-tag">Episode 3</span>
-						<h3>Mortality and Capital Loss</h3>
-						<p>A deep dive into the horrific economic calculus of the "seasoning" period and the disease environment of St. Croix.</p>
+				</div>
+				<div class="academic-notes-row">
+					<div class="show-notes">
+						<h3>Academic Show Notes</h3>
+						<ul class="timestamp-list">
+							<li><span class="time">00:00</span> - The Golden Age of Cane Sugar.</li>
+							<li><span class="time">08:45</span> - The rise of the European Beet. See <a href="/history/sugar-beet-threat">The Sugar Beet Threat</a>.</li>
+							<li><span class="time">15:30</span> - Econometric analysis of the 1878 crash.</li>
+							<li><span class="time">22:10</span> - Connection to the <a href="/history/1878-fireburn-st-croix">1878 Fireburn Labor Riot</a>.</li>
+						</ul>
+					</div>
+					<div class="downloads-section">
+						<h3>Supplemental Resources</h3>
+						<div class="download-buttons">
+							<a href="#" class="btn-download">
+								<span class="icon">📄</span> Slide Deck (PDF)
+							</a>
+							<a href="/thesis/behind-the-code" class="btn-download">
+								<span class="icon">📊</span> View Regression Model Data
+							</a>
+						</div>
 					</div>
 				</div>
-			</div>
+			</article>
+
 		</section>
 	</div>
 </Layout>
@@ -90,11 +152,11 @@ import Layout from '../../../layouts/Layout.astro';
 		padding-bottom: var(--space-2xl);
 	}
 
+	/* Header Styles */
 	.video-header {
 		text-align: center;
 		margin-bottom: var(--space-2xl);
 		padding-bottom: var(--space-xl);
-		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
 		position: relative;
 	}
 
@@ -108,9 +170,7 @@ import Layout from '../../../layouts/Layout.astro';
 		transition: color var(--transition-fast);
 	}
 
-	.back-link:hover {
-		color: var(--color-accent);
-	}
+	.back-link:hover { color: var(--color-accent); }
 
 	.label {
 		display: inline-block;
@@ -168,80 +228,53 @@ import Layout from '../../../layouts/Layout.astro';
 		transition: all 0.3s ease;
 	}
 
-	.youtube {
-		background-color: #FF0000;
-		color: #FFF;
+	.youtube { background-color: #FF0000; color: #FFF; }
+	.youtube:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3); }
+	
+	.website { background-color: var(--color-accent); color: var(--color-bg); }
+	.website:hover { background-color: #d6b88a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(196, 167, 125, 0.3); }
+
+
+	/* EPISODE STACK LAYOUT */
+	.episodes-stack {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xl);
 	}
 
-	.youtube:hover {
-		background-color: #CC0000;
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
-	}
-
-	.website {
-		background-color: var(--color-accent);
-		color: var(--color-bg);
-	}
-
-	.website:hover {
-		background-color: #d6b88a;
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(196, 167, 125, 0.3);
-	}
-
-	/* Video Section */
-	.section-header {
-		text-align: center;
-		margin-bottom: var(--space-xl);
-	}
-
-	.section-header h2 {
-		font-family: var(--font-heading);
-		color: var(--color-text);
-		font-size: 2rem;
-	}
-
-	.section-desc {
-		color: var(--color-text-muted);
-		max-width: 600px;
-		margin: 0 auto;
-	}
-
-	.video-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-		gap: var(--space-xl);
-	}
-
-	.video-card {
+	.episode-block {
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
-		border-radius: 8px;
+		border-radius: 12px;
 		overflow: hidden;
-		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 	}
 
-	.video-card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-		border-color: rgba(196, 167, 125, 0.4);
+	/* Media & Data Row */
+	.media-data-row {
+		display: grid;
+		grid-template-columns: 2fr 1.2fr;
+		border-bottom: 1px solid var(--color-border);
 	}
 
-	/* Aspect Ratio 16:9 for Video/Placeholder */
+	.video-column {
+		padding: var(--space-lg);
+		background: rgba(0,0,0,0.2);
+	}
+
 	.video-wrapper {
 		position: relative;
 		width: 100%;
-		padding-bottom: 56.25%; /* 16:9 aspect ratio */
+		padding-bottom: 56.25%; /* 16:9 */
 		background: #000;
+		border-radius: 8px;
+		overflow: hidden;
+		box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 	}
 
 	.video-wrapper iframe, .video-placeholder {
 		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
+		top: 0; left: 0; width: 100%; height: 100%;
 		border: none;
 	}
 
@@ -253,7 +286,6 @@ import Layout from '../../../layouts/Layout.astro';
 		color: rgba(255, 255, 255, 0.5);
 		background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
 		font-family: var(--font-heading);
-		letter-spacing: 1px;
 	}
 
 	.recording-icon {
@@ -262,18 +294,16 @@ import Layout from '../../../layouts/Layout.astro';
 		animation: pulse 2s infinite;
 	}
 
-	@keyframes pulse {
-		0% { opacity: 0.3; }
-		50% { opacity: 1; }
-		100% { opacity: 0.3; }
-	}
+	@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-	.video-info {
-		padding: var(--space-md);
+	.data-column {
+		padding: var(--space-lg);
+		display: flex;
+		flex-direction: column;
 	}
 
 	.episode-tag {
-		display: inline-block;
+		align-self: flex-start;
 		font-size: 0.75rem;
 		text-transform: uppercase;
 		letter-spacing: 1px;
@@ -284,18 +314,175 @@ import Layout from '../../../layouts/Layout.astro';
 		margin-bottom: var(--space-sm);
 	}
 
-	.video-info h3 {
-		font-size: 1.2rem;
+	.data-column h2 {
+		font-family: var(--font-heading);
+		font-size: 1.8rem;
+		margin-bottom: var(--space-xs);
 		color: var(--color-text);
-		margin: 0 0 var(--space-xs) 0;
-		line-height: 1.3;
 	}
 
-	.video-info p {
+	.episode-desc {
 		color: var(--color-text-muted);
-		font-size: 0.95rem;
+		line-height: 1.6;
+		margin-bottom: var(--space-lg);
+	}
+
+	/* Featured Data Widget */
+	.data-widget {
+		background: rgba(0,0,0,0.2);
+		border: 1px solid rgba(255,255,255,0.05);
+		border-radius: 8px;
+		padding: var(--space-md);
+		margin-top: auto;
+	}
+
+	.data-widget h4 {
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		color: var(--color-accent);
+		margin-bottom: var(--space-sm);
+		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
+		padding-bottom: 0.3rem;
+	}
+
+	.mini-data-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.9rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.mini-data-table th, .mini-data-table td {
+		text-align: left;
+		padding: 0.3rem 0;
+		border-bottom: 1px solid rgba(255,255,255,0.05);
+	}
+
+	.mini-data-table th { color: var(--color-text-muted); font-weight: normal; }
+	.mini-data-table .highlight { color: var(--color-accent); font-weight: bold; }
+	.widget-note { font-size: 0.7rem; color: var(--color-text-muted); font-style: italic; }
+
+	/* Mock Chart Widget */
+	.mock-chart {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		height: 100px;
+		padding-top: 1rem;
+	}
+
+	.bar-group {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: 100%;
+		width: 20%;
+	}
+
+	.bar {
+		width: 100%;
+		border-radius: 2px 2px 0 0;
+		transition: height 1s ease;
+	}
+
+	.bar-group span {
+		font-size: 0.7rem;
+		margin-top: 0.3rem;
+		color: var(--color-text-muted);
+	}
+
+	/* Academic Notes & Downloads Row */
+	.academic-notes-row {
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		background: rgba(255,255,255,0.02);
+	}
+
+	.show-notes, .downloads-section {
+		padding: var(--space-lg);
+	}
+
+	.academic-notes-row h3 {
+		font-size: 1rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		color: var(--color-text);
+		margin-bottom: var(--space-md);
+	}
+
+	.timestamp-list {
+		list-style: none;
+		padding: 0;
 		margin: 0;
+	}
+
+	.timestamp-list li {
+		margin-bottom: 0.8rem;
+		color: var(--color-text-muted);
 		line-height: 1.5;
+	}
+
+	.time {
+		font-family: monospace;
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1);
+		padding: 0.1rem 0.3rem;
+		border-radius: 3px;
+		margin-right: 0.5rem;
+	}
+
+	.timestamp-list a {
+		color: var(--color-text);
+		text-decoration: none;
+		border-bottom: 1px dashed var(--color-accent);
+		transition: color var(--transition-fast);
+	}
+	
+	.timestamp-list a:hover { color: var(--color-accent); }
+
+	.downloads-section {
+		border-left: 1px solid var(--color-border);
+	}
+
+	.download-buttons {
+		display: flex;
+		flex-direction: column;
+		gap: 0.8rem;
+	}
+
+	.btn-download {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.6rem 1rem;
+		background: rgba(0,0,0,0.3);
+		border: 1px solid rgba(255,255,255,0.1);
+		border-radius: 4px;
+		color: var(--color-text);
+		text-decoration: none;
+		font-size: 0.9rem;
+		transition: all 0.2s ease;
+	}
+
+	.btn-download:hover {
+		background: rgba(196, 167, 125, 0.1);
+		border-color: var(--color-accent);
+		color: var(--color-accent);
+	}
+
+	/* Responsive Design */
+	@media (max-width: 900px) {
+		.media-data-row, .academic-notes-row {
+			grid-template-columns: 1fr;
+		}
+		
+		.video-column { padding-bottom: 0; }
+		
+		.downloads-section {
+			border-left: none;
+			border-top: 1px solid var(--color-border);
+		}
 	}
 	
 	@media (max-width: 768px) {
