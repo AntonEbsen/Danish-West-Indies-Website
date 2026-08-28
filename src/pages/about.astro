@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About | Danish West Indies">
+	<div class="about-page">
+		<header class="page-header animate-fade-in">
+			<h1>About This Project</h1>
+			<p class="subtitle">Preserving the memory of the Danish West Indies.</p>
+		</header>
+
+		<div class="content-sections animate-fade-in" style="animation-delay: 0.2s;">
+			<section class="card">
+				<h2>The Mission</h2>
+				<p>
+					The <strong>Danish West Indies Memorial Register</strong> is a digital humanities project dedicated to remembering and honoring the tens of thousands of enslaved individuals who lived and died under Danish colonial rule in the Caribbean (1672–1917). 
+				</p>
+				<p>
+					For centuries, these individuals were reduced to mere statistics in colonial ledgers, crop reports, and tax documents. This platform aims to restore their humanity by transforming those sterile archives into a living, searchable, and dignified memorial. 
+				</p>
+			</section>
+
+			<section class="card">
+				<h2>The Creator</h2>
+				<p>
+					This project was created by <strong>Anton Meier Ebsen Jørgensen</strong> as part of an ongoing Master's thesis in Economic History at the University of Copenhagen. By combining deep archival research with modern web technologies, the project seeks to make the complex and tragic history of the Danish West Indies accessible to the public, educators, and descendants worldwide.
+				</p>
+			</section>
+
+			<section class="card">
+				<h2>The Data</h2>
+				<p>
+					The core data driving the Memorial Register is derived from historical censuses, church records, and plantation ledgers preserved in the Danish National Archives (Rigsarkivet). Because colonial record-keeping prioritized property over humanity, the data is often incomplete. We encourage descendants and historians to contribute oral histories and archival discoveries to help us complete these stories.
+				</p>
+			</section>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.about-page {
+		max-width: 800px;
+		margin: 0 auto;
+		padding-bottom: var(--space-xl);
+	}
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.page-header h1 {
+		color: var(--color-accent);
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.2rem;
+		font-style: italic;
+	}
+
+	.content-sections {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-lg);
+	}
+
+	.card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		padding: var(--space-xl);
+		border-radius: 8px;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+	}
+
+	.card h2 {
+		color: var(--color-accent);
+		margin-bottom: var(--space-md);
+		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
+		padding-bottom: 0.5rem;
+	}
+
+	.card p {
+		color: rgba(255, 255, 255, 0.85);
+		line-height: 1.7;
+		margin-bottom: var(--space-md);
+	}
+
+	.card p:last-child {
+		margin-bottom: 0;
+	}
+</style>
