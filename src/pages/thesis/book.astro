@@ -1,0 +1,469 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const thesisChapters = await getCollection('thesis');
+thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
+---
+
+<Layout 
+	title="The Book — The Economics of Colonial Slavery | Danish West Indies"
+	description="Pre-order the self-published book based on our Master's Thesis. A comprehensive economic history of the Danish West Indies, 1672–1917."
+>
+	<div class="page-container animate-fade-in">
+		<a href="/thesis" class="back-link">← Back to Thesis Portal</a>
+
+		<!-- HERO SECTION -->
+		<section class="book-hero">
+			<div class="hero-image">
+				<img src="/images/book-cover.jpg" alt="The Economics of Colonial Slavery — Book Cover" class="cover-img" />
+			</div>
+			<div class="hero-text">
+				<span class="label">Coming Soon</span>
+				<h1>The Economics of Colonial Slavery</h1>
+				<p class="hero-subtitle">The Danish West Indies, 1672–1917</p>
+				<p class="hero-authors">By Anton Meier Ebsen Jørgensen, Jonas Amasa Skov Nielsen & Sheng Ye Michael Chen</p>
+				<p class="hero-blurb">
+					What did it cost to enslave a human being? How did Danish colonial bureaucrats reduce an Akwamu child named Kwasi to a 50-Rigsdaler line item in a tax ledger? 
+					This book, born from a Master's Thesis in Economic History at the University of Copenhagen, traces the brutal financial architecture of Denmark's Caribbean empire — from the slave ships of the <em>Vestindisk-guineisk Kompagni</em> to the royal balance sheets of Amalienborg Palace.
+				</p>
+				<div class="hero-cta">
+					<a href="#notify" class="btn-primary">Get Notified on Launch</a>
+					<a href="#preview" class="btn-secondary">Preview the Contents</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- KEY FACTS -->
+		<section class="key-facts">
+			<div class="fact"><span class="fact-number">245+</span><span class="fact-label">Years of Colonial History</span></div>
+			<div class="fact"><span class="fact-number">15</span><span class="fact-label">Thesis Chapters</span></div>
+			<div class="fact"><span class="fact-number">3</span><span class="fact-label">Authors</span></div>
+			<div class="fact"><span class="fact-number">1000+</span><span class="fact-label">Archival Records Analyzed</span></div>
+		</section>
+
+		<!-- BACK COVER BLURB -->
+		<section class="blurb-section">
+			<h2>About the Book</h2>
+			<div class="blurb-content">
+				<p>For 245 years, Denmark operated a colonial empire in the Caribbean that most Danes today know almost nothing about. The islands of St. Thomas, St. John, and St. Croix were the engine rooms of a vast economic machine — one fueled by the labor of tens of thousands of enslaved Africans.</p>
+				<p>This book goes beyond the familiar narratives of rebellion and emancipation. Drawing on thousands of previously undigitized archival records from the Danish National Archives (<em>Rigsarkivet</em>), the authors reconstruct the cold financial logic of the plantation system: the price of a human body, the "acceptable" mortality rate of the "seasoning" period, the cost-benefit analysis of cruelty, and the staggering royal profits that flowed directly into Copenhagen.</p>
+				<p>It is a work of economic history that refuses to let numbers obscure the humanity behind them.</p>
+			</div>
+		</section>
+
+		<!-- TABLE OF CONTENTS PREVIEW -->
+		<section class="toc-section" id="preview">
+			<h2>Table of Contents</h2>
+			<p class="toc-intro">The book is structured around the thesis chapters, each of which is freely available to read on this portal:</p>
+			<div class="toc-list">
+				{thesisChapters.map((chapter) => (
+					<a href={`/thesis/${chapter.id}`} class="toc-item">
+						<span class="toc-number">{chapter.data.chapterNumber.toString().padStart(2, '0')}</span>
+						<div class="toc-info">
+							<h3>{chapter.data.title}</h3>
+							{chapter.data.description && <p>{chapter.data.description}</p>}
+						</div>
+						<span class="toc-arrow">→</span>
+					</a>
+				))}
+			</div>
+		</section>
+
+		<!-- ENDORSEMENTS -->
+		<section class="endorsements-section">
+			<h2>Endorsements</h2>
+			<div class="endorsement-grid">
+				<blockquote class="endorsement-card">
+					<p>"A placeholder for an endorsement from your thesis supervisor or examiner. This section is ready for you to fill in once you receive quotes."</p>
+					<cite>— Prof. [Supervisor Name], University of Copenhagen</cite>
+				</blockquote>
+				<blockquote class="endorsement-card">
+					<p>"A second placeholder for an endorsement from a peer reviewer, external examiner, or fellow academic who has read early drafts of the manuscript."</p>
+					<cite>— Dr. [Reviewer Name], [Institution]</cite>
+				</blockquote>
+			</div>
+		</section>
+
+		<!-- PRE-ORDER / WAITLIST SIGNUP -->
+		<section class="waitlist-section" id="notify">
+			<div class="waitlist-card">
+				<div class="waitlist-icon">📖</div>
+				<h2>Get Notified on Launch</h2>
+				<p>Be the first to know when the book is available for purchase. Enter your email below and we will notify you on publication day.</p>
+				<form class="waitlist-form" id="waitlist-form">
+					<div class="form-row">
+						<input type="email" id="waitlist-email" placeholder="your.email@example.com" required autocomplete="email" />
+						<button type="submit" class="btn-submit">Notify Me</button>
+					</div>
+					<p class="form-note">We respect your privacy. Your email will only be used for book launch notifications.</p>
+				</form>
+				<div id="waitlist-success" class="waitlist-success hidden">
+					<span class="success-icon">✓</span>
+					<p>Thank you! You'll be notified when the book launches.</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- CONNECT -->
+		<section class="connect-section">
+			<p>Follow the lead author for updates on the book, the video series, and future research:</p>
+			<div class="connect-buttons">
+				<a href="https://www.youtube.com/@thewanderingeconomist" target="_blank" rel="noopener noreferrer" class="btn-promo youtube">
+					<span class="icon">▶</span> YouTube
+				</a>
+				<a href="https://www.antonebsen.dk" target="_blank" rel="noopener noreferrer" class="btn-promo website">
+					<span class="icon">🌐</span> AntonEbsen.dk
+				</a>
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<style>
+	.page-container {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding-bottom: var(--space-2xl);
+	}
+
+	.back-link {
+		display: inline-block; margin-bottom: var(--space-lg);
+		color: var(--color-text-muted); font-size: 0.9rem;
+		transition: color var(--transition-fast); text-decoration: none;
+	}
+	.back-link:hover { color: var(--color-accent); }
+
+	.label {
+		display: inline-block; font-size: 0.8rem; text-transform: uppercase;
+		letter-spacing: 2px; color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1); padding: 0.3rem 0.8rem;
+		border-radius: 20px; margin-bottom: var(--space-sm);
+	}
+
+	/* =========================================
+	   HERO
+	   ========================================= */
+	.book-hero {
+		display: grid;
+		grid-template-columns: 1fr 1.5fr;
+		gap: var(--space-2xl);
+		align-items: center;
+		margin-bottom: var(--space-2xl);
+		padding-bottom: var(--space-2xl);
+		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+	}
+
+	.hero-image {
+		display: flex;
+		justify-content: center;
+	}
+
+	.cover-img {
+		max-height: 500px;
+		width: auto;
+		border-radius: 4px;
+		box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(196, 167, 125, 0.1);
+		transition: transform 0.4s ease;
+	}
+	.cover-img:hover {
+		transform: scale(1.03) rotate(-1deg);
+	}
+
+	.hero-text h1 {
+		font-family: var(--font-heading);
+		font-size: 2.8rem;
+		color: var(--color-text);
+		margin-bottom: 0.3rem;
+		line-height: 1.15;
+	}
+
+	.hero-subtitle {
+		font-size: 1.3rem;
+		color: var(--color-accent);
+		font-style: italic;
+		margin-bottom: var(--space-sm);
+	}
+
+	.hero-authors {
+		font-size: 0.95rem;
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-lg);
+	}
+
+	.hero-blurb {
+		color: var(--color-text);
+		line-height: 1.7;
+		font-size: 1.05rem;
+		margin-bottom: var(--space-xl);
+	}
+
+	.hero-cta {
+		display: flex; gap: 1rem; flex-wrap: wrap;
+	}
+
+	.btn-primary {
+		display: inline-block; padding: 0.8rem 1.5rem;
+		background: var(--color-accent); color: var(--color-bg);
+		border-radius: 4px; text-decoration: none;
+		font-weight: bold; transition: all 0.3s ease;
+	}
+	.btn-primary:hover {
+		background: #d6b88a; transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(196, 167, 125, 0.3);
+	}
+
+	.btn-secondary {
+		display: inline-block; padding: 0.8rem 1.5rem;
+		background: transparent; color: var(--color-text);
+		border: 1px solid var(--color-border); border-radius: 4px;
+		text-decoration: none; transition: all 0.3s ease;
+	}
+	.btn-secondary:hover {
+		border-color: var(--color-accent); color: var(--color-accent);
+	}
+
+	/* =========================================
+	   KEY FACTS
+	   ========================================= */
+	.key-facts {
+		display: grid; grid-template-columns: repeat(4, 1fr);
+		gap: var(--space-md); margin-bottom: var(--space-2xl);
+		text-align: center;
+	}
+	.fact {
+		background: var(--color-surface); border: 1px solid var(--color-border);
+		border-radius: 8px; padding: var(--space-lg);
+		display: flex; flex-direction: column; gap: 0.3rem;
+	}
+	.fact-number {
+		font-family: var(--font-heading); font-size: 2.5rem;
+		color: var(--color-accent); line-height: 1;
+	}
+	.fact-label {
+		font-size: 0.8rem; text-transform: uppercase;
+		letter-spacing: 1px; color: var(--color-text-muted);
+	}
+
+	/* =========================================
+	   BLURB
+	   ========================================= */
+	.blurb-section {
+		margin-bottom: var(--space-2xl);
+		padding-bottom: var(--space-2xl);
+		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+	}
+	.blurb-section h2 {
+		font-family: var(--font-heading); font-size: 2rem;
+		color: var(--color-text); margin-bottom: var(--space-lg);
+		text-align: center;
+	}
+	.blurb-content {
+		max-width: 750px; margin: 0 auto;
+	}
+	.blurb-content p {
+		color: var(--color-text); font-size: 1.05rem;
+		line-height: 1.7; margin-bottom: 1rem;
+	}
+
+	/* =========================================
+	   TABLE OF CONTENTS
+	   ========================================= */
+	.toc-section {
+		margin-bottom: var(--space-2xl);
+		padding-bottom: var(--space-2xl);
+		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+	}
+	.toc-section h2 {
+		font-family: var(--font-heading); font-size: 2rem;
+		color: var(--color-text); margin-bottom: var(--space-sm);
+		text-align: center;
+	}
+	.toc-intro {
+		text-align: center; color: var(--color-text-muted);
+		margin-bottom: var(--space-xl); font-style: italic;
+	}
+	.toc-list {
+		display: flex; flex-direction: column; gap: 0.5rem;
+	}
+	.toc-item {
+		display: flex; align-items: center; gap: var(--space-md);
+		padding: 0.8rem var(--space-md);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 6px;
+		text-decoration: none;
+		transition: all 0.2s ease;
+	}
+	.toc-item:hover {
+		border-color: rgba(196, 167, 125, 0.4);
+		transform: translateX(4px);
+	}
+	.toc-number {
+		font-family: var(--font-heading); font-size: 1.5rem;
+		color: var(--color-accent); min-width: 40px;
+	}
+	.toc-info { flex: 1; }
+	.toc-info h3 { font-size: 1rem; color: var(--color-text); margin: 0 0 0.2rem 0; }
+	.toc-info p { font-size: 0.85rem; color: var(--color-text-muted); margin: 0; }
+	.toc-arrow { color: var(--color-accent); font-size: 1.2rem; transition: transform 0.2s ease; }
+	.toc-item:hover .toc-arrow { transform: translateX(4px); }
+
+	/* =========================================
+	   ENDORSEMENTS
+	   ========================================= */
+	.endorsements-section {
+		margin-bottom: var(--space-2xl);
+		padding-bottom: var(--space-2xl);
+		border-bottom: 1px dashed rgba(196, 167, 125, 0.2);
+	}
+	.endorsements-section h2 {
+		font-family: var(--font-heading); font-size: 2rem;
+		color: var(--color-text); margin-bottom: var(--space-lg);
+		text-align: center;
+	}
+	.endorsement-grid {
+		display: grid; grid-template-columns: 1fr 1fr;
+		gap: var(--space-lg);
+	}
+	.endorsement-card {
+		background: var(--color-surface); border: 1px solid var(--color-border);
+		border-left: 3px solid var(--color-accent);
+		border-radius: 8px; padding: var(--space-lg);
+		margin: 0;
+	}
+	.endorsement-card p {
+		color: var(--color-text); font-size: 1rem;
+		line-height: 1.6; font-style: italic; margin-bottom: 0.8rem;
+	}
+	.endorsement-card cite {
+		color: var(--color-accent); font-size: 0.85rem;
+		font-style: normal;
+	}
+
+	/* =========================================
+	   WAITLIST / PRE-ORDER
+	   ========================================= */
+	.waitlist-section {
+		margin-bottom: var(--space-2xl);
+	}
+	.waitlist-card {
+		background: rgba(196, 167, 125, 0.05);
+		border: 1px solid rgba(196, 167, 125, 0.2);
+		border-radius: 12px;
+		padding: var(--space-2xl);
+		text-align: center;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+	.waitlist-icon {
+		font-size: 3rem; margin-bottom: 1rem;
+	}
+	.waitlist-card h2 {
+		font-family: var(--font-heading); font-size: 1.8rem;
+		color: var(--color-text); margin-bottom: var(--space-sm);
+	}
+	.waitlist-card > p {
+		color: var(--color-text-muted); margin-bottom: var(--space-lg);
+		line-height: 1.5;
+	}
+	.form-row {
+		display: flex; gap: 0.5rem; max-width: 400px; margin: 0 auto;
+	}
+	#waitlist-email {
+		flex: 1; padding: 0.7rem 1rem;
+		border: 1px solid var(--color-border);
+		background: var(--color-bg); color: var(--color-text);
+		border-radius: 4px; font-family: var(--font-body);
+		font-size: 1rem;
+	}
+	#waitlist-email:focus {
+		outline: none; border-color: var(--color-accent);
+	}
+	.btn-submit {
+		padding: 0.7rem 1.2rem;
+		background: var(--color-accent); color: var(--color-bg);
+		border: none; border-radius: 4px; cursor: pointer;
+		font-weight: bold; font-family: var(--font-body);
+		transition: all 0.3s ease;
+	}
+	.btn-submit:hover {
+		background: #d6b88a; transform: translateY(-1px);
+	}
+	.form-note {
+		font-size: 0.75rem; color: var(--color-text-muted);
+		margin-top: 0.8rem; font-style: italic;
+	}
+	.waitlist-success {
+		display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+	}
+	.success-icon {
+		display: inline-flex; justify-content: center; align-items: center;
+		width: 50px; height: 50px; border-radius: 50%;
+		background: rgba(76, 175, 80, 0.15); color: #4caf50;
+		font-size: 1.5rem; font-weight: bold;
+	}
+	.waitlist-success p { color: #4caf50; }
+	.hidden { display: none !important; }
+
+	/* =========================================
+	   CONNECT
+	   ========================================= */
+	.connect-section {
+		text-align: center;
+	}
+	.connect-section p {
+		color: var(--color-text-muted); margin-bottom: var(--space-md); font-style: italic;
+	}
+	.connect-buttons {
+		display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;
+	}
+	.btn-promo {
+		display: inline-flex; align-items: center; gap: 0.5rem;
+		padding: 0.6rem 1.2rem; border-radius: 4px;
+		text-decoration: none; font-weight: bold; transition: all 0.3s ease;
+	}
+	.youtube { background-color: #FF0000; color: #FFF; }
+	.youtube:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3); }
+	.website { background-color: var(--color-accent); color: var(--color-bg); }
+	.website:hover { background-color: #d6b88a; transform: translateY(-2px); }
+
+	/* =========================================
+	   RESPONSIVE
+	   ========================================= */
+	@media (max-width: 900px) {
+		.book-hero { grid-template-columns: 1fr; text-align: center; }
+		.hero-cta { justify-content: center; }
+		.key-facts { grid-template-columns: repeat(2, 1fr); }
+		.endorsement-grid { grid-template-columns: 1fr; }
+	}
+	@media (max-width: 600px) {
+		.key-facts { grid-template-columns: 1fr; }
+		.form-row { flex-direction: column; }
+	}
+</style>
+
+<script>
+	// Waitlist Form — localStorage-based for now
+	const form = document.getElementById('waitlist-form') as HTMLFormElement;
+	const successMsg = document.getElementById('waitlist-success');
+
+	// Check if already signed up
+	if (localStorage.getItem('dwi-book-waitlist')) {
+		form?.classList.add('hidden');
+		successMsg?.classList.remove('hidden');
+	}
+
+	form?.addEventListener('submit', (e) => {
+		e.preventDefault();
+		const emailInput = document.getElementById('waitlist-email') as HTMLInputElement;
+		const email = emailInput?.value;
+
+		if (email) {
+			// Store locally (replace with actual API call when you have a backend)
+			localStorage.setItem('dwi-book-waitlist', email);
+			form.classList.add('hidden');
+			successMsg?.classList.remove('hidden');
+		}
+	});
+</script>

@@ -22,6 +22,11 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 		<section class="portal-features animate-fade-in" style="animation-delay: 0.2s;">
 			<h2>Interactive Features</h2>
 			<div class="features-grid">
+				<a href="/thesis/book" class="feature-card book-card">
+					<div class="fc-icon">📖</div>
+					<h3>Buy the Book</h3>
+					<p>Our thesis is becoming a self-published book. Pre-order now.</p>
+				</a>
 				<a href="/thesis/videos" class="feature-card">
 					<div class="fc-icon">🎥</div>
 					<h3>Video Lectures</h3>
@@ -183,6 +188,12 @@ thesisChapters.sort((a, b) => a.data.chapterNumber - b.data.chapterNumber);
 		font-size: 0.85rem;
 		margin: 0;
 		line-height: 1.4;
+	}
+
+	.book-card {
+		background: rgba(196, 167, 125, 0.08);
+		border-color: rgba(196, 167, 125, 0.4);
+		box-shadow: 0 0 15px rgba(196, 167, 125, 0.08);
 	}
 
 	.chapter-list {
