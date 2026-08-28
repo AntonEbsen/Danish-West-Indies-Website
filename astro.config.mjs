@@ -5,7 +5,7 @@ export default defineConfig({
   site: 'https://danishwestindies.org',
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "da"],
+    locales: ["en", "da", "es", "fr"],
     routing: {
         prefixDefaultLocale: false
     }

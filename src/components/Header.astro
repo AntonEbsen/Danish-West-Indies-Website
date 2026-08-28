@@ -7,10 +7,12 @@ const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
 const currentPath = Astro.url.pathname;
-const cleanPath = currentPath.replace(/^\/(en|da)/, '');
+const cleanPath = currentPath.replace(/^\/(en|da|es|fr)/, '');
 
 const enUrl = cleanPath === '' ? '/' : cleanPath;
 const daUrl = '/da' + (cleanPath === '/' ? '' : cleanPath);
+const esUrl = '/es' + (cleanPath === '/' ? '' : cleanPath);
+const frUrl = '/fr' + (cleanPath === '/' ? '' : cleanPath);
 ---
 <header class="site-header">
   <div class="container header-container">
@@ -28,6 +30,10 @@ const daUrl = '/da' + (cleanPath === '/' ? '' : cleanPath);
         <a href={enUrl} class={lang === 'en' ? 'active' : ''}>EN</a>
         <span class="divider">|</span>
         <a href={daUrl} class={lang === 'da' ? 'active' : ''}>DA</a>
+        <span class="divider">|</span>
+        <a href={esUrl} class={lang === 'es' ? 'active' : ''}>ES</a>
+        <span class="divider">|</span>
+        <a href={frUrl} class={lang === 'fr' ? 'active' : ''}>FR</a>
       </div>
     </nav>
   </div>
