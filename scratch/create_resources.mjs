@@ -3,100 +3,81 @@ import path from 'path';
 
 const resources = [
   {
-    id: "rigsarkivet-dwi",
-    title: "The Danish National Archives (Rigsarkivet) - Danish West Indies Sources",
-    type: "archive",
-    author: "Rigsarkivet",
-    url: "https://www.sa.dk/en/brug-arkivet/danish-west-indies/",
-    description: "The primary repository for colonial records from the Danish West Indies. It holds millions of digitized documents, including census records, police reports, and correspondence between the local administration and Copenhagen."
+    id: "st-croix-landmarks-society",
+    title: "St. Croix Landmarks Society",
+    category: "website",
+    link: "https://www.stcroixlandmarks.org/",
+    description: "Dedicated to the preservation of St. Croix's rich history, this society manages several historic properties, including the Whim Museum and the Research Library & Archives, which are essential for genealogical research."
   },
   {
-    id: "visha",
-    title: "Virgin Islands Social History Associates (VISHA)",
-    type: "website",
-    author: "George Tyson",
-    url: "https://www.visharoots.org/",
-    description: "An incredible genealogical and historical database compiling biographical data of the enslaved and free populations in the Danish West Indies from historical censuses and parish records."
+    id: "enslaved-org",
+    title: "Enslaved: Peoples of the Historical Slave Trade",
+    category: "website",
+    link: "https://enslaved.org/",
+    description: "A robust digital hub that brings together historical records regarding enslaved individuals, slaveholders, and related events, allowing researchers to explore the intricate web of the historical slave trade."
   },
   {
-    id: "slave-voyages",
-    title: "SlaveVoyages Database",
-    type: "website",
-    author: "Emory University et al.",
-    url: "https://www.slavevoyages.org/",
-    description: "The premier digital database for the transatlantic slave trade. It includes comprehensive data on voyages made under the Danish flag and those that disembarked at St. Thomas, St. Croix, and St. John."
+    id: "st-john-rebellion-article",
+    title: "The 1733 St. John Slave Rebellion",
+    category: "article",
+    link: "https://www.blackpast.org/global-african-history/st-john-slave-rebellion-1733-1734/",
+    description: "A comprehensive overview of one of the earliest and longest-lasting slave rebellions in the Americas. Enslaved Akans (referred to as Amina) took control of the island of St. John for six months."
   },
   {
-    id: "neville-hall-slave-society",
-    title: "Slave Society in the Danish West Indies: St. Thomas, St. John, and St. Croix",
-    type: "book",
-    author: "Neville A. T. Hall",
-    url: "https://uwipress.com/9789764100295/slave-society-in-the-danish-west-indies/",
-    description: "A foundational text on the social history of the Danish West Indies, exploring the complex dynamics between the enslaved population, the free people of color, and the colonial elite."
+    id: "royal-library-denmark",
+    title: "The Royal Danish Library (Det Kgl. Bibliotek)",
+    category: "archive",
+    link: "https://www.kb.dk/en",
+    description: "Denmark's national library holds extensive collections of maps, photographs, newspapers, and manuscripts relating to the Danish West Indies, many of which have been digitized."
   },
   {
-    id: "gunvor-simonsen-slave-stories",
-    title: "Slave Stories: Law, Representation, and Gender in the Danish West Indies",
-    type: "book",
-    author: "Gunvor Simonsen",
-    url: "https://www.jstor.org/stable/j.ctt1wf4dhw",
-    description: "An in-depth analysis of the legal and social framework of the Danish West Indies, focusing on how the enslaved used the colonial legal system to navigate and resist their enslavement, with a strong focus on gender."
+    id: "dloc",
+    title: "Digital Library of the Caribbean (dLOC)",
+    category: "archive",
+    link: "https://dloc.com/",
+    description: "A cooperative digital library for resources from and about the Caribbean. It provides access to digitized versions of historical Caribbean newspapers, official documents, maps, and historical texts."
   },
   {
-    id: "von-scholten-rebellion",
-    title: "The 1848 Emancipation Rebellion",
-    type: "article",
-    author: "Virgin Islands History",
-    url: "https://www.virgin-islands-history.org/en/history/slavery/the-rebellion-in-1848/",
-    description: "A detailed historical overview of the events leading up to July 3, 1848, when General Buddhoe led a massive rebellion on St. Croix that resulted in Governor-General Peter von Scholten declaring emancipation."
+    id: "national-museum-denmark",
+    title: "The National Museum of Denmark",
+    category: "website",
+    link: "https://en.natmus.dk/",
+    description: "Features permanent exhibitions on Denmark's colonial history and the transatlantic slave trade, showcasing physical artifacts brought from the Danish West Indies to Copenhagen."
   },
   {
-    id: "fireburn-documentary",
-    title: "Fireburn The Documentary",
-    type: "video",
-    author: "Angela Golden Bryan",
-    url: "https://www.fireburndocumentary.org/",
-    description: "An award-winning documentary exploring the 1878 labor revolt on St. Croix known as the Fireburn, led by three extraordinary women: Queen Mary, Queen Agnes, and Queen Mathilda."
+    id: "vi-public-libraries",
+    title: "Virgin Islands Public Libraries & Archives",
+    category: "archive",
+    link: "https://www.usvilib.org/",
+    description: "The territorial library system holds vital local records, historical newspapers, and physical archives necessary for understanding local historical narratives post-Transfer."
   },
   {
-    id: "moravian-archives",
-    title: "Moravian Archives (Herrnhut)",
-    type: "archive",
-    author: "Unitätsarchiv Herrnhut",
-    url: "https://www.archiv.ebu.de/",
-    description: "The Moravian Brethren were the first missionaries in the Danish West Indies (arriving in 1732). Their archives contain incredibly detailed diaries, censuses, and correspondence regarding the daily lives of the enslaved."
+    id: "night-of-the-fire",
+    title: "Night of the Fire: The St. Croix Slave Rebellion",
+    category: "book",
+    link: "https://uwipress.com/",
+    description: "A historical account focusing on the sociopolitical climate that led to the 1848 rebellion, analyzing the organization of the enslaved workers."
   },
   {
-    id: "buddhoe-park",
-    title: "Buddhoe Park & Frederiksted",
-    type: "website",
-    author: "St. Croix Tourism",
-    url: "https://www.gotostcroix.com/st-croix-blog/buddhoe-park/",
-    description: "Information regarding the historical site in Frederiksted where the 1848 emancipation was declared, honoring the leader of the rebellion, General Buddhoe."
+    id: "black-danes-project",
+    title: "The Black Danes Project",
+    category: "website",
+    link: "https://www.blackdanes.com/",
+    description: "An initiative that documents and explores the lives of Black individuals in Denmark during the colonial era, specifically focusing on those who migrated or were brought from the Danish West Indies."
   },
   {
-    id: "usni-archives",
-    title: "U.S. National Archives - Virgin Islands Records",
-    type: "archive",
-    author: "National Archives and Records Administration (NARA)",
-    url: "https://www.archives.gov/",
-    description: "Records pertaining to the transfer of the islands from Denmark to the United States in 1917, as well as subsequent territorial administration records."
+    id: "transfer-day",
+    title: "Transfer Day Centennial Archive",
+    category: "website",
+    link: "https://www.vitransfercentennial.org/",
+    description: "Created for the 100th anniversary of the transfer of the islands from Denmark to the US in 1917, featuring historical essays, timelines, and digitized records."
   },
   {
-    id: "st-thomas-historical-trust",
-    title: "St. Thomas Historical Trust",
-    type: "website",
-    author: "St. Thomas Historical Trust",
-    url: "https://www.stthomashistoricaltrust.org/",
-    description: "An organization dedicated to preserving the history and architecture of St. Thomas, featuring extensive resources on the island's colonial and maritime history."
-  },
-  {
-    id: "danish-maritime-museum",
-    title: "M/S Maritime Museum of Denmark",
-    type: "archive",
-    author: "M/S Museet for Søfart",
-    url: "https://mfs.dk/en/",
-    description: "Holds extensive collections and exhibits related to Danish maritime history, including the ships that participated in the Triangular Trade and journeys to the West Indies."
+    id: "whim-museum",
+    title: "Estate Whim Museum",
+    category: "website",
+    link: "https://www.stcroixlandmarks.org/museums/estate-whim-museum",
+    description: "The only colonial-era estate museum in the Virgin Islands. Its restored buildings and ruins offer a stark, physical look into the spatial organization of a Danish sugar plantation."
   }
 ];
 
@@ -108,12 +89,12 @@ if (!fs.existsSync(dir)) {
 for (const res of resources) {
   const content = JSON.stringify({
     title: res.title,
-    category: res.type,
-    link: res.url,
+    category: res.category,
+    link: res.link,
     description: res.description
   }, null, 2);
   
   fs.writeFileSync(path.join(dir, `${res.id}.json`), content);
 }
 
-console.log('Successfully created 12 new resources.');
+console.log('Successfully created 11 more resources.');
