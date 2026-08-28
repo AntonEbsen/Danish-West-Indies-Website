@@ -85,6 +85,16 @@ const eventsCollection = defineCollection({
   }),
 });
 
+const languagesCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/languages" }),
+  schema: z.object({
+    title: z.string(),
+    code: z.string(),
+    region: z.string(),
+    description: z.string(),
+  }),
+});
+
 export const collections = {
   'history': historyCollection,
   'resources': resourcesCollection,
@@ -92,5 +102,6 @@ export const collections = {
   'memorial': memorialCollection,
   'journeys': journeysCollection,
   'events': eventsCollection,
+  'languages': languagesCollection,
 };
 

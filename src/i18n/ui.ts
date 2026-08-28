@@ -23,6 +23,7 @@ export const ui = {
     'nav.resources': 'Resources',
     'nav.thesis': 'Thesis',
     'nav.about': 'About',
+    'nav.languages': 'Languages',
   },
   da: {
     'nav.history': 'Historie',
@@ -30,6 +31,7 @@ export const ui = {
     'nav.resources': 'Ressourcer',
     'nav.thesis': 'Speciale',
     'nav.about': 'Om Projektet',
+    'nav.languages': 'Sprog',
   },
   es: {
     'nav.history': 'Historia',
@@ -37,6 +39,7 @@ export const ui = {
     'nav.resources': 'Recursos',
     'nav.thesis': 'Tesis',
     'nav.about': 'Acerca de',
+    'nav.languages': 'Idiomas',
   },
   fr: {
     'nav.history': 'Histoire',
@@ -44,6 +47,7 @@ export const ui = {
     'nav.resources': 'Ressources',
     'nav.thesis': 'Thèse',
     'nav.about': 'À Propos',
+    'nav.languages': 'Langues',
   },
   nl: {
     'nav.history': 'Geschiedenis',
@@ -51,6 +55,7 @@ export const ui = {
     'nav.resources': 'Bronnen',
     'nav.thesis': 'Scriptie',
     'nav.about': 'Over',
+    'nav.languages': 'Talen',
   },
   ak: {
     'nav.history': 'Abakɔsɛm',
@@ -58,6 +63,7 @@ export const ui = {
     'nav.resources': 'Nneɛma',
     'nav.thesis': 'Adesua',
     'nav.about': 'Ho Asɛm',
+    'nav.languages': 'Kasa',
   },
   de: {
     'nav.history': 'Geschichte',
@@ -65,6 +71,7 @@ export const ui = {
     'nav.resources': 'Ressourcen',
     'nav.thesis': 'Arbeit',
     'nav.about': 'Über',
+    'nav.languages': 'Sprachen',
   },
   nh: {
     'nav.history': 'Histori',
@@ -72,6 +79,7 @@ export const ui = {
     'nav.resources': 'Bruk',
     'nav.thesis': 'Buku',
     'nav.about': 'Onda',
+    'nav.languages': 'Tael',
   },
   yo: {
     'nav.history': 'Itan',
@@ -79,6 +87,7 @@ export const ui = {
     'nav.resources': 'Awọn orisun',
     'nav.thesis': 'Iwe-ẹkọ',
     'nav.about': 'Nipa',
+    'nav.languages': 'Ede',
   },
   ig: {
     'nav.history': 'Akụkọ ihe mere eme',
@@ -86,6 +95,7 @@ export const ui = {
     'nav.resources': 'Akụrụngwa',
     'nav.thesis': 'Usoro',
     'nav.about': 'Banyere',
+    'nav.languages': 'Asụsụ',
   },
   kg: {
     'nav.history': 'Kinkulu',
@@ -93,6 +103,7 @@ export const ui = {
     'nav.resources': 'Bima',
     'nav.thesis': 'Mukanda',
     'nav.about': 'Sambu na',
+    'nav.languages': 'Ndinga',
   },
   sv: {
     'nav.history': 'Historia',
@@ -100,6 +111,7 @@ export const ui = {
     'nav.resources': 'Resurser',
     'nav.thesis': 'Uppsats',
     'nav.about': 'Om',
+    'nav.languages': 'Språk',
   },
   pt: {
     'nav.history': 'História',
@@ -107,5 +119,6 @@ export const ui = {
     'nav.resources': 'Recursos',
     'nav.thesis': 'Tese',
     'nav.about': 'Sobre',
+    'nav.languages': 'Idiomas',
   },
 } as const;

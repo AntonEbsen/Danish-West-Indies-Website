@@ -1,0 +1,132 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, useTranslations } from '../../../i18n/utils';
+
+const allLanguages = await getCollection('languages');
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Layout title="Languages | Danish West Indies">
+	<div class="page-container animate-fade-in">
+		<header class="page-header">
+			<h1>The Languages of the Danish West Indies</h1>
+			<p class="subtitle">Exploring the linguistic landscape of the transatlantic slave trade and colonial society.</p>
+		</header>
+
+		<div class="languages-grid">
+			{allLanguages.map((language) => (
+				<a href={`/languages/${language.id}`} class="language-card">
+					<div class="lang-header">
+						<span class="lang-code">{language.data.code.toUpperCase()}</span>
+						<h2>{language.data.title}</h2>
+					</div>
+					<div class="lang-meta">
+						<span class="icon">📍</span> {language.data.region}
+					</div>
+					<p class="lang-desc">{language.data.description}</p>
+					<div class="read-more">Read Historical Context →</div>
+				</a>
+			))}
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.page-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding-bottom: var(--space-2xl);
+	}
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-2xl);
+	}
+
+	.page-header h1 {
+		color: var(--color-accent);
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.2rem;
+		font-style: italic;
+	}
+
+	.languages-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: var(--space-lg);
+	}
+
+	.language-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		border-radius: 8px;
+		padding: var(--space-lg);
+		text-decoration: none;
+		color: var(--color-text);
+		display: flex;
+		flex-direction: column;
+		transition: all 0.3s ease;
+	}
+
+	.language-card:hover {
+		transform: translateY(-5px);
+		border-color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.05);
+		box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+	}
+
+	.lang-header {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.lang-code {
+		background: var(--color-accent);
+		color: #000;
+		font-family: var(--font-heading);
+		font-weight: bold;
+		padding: 0.2rem 0.6rem;
+		border-radius: 4px;
+		font-size: 0.9rem;
+	}
+
+	.lang-header h2 {
+		margin: 0;
+		color: var(--color-accent);
+		font-size: 1.5rem;
+	}
+
+	.lang-meta {
+		font-size: 0.85rem;
+		color: var(--color-text-muted);
+		margin-bottom: 1rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.lang-desc {
+		color: rgba(255, 255, 255, 0.8);
+		line-height: 1.5;
+		margin-bottom: 1.5rem;
+		flex-grow: 1;
+	}
+
+	.read-more {
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+		font-size: 0.9rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		margin-top: auto;
+	}
+</style>
