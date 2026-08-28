@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 ---
 
-<Layout title="Interactive Maps | Master Thesis | Danish West Indies">
+<Layout title="Interactive Historical Map | Danish West Indies">
 	<!-- Leaflet CSS -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
@@ -11,22 +11,56 @@ import Layout from '../../layouts/Layout.astro';
 
 		<header class="page-header">
 			<span class="label">Interactive Feature</span>
-			<h1>Historical GIS Maps</h1>
-			<p class="subtitle">Spatial analysis of plantations, historical sites, and the 1848 rebellion routes across the Danish West Indies.</p>
+			<h1>Historical Map of the Danish West Indies</h1>
+			<p class="subtitle">A spatial analysis of the colonial economy, tracing the locations of major sugar estates, military forts, slave markets, and sites of rebellion.</p>
 		</header>
 
-		<div class="map-container">
-			<div id="historicalMap"></div>
+		<div class="map-wrapper">
+			<!-- Filter Controls -->
+			<div class="map-controls">
+				<span class="filter-label">Filter Locations:</span>
+				<button class="btn-filter active" data-filter="all">All Sites</button>
+				<button class="btn-filter" data-filter="plantation">🌿 Plantations</button>
+				<button class="btn-filter" data-filter="fort">🏰 Military Forts</button>
+				<button class="btn-filter" data-filter="rebellion">⚔️ Rebellions</button>
+				<button class="btn-filter" data-filter="trade">🚢 Ports & Markets</button>
+			</div>
+
+			<div class="map-container">
+				<div id="historicalMap"></div>
+			</div>
 		</div>
 
 		<div class="map-legend">
-			<h2>Map Key & Historical Notes</h2>
-			<ul class="legend-list">
-				<li><span class="dot c-red"></span> <strong>Fort Frederik (Frederiksted)</strong>: The site where Governor General Peter von Scholten declared emancipation on July 3, 1848, following the uprising led by General Buddhoe.</li>
-				<li><span class="dot c-gold"></span> <strong>Christiansted</strong>: The former capital of the Danish West Indies and the center of colonial administration.</li>
-				<li><span class="dot c-blue"></span> <strong>Cruz Bay (St. John)</strong>: Site of significant historical importance, including the 1733 Akwamu (Amina) slave rebellion.</li>
-			</ul>
-			<p class="methodology-note">Note: This map uses modern cartography tiles overlaid with historical coordinates to demonstrate spatial relationships discussed in the thesis.</p>
+			<h2>Methodology & Historical Notes</h2>
+			<p class="methodology-note">This interactive map utilizes modern cartographic tiles (OpenStreetMap/CARTO) overlaid with historical coordinates. The locations of specific estates, such as Estate La Grange and Estate Sprat Hall, have been plotted based on 18th and 19th-century colonial ledgers and modern historical geography.</p>
+			
+			<div class="legend-grid">
+				<div class="legend-item">
+					<div class="legend-icon" style="background: #22c55e;">🌿</div>
+					<div class="legend-text">
+						<strong>Plantations:</strong> The engines of the colonial economy. Sites of intense labor, wealth extraction, and resistance.
+					</div>
+				</div>
+				<div class="legend-item">
+					<div class="legend-icon" style="background: #64748b;">🏰</div>
+					<div class="legend-text">
+						<strong>Military Forts:</strong> Danish state infrastructure built to protect trade routes and suppress enslaved uprisings.
+					</div>
+				</div>
+				<div class="legend-item">
+					<div class="legend-icon" style="background: #ef4444;">⚔️</div>
+					<div class="legend-text">
+						<strong>Rebellion Sites:</strong> Key locations from the 1733 St. John rebellion, the 1848 Emancipation, and the 1878 Fireburn.
+					</div>
+				</div>
+				<div class="legend-item">
+					<div class="legend-icon" style="background: #3b82f6;">🚢</div>
+					<div class="legend-text">
+						<strong>Ports & Markets:</strong> Free ports and slave markets that integrated the colony into global transatlantic trade.
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -35,41 +69,138 @@ import Layout from '../../layouts/Layout.astro';
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			const mapEl = document.getElementById('historicalMap');
-			if (mapEl) {
-				// Initialize map centered on St. Croix
-				const map = L.map('historicalMap').setView([17.7276, -64.7470], 10);
+			if (!mapEl) return;
 
-				// Add a dark, premium map tile layer (CartoDB Dark Matter)
-				L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-					attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-					subdomains: 'abcd',
-					maxZoom: 20
-				}).addTo(map);
+			// Initialize map centered on St. Croix (which has the most sites)
+			const map = L.map('historicalMap').setView([17.7276, -64.7470], 11);
 
-				// Custom Markers
-				const createCustomIcon = (color) => {
-					return L.divIcon({
-						className: 'custom-leaflet-marker',
-						html: `<div style="background-color: ${color}; width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px ${color};"></div>`,
-						iconSize: [16, 16],
-						iconAnchor: [8, 8]
-					});
-				};
+			// Add a dark, premium map tile layer (CartoDB Dark Matter)
+			L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+				subdomains: 'abcd',
+				maxZoom: 18,
+				minZoom: 10
+			}).addTo(map);
 
-				// Markers
-				const locations = [
-					{ name: "Fort Frederik (Frederiksted)", coords: [17.7126, -64.8824], color: "#f87171", desc: "Emancipation declared July 3, 1848." },
-					{ name: "Christiansted", coords: [17.7466, -64.7032], color: "#c4a77d", desc: "Capital of the Danish West Indies." },
-					{ name: "Cruz Bay (St. John)", coords: [18.3313, -64.7937], color: "#38bdf8", desc: "Site of the 1733 Rebellion." },
-					{ name: "Charlotte Amalie (St. Thomas)", coords: [18.3419, -64.9307], color: "#c4a77d", desc: "Major port and commercial hub." }
-				];
-
-				locations.forEach(loc => {
-					L.marker(loc.coords, { icon: createCustomIcon(loc.color) })
-						.addTo(map)
-						.bindPopup(`<strong style="color:#000;">${loc.name}</strong><br><span style="color:#333;">${loc.desc}</span>`);
+			// Custom Markers generator
+			const createCustomIcon = (emoji, color) => {
+				return L.divIcon({
+					className: 'custom-leaflet-marker',
+					html: `<div style="background-color: ${color}; width: 30px; height: 30px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px ${color}; display: flex; align-items: center; justify-content: center; font-size: 16px;">${emoji}</div>`,
+					iconSize: [30, 30],
+					iconAnchor: [15, 15],
+					popupAnchor: [0, -15]
 				});
-			}
+			};
+
+			// Historical Locations Dataset
+			const locations = [
+				// FORTS
+				{ 
+					id: "fort-frederik", category: "fort", emoji: "🏰", color: "#64748b",
+					name: "Fort Frederik", coords: [17.7126, -64.8824], 
+					desc: "Danish fort in Frederiksted, St. Croix. It was here that Governor General Peter von Scholten was forced to declare emancipation on July 3, 1848, under threat of a massive rebellion led by General Buddhoe.",
+					link: "/history/1848-emancipation"
+				},
+				{ 
+					id: "fort-christiansvaern", category: "fort", emoji: "🏰", color: "#64748b",
+					name: "Fort Christiansvaern", coords: [17.7466, -64.7018], 
+					desc: "Built in 1738 to protect Christiansted harbor from pirates and slave insurrections. It housed the Danish colonial administration and dungeons for holding the enslaved."
+				},
+				{ 
+					id: "fort-christian", category: "fort", emoji: "🏰", color: "#64748b",
+					name: "Fort Christian", coords: [18.3394, -64.9304], 
+					desc: "The oldest standing structure in the US Virgin Islands (St. Thomas), built in 1672 by the Danish West India and Guinea Company to secure their first colonial foothold."
+				},
+				// PLANTATIONS
+				{ 
+					id: "estate-la-grange", category: "plantation", emoji: "🌿", color: "#22c55e",
+					name: "Estate La Grange", coords: [17.7183, -64.8741], 
+					desc: "A massive sugar estate on St. Croix owned by the extraordinarily wealthy Schimmelmann family, who integrated sugar production with their ownership of slave ships in Copenhagen.",
+					link: "/history/schimmelmann-family"
+				},
+				{ 
+					id: "estate-sprat-hall", category: "plantation", emoji: "🌿", color: "#22c55e",
+					name: "Estate Sprat Hall", coords: [17.7335, -64.8872], 
+					desc: "A significant sugar plantation where Mary Thomas (Queen Mary) worked under the oppressive 1849 Labor Act before helping to lead the 1878 Fireburn.",
+					link: "/history/mary-thomas"
+				},
+				{ 
+					id: "estate-annas-hope", category: "plantation", emoji: "🌿", color: "#22c55e",
+					name: "Estate Anna's Hope", coords: [17.7289, -64.7231], 
+					desc: "A prominent St. Croix plantation that exemplifies the sheer scale of the agricultural economy that drove Danish colonial wealth.",
+					link: "/history/anatomy-of-a-danish-sugar-estate"
+				},
+				// REBELLIONS
+				{ 
+					id: "coral-bay", category: "rebellion", emoji: "⚔️", color: "#ef4444",
+					name: "Coral Bay / Fortsberg", coords: [18.3472, -64.7107], 
+					desc: "The starting point of the massive 1733 St. John rebellion. Enslaved Akwamu people smuggled cane bills hidden in wood bundles into the fort, overpowered the Danish garrison, and took control of the island.",
+					link: "/history/1733-st-john-rebellion"
+				},
+				{ 
+					id: "frederiksted-fireburn", category: "rebellion", emoji: "⚔️", color: "#ef4444",
+					name: "The Fireburn (Frederiksted)", coords: [17.7150, -64.8800], 
+					desc: "On October 1, 1878 (Contract Day), laborers rioted against poverty wages. The town of Frederiksted and over 50 plantations along the west coast were burned.",
+					link: "/history/1878-fireburn-st-croix"
+				},
+				// TRADE & MARKETS
+				{ 
+					id: "charlotte-amalie-port", category: "trade", emoji: "🚢", color: "#3b82f6",
+					name: "Charlotte Amalie Free Port", coords: [18.3419, -64.9307], 
+					desc: "Declared a free port in 1764, St. Thomas became one of the busiest and wealthiest commercial hubs in the Caribbean, heavily involved in the transit of enslaved people and contraband.",
+					link: "/history/st-thomas-free-port"
+				}
+			];
+
+			// Store marker objects so we can filter them
+			let mapMarkers = [];
+
+			// Add markers to map
+			locations.forEach(loc => {
+				const popupContent = `
+					<div class="map-popup">
+						<span class="popup-category">${loc.category.toUpperCase()}</span>
+						<h3 class="popup-title">${loc.name}</h3>
+						<p class="popup-desc">${loc.desc}</p>
+						${loc.link ? `<a href="${loc.link}" class="popup-link">Read History Article →</a>` : ''}
+					</div>
+				`;
+
+				const marker = L.marker(loc.coords, { icon: createCustomIcon(loc.emoji, loc.color) })
+					.bindPopup(popupContent, { maxWidth: 300, className: 'custom-popup' });
+				
+				marker.category = loc.category; // Attach category for filtering
+				mapMarkers.push(marker);
+				marker.addTo(map);
+			});
+
+			// Filtering Logic
+			const filterBtns = document.querySelectorAll('.btn-filter');
+			filterBtns.forEach(btn => {
+				btn.addEventListener('click', (e) => {
+					// UI State
+					filterBtns.forEach(b => b.classList.remove('active'));
+					btn.classList.add('active');
+
+					// Map State
+					const filter = btn.getAttribute('data-filter');
+					mapMarkers.forEach(marker => {
+						if (filter === 'all' || marker.category === filter) {
+							if (!map.hasLayer(marker)) marker.addTo(map);
+						} else {
+							if (map.hasLayer(marker)) map.removeLayer(marker);
+						}
+					});
+
+					// Re-center map if filtering specifically for St. Thomas/St. John vs St. Croix
+					if (filter === 'trade') {
+						map.setView([18.3419, -64.9307], 12); // Focus St. Thomas
+					} else {
+						map.setView([17.7276, -64.7470], 11); // Focus St. Croix
+					}
+				});
+			});
 		});
 	</script>
 </Layout>
@@ -82,106 +213,94 @@ import Layout from '../../layouts/Layout.astro';
 	}
 
 	.back-link {
-		display: inline-block;
-		margin-bottom: var(--space-lg);
-		color: var(--color-text-muted);
-		font-size: 0.9rem;
-		transition: color var(--transition-fast);
+		display: inline-block; margin-bottom: var(--space-lg);
+		color: var(--color-text-muted); font-size: 0.9rem;
+		transition: color var(--transition-fast); text-decoration: none;
 	}
-
 	.back-link:hover { color: var(--color-accent); }
 
-	.page-header {
-		text-align: center;
-		margin-bottom: var(--space-2xl);
-	}
-
+	.page-header { text-align: center; margin-bottom: var(--space-xl); }
 	.label {
-		display: inline-block;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 2px;
-		color: var(--color-accent);
-		background: rgba(196, 167, 125, 0.1);
-		padding: 0.3rem 0.8rem;
-		border-radius: 20px;
-		margin-bottom: var(--space-sm);
+		display: inline-block; font-size: 0.8rem; text-transform: uppercase;
+		letter-spacing: 2px; color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1); padding: 0.3rem 0.8rem;
+		border-radius: 20px; margin-bottom: var(--space-sm);
 	}
-
 	.page-header h1 {
-		color: var(--color-accent);
-		font-size: 3rem;
-		margin-bottom: 0.5rem;
+		color: var(--color-accent); font-size: 3rem; margin-bottom: 0.5rem; font-family: var(--font-heading);
 	}
+	.subtitle { color: var(--color-text-muted); font-size: 1.1rem; font-style: italic; max-width: 800px; margin: 0 auto; }
 
-	.subtitle {
-		color: var(--color-text-muted);
-		font-size: 1.1rem;
-		font-style: italic;
-	}
-
-	.map-container {
-		height: 600px;
-		width: 100%;
-		border-radius: 12px;
-		overflow: hidden;
-		border: 1px solid rgba(196, 167, 125, 0.3);
-		margin-bottom: var(--space-2xl);
+	/* Map Controls & Container */
+	.map-wrapper {
+		background: var(--color-surface); border: 1px solid var(--color-border);
+		border-radius: 12px; padding: var(--space-lg); margin-bottom: var(--space-2xl);
 		box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 	}
 
-	#historicalMap {
-		height: 100%;
-		width: 100%;
-		z-index: 1; /* Keep map behind modals/nav */
+	.map-controls {
+		display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;
 	}
+	.filter-label { color: var(--color-text-muted); font-size: 0.9rem; margin-right: 0.5rem; font-weight: bold; }
+	.btn-filter {
+		background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+		color: var(--color-text-muted); padding: 0.5rem 1rem; border-radius: 20px;
+		cursor: pointer; font-size: 0.9rem; transition: all 0.2s ease;
+	}
+	.btn-filter:hover { border-color: rgba(196, 167, 125, 0.4); color: var(--color-text); }
+	.btn-filter.active { background: rgba(196, 167, 125, 0.15); border-color: var(--color-accent); color: var(--color-accent); font-weight: bold; }
 
-	.map-legend {
-		background: rgba(255, 255, 255, 0.02);
+	.map-container {
+		height: 600px; width: 100%; border-radius: 8px; overflow: hidden;
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 8px;
-		padding: var(--space-xl);
 	}
 
-	.map-legend h2 {
-		color: var(--color-text);
-		margin-bottom: 1rem;
-		font-size: 1.5rem;
+	#historicalMap { height: 100%; width: 100%; z-index: 1; }
+
+	/* Custom Leaflet Overrides */
+	:global(.custom-leaflet-marker) { display: flex; justify-content: center; align-items: center; }
+	
+	/* Premium Popup Styling */
+	:global(.leaflet-popup-content-wrapper) {
+		background: var(--color-surface) !important;
+		color: var(--color-text) !important;
+		border: 1px solid var(--color-accent) !important;
+		border-radius: 8px !important;
+		box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
 	}
+	:global(.leaflet-popup-tip) { background: var(--color-surface) !important; border: 1px solid var(--color-accent) !important; }
+	:global(.leaflet-popup-content) { margin: 15px !important; line-height: 1.5 !important; }
+	
+	:global(.map-popup) { display: flex; flex-direction: column; }
+	:global(.popup-category) { font-size: 0.7rem; color: var(--color-accent); letter-spacing: 1px; margin-bottom: 0.3rem; }
+	:global(.popup-title) { font-family: var(--font-heading); font-size: 1.2rem; color: var(--color-text); margin: 0 0 0.5rem 0; }
+	:global(.popup-desc) { font-family: var(--font-body); font-size: 0.9rem; color: var(--color-text-muted); margin: 0 0 1rem 0; line-height: 1.5; }
+	:global(.popup-link) { color: var(--color-accent); text-decoration: none; font-weight: bold; font-size: 0.9rem; align-self: flex-start; border-bottom: 1px dashed var(--color-accent); }
+	:global(.popup-link:hover) { color: #d6b88a; }
+	:global(.leaflet-container a.leaflet-popup-close-button) { color: var(--color-text-muted) !important; padding: 4px 10px !important; }
 
-	.legend-list {
-		list-style: none;
-		padding: 0;
-		margin: 0 0 1.5rem 0;
+	/* Legend */
+	.map-legend {
+		background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 12px; padding: var(--space-xl);
 	}
-
-	.legend-list li {
-		margin-bottom: 0.8rem;
-		display: flex;
-		align-items: flex-start;
-		line-height: 1.5;
-		color: rgba(255, 255, 255, 0.8);
+	.map-legend h2 { color: var(--color-text); margin-bottom: 0.5rem; font-family: var(--font-heading); font-size: 1.8rem; }
+	.methodology-note { color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; font-style: italic; }
+	
+	.legend-grid {
+		display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+		border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 1.5rem;
 	}
-
-	.dot {
-		display: inline-block;
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		margin-right: 12px;
-		margin-top: 5px;
-		flex-shrink: 0;
+	.legend-item { display: flex; align-items: flex-start; gap: 1rem; }
+	.legend-icon {
+		width: 30px; height: 30px; border-radius: 50%; border: 2px solid white; display: flex;
+		justify-content: center; align-items: center; flex-shrink: 0; font-size: 14px;
 	}
+	.legend-text { color: rgba(255, 255, 255, 0.85); font-size: 0.95rem; line-height: 1.5; }
+	.legend-text strong { color: var(--color-text); display: block; margin-bottom: 0.2rem; font-size: 1.05rem; }
 
-	.c-red { background-color: #f87171; box-shadow: 0 0 8px #f87171; }
-	.c-gold { background-color: #c4a77d; box-shadow: 0 0 8px #c4a77d; }
-	.c-blue { background-color: #38bdf8; box-shadow: 0 0 8px #38bdf8; }
-
-	.methodology-note {
-		color: var(--color-text-muted);
-		font-size: 0.9rem;
-		font-style: italic;
-		border-top: 1px dashed rgba(255, 255, 255, 0.1);
-		padding-top: 1rem;
+	@media (max-width: 768px) {
+		.legend-grid { grid-template-columns: 1fr; }
+		.map-controls { justify-content: center; }
 	}
 </style>
