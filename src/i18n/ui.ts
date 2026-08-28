@@ -24,6 +24,7 @@ export const ui = {
     'nav.thesis': 'Thesis',
     'nav.about': 'About',
     'nav.languages': 'Languages',
+    'nav.contact': 'Contact',
   },
   da: {
     'nav.history': 'Historie',
@@ -32,6 +33,7 @@ export const ui = {
     'nav.thesis': 'Speciale',
     'nav.about': 'Om Projektet',
     'nav.languages': 'Sprog',
+    'nav.contact': 'Kontakt',
   },
   es: {
     'nav.history': 'Historia',
@@ -40,6 +42,7 @@ export const ui = {
     'nav.thesis': 'Tesis',
     'nav.about': 'Acerca de',
     'nav.languages': 'Idiomas',
+    'nav.contact': 'Contacto',
   },
   fr: {
     'nav.history': 'Histoire',
@@ -48,6 +51,7 @@ export const ui = {
     'nav.thesis': 'Thèse',
     'nav.about': 'À Propos',
     'nav.languages': 'Langues',
+    'nav.contact': 'Contact',
   },
   nl: {
     'nav.history': 'Geschiedenis',
@@ -56,6 +60,7 @@ export const ui = {
     'nav.thesis': 'Scriptie',
     'nav.about': 'Over',
     'nav.languages': 'Talen',
+    'nav.contact': 'Contact',
   },
   ak: {
     'nav.history': 'Abakɔsɛm',
@@ -64,6 +69,7 @@ export const ui = {
     'nav.thesis': 'Adesua',
     'nav.about': 'Ho Asɛm',
     'nav.languages': 'Kasa',
+    'nav.contact': 'Nkitahodi',
   },
   de: {
     'nav.history': 'Geschichte',
@@ -72,6 +78,7 @@ export const ui = {
     'nav.thesis': 'Arbeit',
     'nav.about': 'Über',
     'nav.languages': 'Sprachen',
+    'nav.contact': 'Kontakt',
   },
   nh: {
     'nav.history': 'Histori',
@@ -80,6 +87,7 @@ export const ui = {
     'nav.thesis': 'Buku',
     'nav.about': 'Onda',
     'nav.languages': 'Tael',
+    'nav.contact': 'Kontak',
   },
   yo: {
     'nav.history': 'Itan',
@@ -88,6 +96,7 @@ export const ui = {
     'nav.thesis': 'Iwe-ẹkọ',
     'nav.about': 'Nipa',
     'nav.languages': 'Ede',
+    'nav.contact': 'Olubasọrọ',
   },
   ig: {
     'nav.history': 'Akụkọ ihe mere eme',
@@ -96,6 +105,7 @@ export const ui = {
     'nav.thesis': 'Usoro',
     'nav.about': 'Banyere',
     'nav.languages': 'Asụsụ',
+    'nav.contact': 'Kpọtụrụ',
   },
   kg: {
     'nav.history': 'Kinkulu',
@@ -104,6 +114,7 @@ export const ui = {
     'nav.thesis': 'Mukanda',
     'nav.about': 'Sambu na',
     'nav.languages': 'Ndinga',
+    'nav.contact': 'Kontakiti',
   },
   sv: {
     'nav.history': 'Historia',
@@ -112,6 +123,7 @@ export const ui = {
     'nav.thesis': 'Uppsats',
     'nav.about': 'Om',
     'nav.languages': 'Språk',
+    'nav.contact': 'Kontakt',
   },
   pt: {
     'nav.history': 'História',
@@ -120,5 +132,6 @@ export const ui = {
     'nav.thesis': 'Tese',
     'nav.about': 'Sobre',
     'nav.languages': 'Idiomas',
+    'nav.contact': 'Contato',
   },
 } as const;
