@@ -108,13 +108,12 @@ if (!fs.existsSync(dir)) {
 for (const res of resources) {
   const content = JSON.stringify({
     title: res.title,
-    type: res.type,
-    author: res.author,
-    url: res.url,
+    category: res.type,
+    link: res.url,
     description: res.description
   }, null, 2);
   
-  fs.writeFileSync(path.join(dir, \`\${res.id}.json\`), content);
+  fs.writeFileSync(path.join(dir, `${res.id}.json`), content);
 }
 
 console.log('Successfully created 12 new resources.');
