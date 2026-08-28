@@ -1,0 +1,405 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Tribute to Erik Gøbel | Danish West Indies">
+	<div class="gobel-page">
+		<header class="page-header animate-fade-in">
+			<a href="/resources" class="back-link">← Back to Resources</a>
+			<h1>Erik Gøbel</h1>
+			<p class="subtitle">The Archival Pioneer of the Danish West Indies.</p>
+		</header>
+
+		<!-- Tribute Section -->
+		<section class="tribute-section animate-fade-in" style="animation-delay: 0.2s;">
+			<div class="card tribute-card">
+				<div class="tribute-content">
+					<h2>The Archival Key</h2>
+					<p>
+						For 36 years, Erik Gøbel served as a senior researcher at the Danish National Archives (Rigsarkivet). 
+						Without his monumental efforts to catalog, decipher, and contextualize the raw administrative records of the Danish colonies, 
+						modern digital humanities projects like this Memorial Register would be virtually impossible.
+					</p>
+					<p>
+						He provided the <em>key</em> that allows researchers to unlock the human stories hidden within an ocean of 18th and 19th-century colonial paper.
+					</p>
+					<a href="https://da.wikipedia.org/wiki/Erik_G%C3%B8bel" target="_blank" rel="noopener noreferrer" class="btn-external">
+						View his Profile <span class="icon">↗</span>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- Archivist's Lens Feature -->
+		<section class="lens-section animate-fade-in" style="animation-delay: 0.4s;">
+			<h2>The Archivist's Lens</h2>
+			<p>Experience the difficult work of translating 18th-century Gothic Danish script into accessible historical data.</p>
+			
+			<div class="lens-container">
+				<div class="lens-image-wrapper">
+					<img src="/images/colonial_ledger.jpg" alt="Original Colonial Ledger" class="ledger-background" />
+					<div id="lens-overlay" class="lens-overlay">
+						<div class="decoded-text">
+							<h3>Decoded Record (1782)</h3>
+							<ul>
+								<li><strong>Name:</strong> John Adams</li>
+								<li><strong>Status:</strong> Farmer</li>
+								<li><strong>Household:</strong> 1m, 1f, 4c, 0s</li>
+								<li><strong>Total:</strong> 6 souls</li>
+							</ul>
+							<p><em>Translation by Archivist</em></p>
+						</div>
+					</div>
+				</div>
+				<div class="lens-controls">
+					<label class="toggle-switch">
+						<input type="checkbox" id="lens-toggle">
+						<span class="slider"></span>
+						<span class="toggle-label">Apply the Archivist's Lens</span>
+					</label>
+				</div>
+			</div>
+		</section>
+
+		<!-- Bibliography -->
+		<section class="bibliography-section animate-fade-in" style="animation-delay: 0.6s;">
+			<h2>The Gøbel Library</h2>
+			<p>Key publications foundational to understanding the Danish West Indies.</p>
+			
+			<div class="book-grid">
+				<a href="#" class="book-card">
+					<div class="book-cover">2002</div>
+					<h3>A Guide to Sources for the History of the Danish West Indies</h3>
+					<p>The definitive map of the archival materials covering 1671-1917. The foundation of modern research.</p>
+				</a>
+				
+				<a href="#" class="book-card">
+					<div class="book-cover">2016</div>
+					<h3>The Danish Slave Trade and Its Abolition</h3>
+					<p>A comprehensive, meticulous study of Denmark's involvement in and eventual cessation of the transatlantic slave trade.</p>
+				</a>
+
+				<a href="#" class="book-card">
+					<div class="book-cover">2015</div>
+					<h3>Vestindisk-guineisk Kompagni 1671-1754</h3>
+					<p>Studies and sources relating to the company that initiated Danish colonization and the enslavement of Africans.</p>
+				</a>
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const lensToggle = document.getElementById('lens-toggle') as HTMLInputElement;
+		const lensOverlay = document.getElementById('lens-overlay');
+		
+		lensToggle?.addEventListener('change', (e) => {
+			const target = e.target as HTMLInputElement;
+			if (target.checked) {
+				lensOverlay?.classList.add('active');
+			} else {
+				lensOverlay?.classList.remove('active');
+			}
+		});
+	});
+</script>
+
+<style>
+	.gobel-page {
+		max-width: 1000px;
+		margin: 0 auto;
+		padding-bottom: var(--space-xl);
+	}
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-md);
+		color: var(--color-accent);
+		text-decoration: none;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-size: 0.85rem;
+		transition: color 0.3s;
+	}
+
+	.back-link:hover {
+		color: #d4b88f;
+	}
+
+	.page-header h1 {
+		color: var(--color-accent);
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.2rem;
+		font-style: italic;
+	}
+
+	/* Card Base */
+	.card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		padding: var(--space-xl);
+		border-radius: 8px;
+	}
+
+	h2 {
+		color: var(--color-accent);
+		margin-bottom: var(--space-md);
+		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
+		padding-bottom: 0.5rem;
+	}
+
+	/* Tribute */
+	.tribute-section {
+		margin-bottom: var(--space-2xl);
+	}
+
+	.tribute-content p {
+		margin-bottom: var(--space-md);
+		line-height: 1.7;
+		font-size: 1.1rem;
+		color: rgba(255, 255, 255, 0.9);
+	}
+
+	.btn-external {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: var(--space-md);
+		background: rgba(196, 167, 125, 0.1);
+		border: 1px solid var(--color-accent);
+		color: var(--color-accent);
+		padding: 0.8rem 1.5rem;
+		border-radius: 30px;
+		text-decoration: none;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-size: 0.9rem;
+		transition: all 0.3s ease;
+	}
+
+	.btn-external:hover {
+		background: var(--color-accent);
+		color: #000;
+	}
+
+	/* Archivist Lens */
+	.lens-section {
+		margin-bottom: var(--space-2xl);
+	}
+
+	.lens-section > p {
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-lg);
+	}
+
+	.lens-container {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		border-radius: 8px;
+		padding: var(--space-lg);
+	}
+
+	.lens-image-wrapper {
+		position: relative;
+		width: 100%;
+		border-radius: 4px;
+		overflow: hidden;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+	}
+
+	.ledger-background {
+		width: 100%;
+		height: auto;
+		max-height: 400px;
+		object-fit: cover;
+		display: block;
+		filter: contrast(1.2) sepia(0.3);
+	}
+
+	.lens-overlay {
+		position: absolute;
+		top: 0; left: 0; right: 0; bottom: 0;
+		background: rgba(0,0,0,0.85);
+		backdrop-filter: blur(8px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.8s ease;
+	}
+
+	.lens-overlay.active {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.decoded-text {
+		background: #f4ecd8;
+		color: #2b2520;
+		padding: 2rem;
+		border-radius: 4px;
+		border: 2px solid #c4a77d;
+		font-family: "Courier New", Courier, monospace;
+		max-width: 80%;
+		box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+		transform: translateY(20px);
+		transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	}
+
+	.lens-overlay.active .decoded-text {
+		transform: translateY(0);
+	}
+
+	.decoded-text h3 {
+		font-family: var(--font-heading);
+		margin-bottom: 1rem;
+		border-bottom: 1px solid rgba(43, 37, 32, 0.3);
+		padding-bottom: 0.5rem;
+	}
+
+	.decoded-text ul {
+		list-style: none;
+		margin-bottom: 1rem;
+	}
+
+	.decoded-text li {
+		margin-bottom: 0.5rem;
+		font-size: 1.1rem;
+	}
+
+	.decoded-text p {
+		font-style: italic;
+		font-size: 0.9rem;
+		text-align: right;
+		opacity: 0.7;
+	}
+
+	.lens-controls {
+		margin-top: var(--space-lg);
+		display: flex;
+		justify-content: center;
+	}
+
+	/* Toggle Switch */
+	.toggle-switch {
+		position: relative;
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+	}
+
+	.toggle-switch input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.slider {
+		position: relative;
+		display: inline-block;
+		width: 50px;
+		height: 24px;
+		background-color: rgba(255,255,255,0.2);
+		border-radius: 24px;
+		transition: .4s;
+		margin-right: 15px;
+	}
+
+	.slider:before {
+		position: absolute;
+		content: "";
+		height: 18px;
+		width: 18px;
+		left: 3px;
+		bottom: 3px;
+		background-color: white;
+		border-radius: 50%;
+		transition: .4s;
+	}
+
+	input:checked + .slider {
+		background-color: var(--color-accent);
+	}
+
+	input:checked + .slider:before {
+		transform: translateX(26px);
+		background-color: #000;
+	}
+
+	.toggle-label {
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+		font-size: 1.2rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	/* Bibliography */
+	.bibliography-section > p {
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-lg);
+	}
+
+	.book-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: var(--space-lg);
+	}
+
+	.book-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.15);
+		padding: var(--space-lg);
+		border-radius: 8px;
+		text-decoration: none;
+		color: var(--color-text);
+		transition: all 0.3s ease;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.book-card:hover {
+		transform: translateY(-5px);
+		border-color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.05);
+	}
+
+	.book-cover {
+		background: var(--color-accent);
+		color: #000;
+		font-family: var(--font-heading);
+		font-size: 1.5rem;
+		font-weight: bold;
+		padding: 2rem 1rem;
+		text-align: center;
+		border-radius: 4px;
+		margin-bottom: var(--space-md);
+		box-shadow: inset 5px 0 10px rgba(0,0,0,0.2);
+	}
+
+	.book-card h3 {
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+		font-size: 1.2rem;
+		line-height: 1.4;
+	}
+
+	.book-card p {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.95rem;
+		line-height: 1.5;
+		margin-top: auto;
+	}
+</style>
