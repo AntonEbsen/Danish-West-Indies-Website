@@ -76,10 +76,21 @@ const journeysCollection = defineCollection({
   }),
 });
 
+const eventsCollection = defineCollection({
+  loader: glob({ pattern: "**/*.json", base: "./src/content/events" }),
+  schema: z.object({
+    title: z.string(),
+    year: z.number(),
+    description: z.string(),
+  }),
+});
+
 export const collections = {
   'history': historyCollection,
   'resources': resourcesCollection,
   'thesis': thesisCollection,
   'memorial': memorialCollection,
   'journeys': journeysCollection,
+  'events': eventsCollection,
 };
+

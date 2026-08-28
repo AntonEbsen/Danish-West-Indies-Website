@@ -1,0 +1,282 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import AmbientSound from '../../components/AmbientSound.astro';
+
+const allEntries = await getCollection('memorial');
+
+// Serialize data for client-side rendering
+const entriesData = allEntries.map(e => ({
+  id: e.id,
+  name: e.data.name,
+  yearOfBirth: e.data.yearOfBirth,
+  yearOfDeath: e.data.yearOfDeath,
+  origin: e.data.origin,
+  location: e.data.location,
+  island: e.data.island,
+  tags: e.data.tags || [],
+  notes: e.data.notes
+}));
+---
+
+<Layout title="My Register - Personal Collection | Danish West Indies">
+	<div class="page-header animate-fade-in">
+		<a href="/memorial" class="back-link">← Back to Register</a>
+		<h1>My Register</h1>
+		<p class="subtitle">Your personal collection of saved profiles.</p>
+	</div>
+
+	<section class="register-section animate-fade-in" style="animation-delay: 0.2s;">
+		<div id="saved-grid" class="memorial-grid">
+			<!-- Rendered by client JS -->
+		</div>
+
+		<div id="empty-state" class="empty-state" style="display: none;">
+			<div class="empty-icon">🔖</div>
+			<p>You haven't saved any profiles yet.</p>
+			<p class="small">Click the "Save to My Register" button on any individual's profile to keep them here for your research.</p>
+			<a href="/memorial" class="btn-secondary">Explore the Register</a>
+		</div>
+	</section>
+
+	<AmbientSound />
+</Layout>
+
+<script define:vars={{ entriesData }}>
+	document.addEventListener('DOMContentLoaded', () => {
+		const grid = document.getElementById('saved-grid');
+		const emptyState = document.getElementById('empty-state');
+		
+		let savedIds = [];
+		try {
+			savedIds = JSON.parse(localStorage.getItem('myRegister') || '[]');
+		} catch (e) {}
+
+		if (savedIds.length === 0) {
+			emptyState.style.display = 'block';
+			return;
+		}
+
+		// Filter the full dataset based on saved IDs
+		const savedEntries = entriesData.filter(entry => savedIds.includes(entry.id));
+
+		if (savedEntries.length === 0) {
+			emptyState.style.display = 'block';
+			return;
+		}
+
+		// Render cards
+		savedEntries.forEach((entry, index) => {
+			const card = document.createElement('a');
+			card.href = `/memorial/${entry.id}`;
+			card.className = 'memorial-card scroll-animate';
+			card.style.animationDelay = `${(index * 0.05)}s`;
+
+			let detailsHTML = '';
+			if (entry.yearOfBirth) detailsHTML += `<p><strong>Born:</strong> ~${entry.yearOfBirth}</p>`;
+			if (entry.yearOfDeath) detailsHTML += `<p><strong>Died:</strong> ~${entry.yearOfDeath}</p>`;
+			if (entry.origin) detailsHTML += `<p><strong>Origin:</strong> ${entry.origin}</p>`;
+			if (entry.location) detailsHTML += `<p><strong>Location:</strong> ${entry.location}</p>`;
+
+			let tagsHTML = '';
+			if (entry.tags && entry.tags.length > 0) {
+				tagsHTML = `<div class="tag-list">` + 
+					entry.tags.map(tag => `<span class="tag">${tag}</span>`).join('') + 
+				`</div>`;
+			}
+
+			const notesHTML = entry.notes ? `<p class="notes">${entry.notes}</p>` : '';
+
+			card.innerHTML = `
+				<div class="card-candle" aria-hidden="true">🕯</div>
+				<h3 class="name">${entry.name}</h3>
+				<div class="details">
+					${detailsHTML}
+				</div>
+				${tagsHTML}
+				${notesHTML}
+				<span class="read-more">Read their story →</span>
+			`;
+
+			grid.appendChild(card);
+		});
+	});
+</script>
+
+<style>
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-md);
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		transition: color var(--transition-fast);
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.page-header h1 {
+		font-size: clamp(2.5rem, 6vw, 4.5rem);
+		color: var(--color-text);
+		margin-bottom: var(--space-xs);
+		letter-spacing: 1px;
+	}
+
+	.subtitle {
+		font-size: 1.1rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+		font-family: var(--font-heading);
+	}
+
+	.memorial-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: var(--space-lg);
+		margin-bottom: var(--space-xl);
+	}
+
+	/* Card styling copied from index.astro for consistency */
+	:global(.memorial-card) {
+		background: var(--color-bg-light);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: var(--space-lg);
+		text-decoration: none;
+		color: inherit;
+		transition: all var(--transition-fast);
+		display: flex;
+		flex-direction: column;
+		position: relative;
+		overflow: hidden;
+	}
+
+	:global(.memorial-card:hover) {
+		transform: translateY(-5px);
+		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+		border-color: var(--color-accent);
+	}
+
+	:global(.memorial-card::before) {
+		content: '';
+		position: absolute;
+		top: 0; left: 0; right: 0;
+		height: 4px;
+		background: var(--color-accent);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.4s ease;
+	}
+
+	:global(.memorial-card:hover::before) {
+		transform: scaleX(1);
+	}
+
+	:global(.card-candle) {
+		font-size: 1.5rem;
+		margin-bottom: var(--space-sm);
+	}
+
+	:global(.memorial-card h3.name) {
+		font-size: 1.4rem;
+		color: var(--color-text);
+		margin-bottom: var(--space-sm);
+		font-family: var(--font-heading);
+	}
+
+	:global(.memorial-card .details) {
+		margin-bottom: var(--space-sm);
+	}
+
+	:global(.memorial-card .details p) {
+		font-size: 0.9rem;
+		color: var(--color-text-muted);
+		margin: 0.2rem 0;
+	}
+
+	:global(.memorial-card .details strong) {
+		color: var(--color-text);
+	}
+
+	:global(.memorial-card .tag-list) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin-bottom: var(--space-md);
+	}
+
+	:global(.memorial-card .tag) {
+		font-size: 0.75rem;
+		background: rgba(196, 167, 125, 0.1);
+		color: var(--color-accent);
+		padding: 0.2rem 0.6rem;
+		border-radius: 20px;
+	}
+
+	:global(.memorial-card .notes) {
+		font-size: 0.95rem;
+		font-style: italic;
+		line-height: 1.6;
+		margin-bottom: var(--space-md);
+		flex: 1;
+	}
+
+	:global(.memorial-card .read-more) {
+		font-size: 0.9rem;
+		color: var(--color-accent);
+		font-weight: 600;
+		margin-top: auto;
+	}
+
+	.empty-state {
+		text-align: center;
+		padding: var(--space-xl) var(--space-lg);
+		background: rgba(196, 167, 125, 0.03);
+		border: 1px dashed rgba(196, 167, 125, 0.2);
+		border-radius: 8px;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.empty-icon {
+		font-size: 3rem;
+		margin-bottom: var(--space-md);
+		opacity: 0.5;
+	}
+
+	.empty-state p {
+		font-size: 1.2rem;
+		color: var(--color-text);
+		margin-bottom: var(--space-sm);
+	}
+
+	.empty-state p.small {
+		font-size: 1rem;
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-lg);
+	}
+
+	.btn-secondary {
+		display: inline-block;
+		padding: 0.6rem 1.2rem;
+		border-radius: 4px;
+		font-weight: 500;
+		transition: all var(--transition-fast);
+		background-color: transparent;
+		color: var(--color-accent);
+		border: 1px solid var(--color-accent);
+		text-decoration: none;
+		font-family: var(--font-body);
+		font-size: 0.9rem;
+	}
+
+	.btn-secondary:hover {
+		background-color: rgba(196, 167, 125, 0.1);
+	}
+</style>
