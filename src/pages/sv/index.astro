@@ -1,0 +1,190 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Danish West Indies - Home">
+	<section class="hero animate-fade-in">
+		<div class="hero-content">
+			<h1>A History of the <br/><span class="text-accent">Danish West Indies</span></h1>
+			<p class="subtitle">Shedding light on the sins of the past and honoring those who were enslaved.</p>
+			<div class="actions">
+				<a href="/history" class="btn btn-primary">Learn the History</a>
+				<a href="/thesis" class="btn btn-secondary">Read the Thesis</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="mission-section animate-fade-in" style="animation-delay: 0.2s;">
+		<h2>Our Mission</h2>
+		<p>
+			This website serves as a public resource dedicated to the history of the Danish West Indies (1672–1917).
+			It is built to gather information, offer educational materials, and most importantly, to honor the enslaved individuals who suffered under inhumane conditions.
+		</p>
+		<p>
+			Through comprehensive historical accounts, resources, and our ongoing Master's thesis in Economic History from the University of Copenhagen, we aim to uncover truths that must not be forgotten.
+		</p>
+	</section>
+
+	<section class="memorial-showcase animate-fade-in" style="animation-delay: 0.4s;">
+		<h2>The Memorial Experience</h2>
+		<p class="section-desc">Interactive experiences designed to honor and remember.</p>
+		
+		<div class="showcase-grid">
+			<a href="/memorial" class="showcase-card">
+				<span class="icon">🏛️</span>
+				<h3>The Memorial Register</h3>
+				<p>Explore the full archive of documented individuals.</p>
+			</a>
+			<a href="/memorial/voyage" class="showcase-card">
+				<span class="icon">🌊</span>
+				<h3>The Voyage</h3>
+				<p>A solemn honoring of those lost in the Middle Passage.</p>
+			</a>
+			<a href="/memorial/resistance" class="showcase-card">
+				<span class="icon">✨</span>
+				<h3>Constellation of Resistance</h3>
+				<p>Interactive mapping of rebellions and freedom fighters.</p>
+			</a>
+			<a href="/memorial/altar" class="showcase-card">
+				<span class="icon">🕯️</span>
+				<h3>The Ancestral Altar</h3>
+				<p>Pour a libation and leave a dedication to the ancestors.</p>
+			</a>
+			<a href="/memorial/descendants" class="showcase-card">
+				<span class="icon">🗣️</span>
+				<h3>Descendants' Voices</h3>
+				<p>The living legacy of those who survived.</p>
+			</a>
+			<a href="/memorial/ledger" class="showcase-card">
+				<span class="icon">📜</span>
+				<h3>The Raw Ledger</h3>
+				<p>View the stark reality of the colonial archival data.</p>
+			</a>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.hero {
+		min-height: 70vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		border-bottom: 1px solid var(--color-border);
+		margin-bottom: var(--space-xl);
+	}
+	
+	.hero-content {
+		max-width: 800px;
+	}
+	
+	.subtitle {
+		font-size: 1.5rem;
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-lg);
+		max-width: 600px;
+	}
+	
+	.actions {
+		display: flex;
+		gap: var(--space-md);
+	}
+	
+	.btn {
+		display: inline-block;
+		padding: 0.8rem 1.5rem;
+		border-radius: 4px;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-size: 0.9rem;
+		transition: all var(--transition-fast);
+	}
+	
+	.btn-primary {
+		background-color: var(--color-accent);
+		color: var(--color-bg);
+	}
+	
+	.btn-primary:hover {
+		background-color: var(--color-accent-hover);
+		color: var(--color-bg);
+	}
+	
+	.btn-secondary {
+		border: 1px solid var(--color-accent);
+		color: var(--color-accent);
+	}
+	
+	.btn-secondary:hover {
+		background-color: rgba(196, 167, 125, 0.1);
+	}
+	
+	.mission-section {
+		max-width: 800px;
+		margin: 0 auto;
+		padding-bottom: var(--space-xl);
+		border-bottom: 1px solid var(--color-border);
+		margin-bottom: var(--space-xl);
+	}
+
+	.memorial-showcase {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding-bottom: var(--space-xl);
+	}
+
+	.memorial-showcase h2 {
+		text-align: center;
+		color: var(--color-accent);
+		font-size: 2.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.section-desc {
+		text-align: center;
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-xl);
+	}
+
+	.showcase-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: var(--space-lg);
+	}
+
+	.showcase-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.1);
+		padding: var(--space-lg);
+		border-radius: 8px;
+		text-decoration: none;
+		color: var(--color-text);
+		transition: all var(--transition-normal);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.showcase-card:hover {
+		transform: translateY(-5px);
+		border-color: rgba(196, 167, 125, 0.4);
+		background: rgba(196, 167, 125, 0.05);
+	}
+
+	.showcase-card .icon {
+		font-size: 2.5rem;
+		margin-bottom: var(--space-md);
+	}
+
+	.showcase-card h3 {
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+	}
+
+	.showcase-card p {
+		color: var(--color-text-muted);
+		font-size: 0.95rem;
+	}
+</style>

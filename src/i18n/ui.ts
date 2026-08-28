@@ -7,6 +7,11 @@ export const languages = {
   ak: 'Akan (Twi)',
   de: 'Deutsch',
   nh: 'Negerhollands',
+  yo: 'Yorùbá',
+  ig: 'Igbo',
+  kg: 'Kikongo',
+  sv: 'Svenska',
+  pt: 'Português',
 };
 
 export const defaultLang = 'en';
@@ -67,5 +72,40 @@ export const ui = {
     'nav.resources': 'Bruk',
     'nav.thesis': 'Buku',
     'nav.about': 'Onda',
+  },
+  yo: {
+    'nav.history': 'Itan',
+    'nav.memorial': 'Iranti',
+    'nav.resources': 'Awọn orisun',
+    'nav.thesis': 'Iwe-ẹkọ',
+    'nav.about': 'Nipa',
+  },
+  ig: {
+    'nav.history': 'Akụkọ ihe mere eme',
+    'nav.memorial': 'Ihe ncheta',
+    'nav.resources': 'Akụrụngwa',
+    'nav.thesis': 'Usoro',
+    'nav.about': 'Banyere',
+  },
+  kg: {
+    'nav.history': 'Kinkulu',
+    'nav.memorial': 'Luyindulu',
+    'nav.resources': 'Bima',
+    'nav.thesis': 'Mukanda',
+    'nav.about': 'Sambu na',
+  },
+  sv: {
+    'nav.history': 'Historia',
+    'nav.memorial': 'Minnesmärke',
+    'nav.resources': 'Resurser',
+    'nav.thesis': 'Uppsats',
+    'nav.about': 'Om',
+  },
+  pt: {
+    'nav.history': 'História',
+    'nav.memorial': 'Memorial',
+    'nav.resources': 'Recursos',
+    'nav.thesis': 'Tese',
+    'nav.about': 'Sobre',
   },
 } as const;

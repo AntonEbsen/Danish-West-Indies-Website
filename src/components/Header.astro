@@ -7,7 +7,7 @@ const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
 const currentPath = Astro.url.pathname;
-const cleanPath = currentPath.replace(/^\/(en|da|es|fr|nl|ak|de|nh)/, '');
+const cleanPath = currentPath.replace(/^\/(en|da|es|fr|nl|ak|de|nh|yo|ig|kg|sv|pt)/, '');
 
 const enUrl = cleanPath === '' ? '/' : cleanPath;
 const daUrl = '/da' + (cleanPath === '/' ? '' : cleanPath);
@@ -17,6 +17,13 @@ const nlUrl = '/nl' + (cleanPath === '/' ? '' : cleanPath);
 const akUrl = '/ak' + (cleanPath === '/' ? '' : cleanPath);
 const deUrl = '/de' + (cleanPath === '/' ? '' : cleanPath);
 const nhUrl = '/nh' + (cleanPath === '/' ? '' : cleanPath);
+const yoUrl = '/yo' + (cleanPath === '/' ? '' : cleanPath);
+const igUrl = '/ig' + (cleanPath === '/' ? '' : cleanPath);
+const kgUrl = '/kg' + (cleanPath === '/' ? '' : cleanPath);
+const svUrl = '/sv' + (cleanPath === '/' ? '' : cleanPath);
+const ptUrl = '/pt' + (cleanPath === '/' ? '' : cleanPath);
+
+const currentLangName = languages[lang];
 ---
 <header class="site-header">
   <div class="container header-container">
@@ -30,22 +37,24 @@ const nhUrl = '/nh' + (cleanPath === '/' ? '' : cleanPath);
         <li><a href={translatePath('/about')}>{t('nav.about')}</a></li>
       </ul>
       
-      <div class="lang-switcher">
-        <a href={enUrl} class={lang === 'en' ? 'active' : ''}>EN</a>
-        <span class="divider">|</span>
-        <a href={daUrl} class={lang === 'da' ? 'active' : ''}>DA</a>
-        <span class="divider">|</span>
-        <a href={nlUrl} class={lang === 'nl' ? 'active' : ''}>NL</a>
-        <span class="divider">|</span>
-        <a href={deUrl} class={lang === 'de' ? 'active' : ''}>DE</a>
-        <span class="divider">|</span>
-        <a href={esUrl} class={lang === 'es' ? 'active' : ''}>ES</a>
-        <span class="divider">|</span>
-        <a href={frUrl} class={lang === 'fr' ? 'active' : ''}>FR</a>
-        <span class="divider">|</span>
-        <a href={akUrl} class={lang === 'ak' ? 'active' : ''}>AK</a>
-        <span class="divider">|</span>
-        <a href={nhUrl} class={lang === 'nh' ? 'active' : ''}>NH</a>
+      <div class="lang-dropdown">
+        <button class="lang-btn">{currentLangName} ▼</button>
+        <div class="lang-menu">
+          <a href={enUrl} class={lang === 'en' ? 'active' : ''}>English</a>
+          <a href={daUrl} class={lang === 'da' ? 'active' : ''}>Dansk</a>
+          <a href={esUrl} class={lang === 'es' ? 'active' : ''}>Español</a>
+          <a href={frUrl} class={lang === 'fr' ? 'active' : ''}>Français</a>
+          <a href={nlUrl} class={lang === 'nl' ? 'active' : ''}>Nederlands</a>
+          <a href={deUrl} class={lang === 'de' ? 'active' : ''}>Deutsch</a>
+          <a href={svUrl} class={lang === 'sv' ? 'active' : ''}>Svenska</a>
+          <a href={ptUrl} class={lang === 'pt' ? 'active' : ''}>Português</a>
+          <div class="lang-divider"></div>
+          <a href={akUrl} class={lang === 'ak' ? 'active' : ''}>Akan (Twi)</a>
+          <a href={yoUrl} class={lang === 'yo' ? 'active' : ''}>Yorùbá</a>
+          <a href={igUrl} class={lang === 'ig' ? 'active' : ''}>Igbo</a>
+          <a href={kgUrl} class={lang === 'kg' ? 'active' : ''}>Kikongo</a>
+          <a href={nhUrl} class={lang === 'nh' ? 'active' : ''}>Negerhollands</a>
+        </div>
       </div>
     </nav>
   </div>
@@ -99,34 +108,83 @@ const nhUrl = '/nh' + (cleanPath === '/' ? '' : cleanPath);
     color: var(--color-accent);
   }
 
-  .lang-switcher {
+  /* Dropdown Styles */
+  .lang-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .lang-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(196,167,125,0.2);
+    color: var(--color-text);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.85rem;
-    font-family: var(--font-heading);
-    background: rgba(255,255,255,0.05);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    border: 1px solid rgba(196,167,125,0.2);
+    transition: all 0.2s;
   }
 
-  .lang-switcher a {
-    color: rgba(255,255,255,0.5);
+  .lang-dropdown:hover .lang-btn {
+    background: rgba(196,167,125,0.1);
+    border-color: var(--color-accent);
+  }
+
+  .lang-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 0.5rem;
+    background: #1a1613; /* Match theme background */
+    border: 1px solid rgba(196,167,125,0.3);
+    border-radius: 8px;
+    padding: 0.5rem;
+    min-width: 160px;
+    z-index: 100;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+  }
+
+  .lang-dropdown:hover .lang-menu {
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .lang-menu a {
+    color: rgba(255,255,255,0.7);
     text-decoration: none;
-    transition: color 0.2s;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+    text-transform: none; /* Override main-nav */
+    letter-spacing: normal;
   }
 
-  .lang-switcher a.active {
-    color: var(--color-accent);
-    font-weight: bold;
-  }
-
-  .lang-switcher a:hover {
+  .lang-menu a:hover {
+    background: rgba(196,167,125,0.1);
     color: #fff;
   }
 
-  .divider {
-    color: rgba(255,255,255,0.3);
+  .lang-menu a.active {
+    color: var(--color-accent);
+    background: rgba(196,167,125,0.05);
+    font-weight: 600;
+  }
+
+  .lang-divider {
+    height: 1px;
+    background: rgba(196,167,125,0.2);
+    margin: 0.5rem 0;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 </style>
