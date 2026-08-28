@@ -1,0 +1,15 @@
+{
+  "name": "Breffu",
+  "yearOfDeath": 1734,
+  "origin": "Akwamu (Present-day Ghana)",
+  "location": "Coral Bay, St. John",
+  "island": "St. John",
+  "biography": "Breffu was an Akwamu woman who led the 1733 St. John slave revolt, one of the earliest and longest-lasting slave rebellions in the Americas. Enslaved on a plantation in Coral Bay, she masterminded the takeover of the Danish fort at Frederiksberg and held control of the island for nearly six months.",
+  "notes": "She is recognized as the 'Queen of St. John' and a heroic figure who chose to take her own life rather than submit to recapture by French and Swiss troops.",
+  "tags": ["1733 Revolt", "Akwamu", "Leader"],
+  "relationships": [
+    { "id": "king-june", "type": "Co-leader" }
+  ],
+  "mapLat": 18.3444,
+  "mapLng": -64.7166
+}

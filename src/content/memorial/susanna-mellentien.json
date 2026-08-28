@@ -1,0 +1,16 @@
+{
+  "name": "Susanna Mellentien",
+  "origin": "St. Croix",
+  "location": "St. Croix, Danish West Indies",
+  "island": "St. Croix",
+  "biography": "Susanna Mellentien, often referred to as 'Queen Bottom Belly', was one of the four Queens of the 1878 Fireburn rebellion. Like Mary, Agnes, and Mathilda, she was a leader in the labor revolt that demanded better working conditions and wages for the formally enslaved people of St. Croix.",
+  "notes": "She is remembered as a powerful matriarch who stood against the oppressive labor system that persisted even after the 1848 emancipation.",
+  "tags": ["Fireburn", "Labor Leader", "Queen"],
+  "relationships": [
+    { "id": "queen-mary", "type": "Co-leader" },
+    { "id": "queen-agnes", "type": "Co-leader" },
+    { "id": "queen-mathilda", "type": "Co-leader" }
+  ],
+  "mapLat": 17.7246,
+  "mapLng": -64.7335
+}

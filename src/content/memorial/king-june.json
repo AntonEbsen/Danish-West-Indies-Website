@@ -1,0 +1,13 @@
+{
+  "name": "King June",
+  "yearOfDeath": 1734,
+  "origin": "Akwamu (Present-day Ghana)",
+  "location": "St. John",
+  "island": "St. John",
+  "biography": "King June was one of the primary leaders of the 1733 St. John slave rebellion. An Akwamu royal who had been captured and sold into slavery, he helped orchestrate the uprising alongside Breffu, successfully capturing the island's fort and holding off colonial forces for months.",
+  "notes": "His leadership united the enslaved Akwamu people on the island in a fight for freedom and autonomy.",
+  "tags": ["1733 Revolt", "Akwamu", "Leader"],
+  "relationships": [
+    { "id": "breffu", "type": "Co-leader" }
+  ]
+}
