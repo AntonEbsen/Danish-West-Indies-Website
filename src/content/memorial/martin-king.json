@@ -1,0 +1,14 @@
+{
+  "name": "Martin King",
+  "origin": "St. Croix",
+  "location": "Frederiksted, St. Croix",
+  "island": "St. Croix",
+  "biography": "Martin King was a key leader in the 1848 Emancipation revolt on St. Croix, acting closely alongside General Buddhoe. As part of the organized resistance, he helped coordinate the massive march on Fort Frederik that ultimately forced Governor von Scholten to declare emancipation.",
+  "notes": "Following the rebellion, Martin King, like Buddhoe, faced severe repercussions from the colonial government for his role in securing freedom for the enslaved population.",
+  "tags": ["1848 Emancipation", "Leader", "Rebellion"],
+  "relationships": [
+    { "id": "buddhoe", "type": "Co-leader" }
+  ],
+  "mapLat": 17.7125,
+  "mapLng": -64.8833
+}
