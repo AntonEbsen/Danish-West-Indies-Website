@@ -7,12 +7,16 @@ const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
 const currentPath = Astro.url.pathname;
-const cleanPath = currentPath.replace(/^\/(en|da|es|fr)/, '');
+const cleanPath = currentPath.replace(/^\/(en|da|es|fr|nl|ak|de|nh)/, '');
 
 const enUrl = cleanPath === '' ? '/' : cleanPath;
 const daUrl = '/da' + (cleanPath === '/' ? '' : cleanPath);
 const esUrl = '/es' + (cleanPath === '/' ? '' : cleanPath);
 const frUrl = '/fr' + (cleanPath === '/' ? '' : cleanPath);
+const nlUrl = '/nl' + (cleanPath === '/' ? '' : cleanPath);
+const akUrl = '/ak' + (cleanPath === '/' ? '' : cleanPath);
+const deUrl = '/de' + (cleanPath === '/' ? '' : cleanPath);
+const nhUrl = '/nh' + (cleanPath === '/' ? '' : cleanPath);
 ---
 <header class="site-header">
   <div class="container header-container">
@@ -31,9 +35,17 @@ const frUrl = '/fr' + (cleanPath === '/' ? '' : cleanPath);
         <span class="divider">|</span>
         <a href={daUrl} class={lang === 'da' ? 'active' : ''}>DA</a>
         <span class="divider">|</span>
+        <a href={nlUrl} class={lang === 'nl' ? 'active' : ''}>NL</a>
+        <span class="divider">|</span>
+        <a href={deUrl} class={lang === 'de' ? 'active' : ''}>DE</a>
+        <span class="divider">|</span>
         <a href={esUrl} class={lang === 'es' ? 'active' : ''}>ES</a>
         <span class="divider">|</span>
         <a href={frUrl} class={lang === 'fr' ? 'active' : ''}>FR</a>
+        <span class="divider">|</span>
+        <a href={akUrl} class={lang === 'ak' ? 'active' : ''}>AK</a>
+        <span class="divider">|</span>
+        <a href={nhUrl} class={lang === 'nh' ? 'active' : ''}>NH</a>
       </div>
     </nav>
   </div>
