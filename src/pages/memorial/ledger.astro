@@ -1,0 +1,192 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AmbientSound from '../../components/AmbientSound.astro';
+import { getCollection } from 'astro:content';
+
+const memorialEntries = await getCollection('memorial');
+// Sort by name for the ledger
+memorialEntries.sort((a, b) => a.data.name.localeCompare(b.data.name));
+---
+
+<Layout title="The Raw Ledger | Danish West Indies">
+	<div class="ledger-page">
+		<header class="page-header animate-fade-in">
+			<a href="/memorial" class="back-link">← Back to Register</a>
+			<h1>The Raw Ledger</h1>
+			<p class="subtitle">A reflection of the archives. This is how colonial systems quantified human lives.</p>
+		</header>
+
+		<div class="ledger-container animate-fade-in" style="animation-delay: 0.5s;">
+			<div class="ledger-paper">
+				<table class="ledger-table">
+					<thead>
+						<tr>
+							<th>Record ID</th>
+							<th>Name / Moniker</th>
+							<th>Origin / Ethnicity</th>
+							<th>Location / Plantation</th>
+							<th>Birth Year</th>
+							<th>Death Year</th>
+							<th>Archival Notes</th>
+						</tr>
+					</thead>
+					<tbody>
+						{memorialEntries.map((entry) => (
+							<tr>
+								<td class="col-id">{entry.id}</td>
+								<td class="col-name"><a href={`/memorial/${entry.id}`}>{entry.data.name}</a></td>
+								<td>{entry.data.origin || 'Unknown'}</td>
+								<td>{entry.data.location || 'Unknown'}</td>
+								<td class="col-num">{entry.data.yearOfBirth || '—'}</td>
+								<td class="col-num">{entry.data.yearOfDeath || '—'}</td>
+								<td class="col-notes">{entry.data.notes || '—'}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="ledger-caption">
+				<p>The stark reality of historical records. While the archives attempted to reduce them to property and statistics, this register restores their humanity.</p>
+			</div>
+		</div>
+	</div>
+
+	<AmbientSound />
+</Layout>
+
+<style>
+	.ledger-page {
+		min-height: 100vh;
+		background: #111;
+		padding: var(--space-xl) var(--space-md);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+		max-width: 800px;
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-md);
+		color: rgba(196, 167, 125, 0.6);
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-size: 0.9rem;
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.page-header h1 {
+		font-size: clamp(2.5rem, 6vw, 4rem);
+		color: var(--color-accent);
+		margin-bottom: var(--space-xs);
+	}
+
+	.subtitle {
+		font-size: 1.2rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+	}
+
+	.ledger-container {
+		width: 100%;
+		max-width: 1200px;
+		overflow-x: auto;
+		margin-bottom: 4rem;
+	}
+
+	/* Aged Paper Effect */
+	.ledger-paper {
+		background-color: #f4ecd8; /* Sepia/Aged paper base */
+		background-image: 
+			linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+		background-size: 20px 20px;
+		padding: 2rem;
+		border: 1px solid #d4c5a3;
+		box-shadow: 
+			inset 0 0 50px rgba(0,0,0,0.1),
+			0 10px 30px rgba(0,0,0,0.5);
+		border-radius: 2px;
+	}
+
+	.ledger-table {
+		width: 100%;
+		border-collapse: collapse;
+		color: #2b2520; /* Dark brown ink */
+		font-family: "Courier New", Courier, monospace; /* Monospaced for ledger feel */
+		font-size: 0.95rem;
+	}
+
+	.ledger-table th, .ledger-table td {
+		border: 1px solid rgba(43, 37, 32, 0.3); /* Faded ink borders */
+		padding: 0.8rem;
+		text-align: left;
+		vertical-align: top;
+	}
+
+	.ledger-table th {
+		background: rgba(43, 37, 32, 0.05);
+		font-weight: bold;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-size: 0.85rem;
+		border-bottom: 2px solid rgba(43, 37, 32, 0.5);
+	}
+
+	.ledger-table tr:nth-child(even) {
+		background: rgba(255, 255, 255, 0.3);
+	}
+
+	.ledger-table tr:hover {
+		background: rgba(196, 167, 125, 0.2);
+	}
+
+	.col-id {
+		color: #665b50;
+		font-size: 0.85rem;
+	}
+
+	.col-name a {
+		color: #2b2520;
+		font-weight: bold;
+		text-decoration: underline;
+		text-decoration-color: rgba(43, 37, 32, 0.3);
+		transition: all var(--transition-fast);
+	}
+
+	.col-name a:hover {
+		color: #8b1e1e; /* Red ink on hover */
+		text-decoration-color: #8b1e1e;
+	}
+
+	.col-num {
+		text-align: center;
+		font-style: italic;
+	}
+
+	.col-notes {
+		font-family: "Times New Roman", Times, serif; /* Mixed font for notes */
+		font-style: italic;
+		font-size: 1.05rem;
+		max-width: 300px;
+	}
+
+	.ledger-caption {
+		text-align: center;
+		margin-top: var(--space-xl);
+		color: rgba(255,255,255,0.5);
+		font-style: italic;
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+</style>

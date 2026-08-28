@@ -1,0 +1,356 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AmbientSound from '../../components/AmbientSound.astro';
+---
+
+<Layout title="The Ancestral Altar | Danish West Indies">
+	<div class="altar-page">
+		<header class="page-header animate-fade-in">
+			<a href="/memorial" class="back-link">← Back to Register</a>
+			<h1>The Ancestral Altar</h1>
+			<p class="subtitle">A space for reflection, remembrance, and pouring libations.</p>
+		</header>
+
+		<div class="altar-center animate-fade-in" style="animation-delay: 0.5s;">
+			<!-- Central Glowing Element -->
+			<div class="flame-container" aria-hidden="true">
+				<div class="glow"></div>
+				<div class="flame"></div>
+				<div class="wick"></div>
+				<div class="wax"></div>
+			</div>
+			
+			<div class="dedication-form-container">
+				<h2>Pour a Libation</h2>
+				<p>Leave a message, a prayer, or a thought to honor the ancestors.</p>
+				<form id="dedication-form">
+					<div class="form-group">
+						<label for="d-name">Your Name (Optional)</label>
+						<input type="text" id="d-name" placeholder="Anonymous" />
+					</div>
+					<div class="form-group">
+						<label for="d-message">Your Dedication</label>
+						<textarea id="d-message" rows="3" required placeholder="May your names be remembered..."></textarea>
+					</div>
+					<button type="submit" class="btn-primary">Leave Dedication</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="dedications-list animate-fade-in" style="animation-delay: 1s;">
+			<h3>Community Dedications</h3>
+			<div id="dedications-grid" class="dedications-grid">
+				<!-- Pre-populated dedications -->
+				<div class="dedication-card">
+					<p class="d-text">"To the men, women, and children whose sweat built the islands, we see you. We honor you."</p>
+					<span class="d-author">— The Archival Team</span>
+				</div>
+				<!-- JS will inject local storage dedications here -->
+			</div>
+		</div>
+	</div>
+
+	<AmbientSound />
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const form = document.getElementById('dedication-form') as HTMLFormElement;
+		const grid = document.getElementById('dedications-grid');
+		const nameInput = document.getElementById('d-name') as HTMLInputElement;
+		const msgInput = document.getElementById('d-message') as HTMLTextAreaElement;
+
+		// Load existing dedications from local storage
+		const loadDedications = () => {
+			const saved = JSON.parse(localStorage.getItem('dwi_dedications') || '[]');
+			saved.forEach((dedication: { text: string, author: string, date: string }) => {
+				addDedicationToDOM(dedication.text, dedication.author, dedication.date);
+			});
+		};
+
+		const addDedicationToDOM = (text: string, author: string, date: string) => {
+			const card = document.createElement('div');
+			card.className = 'dedication-card animate-fade-in';
+			card.innerHTML = `
+				<p class="d-text">"${text}"</p>
+				<div class="d-meta">
+					<span class="d-author">— ${author || 'Anonymous'}</span>
+					<span class="d-date">${new Date(date).toLocaleDateString()}</span>
+				</div>
+			`;
+			grid?.prepend(card);
+		};
+
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+			const text = msgInput.value.trim();
+			const author = nameInput.value.trim() || 'Anonymous';
+			const date = new Date().toISOString();
+
+			if (text) {
+				// Save to local storage
+				const saved = JSON.parse(localStorage.getItem('dwi_dedications') || '[]');
+				saved.push({ text, author, date });
+				localStorage.setItem('dwi_dedications', JSON.stringify(saved));
+
+				// Add to DOM
+				addDedicationToDOM(text, author, date);
+
+				// Reset form
+				form.reset();
+				
+				// Optional: Trigger a visual "flare" on the candle
+				const flame = document.querySelector('.flame');
+				flame?.classList.add('flare');
+				setTimeout(() => flame?.classList.remove('flare'), 1000);
+			}
+		});
+
+		loadDedications();
+	});
+</script>
+
+<style>
+	.altar-page {
+		min-height: 100vh;
+		background: #000;
+		background-image: radial-gradient(circle at 50% 30%, #1a110a 0%, #000 60%);
+		padding: var(--space-xl) var(--space-md);
+		color: #fff;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-md);
+		color: rgba(196, 167, 125, 0.6);
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-size: 0.9rem;
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.page-header h1 {
+		font-size: clamp(2.5rem, 6vw, 4rem);
+		color: var(--color-accent);
+		margin-bottom: var(--space-xs);
+		letter-spacing: 2px;
+	}
+
+	.subtitle {
+		font-size: 1.2rem;
+		color: rgba(255, 255, 255, 0.6);
+		font-style: italic;
+	}
+
+	/* Central Altar */
+	.altar-center {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 4rem;
+		width: 100%;
+		max-width: 600px;
+	}
+
+	/* CSS Candle */
+	.flame-container {
+		position: relative;
+		width: 60px;
+		height: 100px;
+		margin-bottom: var(--space-xl);
+	}
+
+	.wax {
+		position: absolute;
+		bottom: 0;
+		width: 40px;
+		height: 30px;
+		background: #fff;
+		left: 10px;
+		border-radius: 4px 4px 0 0;
+		background: linear-gradient(to right, #ccc 0%, #fff 50%, #ccc 100%);
+	}
+
+	.wick {
+		position: absolute;
+		bottom: 30px;
+		left: 28px;
+		width: 4px;
+		height: 10px;
+		background: #333;
+		border-radius: 2px;
+	}
+
+	.flame {
+		position: absolute;
+		bottom: 40px;
+		left: 20px;
+		width: 20px;
+		height: 40px;
+		background: var(--color-accent);
+		border-radius: 50% 50% 20% 20%;
+		transform-origin: center bottom;
+		animation: flicker 3s ease-in-out infinite alternate;
+		box-shadow: 0 0 20px var(--color-accent);
+	}
+
+	.flame.flare {
+		animation: flare 1s ease-out;
+	}
+
+	.glow {
+		position: absolute;
+		bottom: 20px;
+		left: -40px;
+		width: 140px;
+		height: 140px;
+		background: rgba(196, 167, 125, 0.1);
+		border-radius: 50%;
+		filter: blur(20px);
+		animation: pulseGlow 4s ease-in-out infinite alternate;
+	}
+
+	@keyframes flicker {
+		0%, 100% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+		25% { transform: scale(1.05) rotate(2deg); opacity: 1; }
+		50% { transform: scale(0.95) rotate(-1deg); opacity: 0.8; }
+		75% { transform: scale(1.1) rotate(1deg); opacity: 1; }
+	}
+
+	@keyframes pulseGlow {
+		0% { transform: scale(1); opacity: 0.5; }
+		100% { transform: scale(1.2); opacity: 0.8; }
+	}
+
+	@keyframes flare {
+		0% { transform: scale(1); filter: brightness(1); }
+		50% { transform: scale(1.5) translateY(-10px); filter: brightness(2); }
+		100% { transform: scale(1); filter: brightness(1); }
+	}
+
+	/* Form */
+	.dedication-form-container {
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid rgba(196, 167, 125, 0.2);
+		padding: var(--space-xl);
+		border-radius: 8px;
+		width: 100%;
+		text-align: center;
+		backdrop-filter: blur(5px);
+	}
+
+	.dedication-form-container h2 {
+		font-size: 1.5rem;
+		color: var(--color-accent);
+		margin-bottom: 0.5rem;
+	}
+
+	.dedication-form-container p {
+		color: rgba(255, 255, 255, 0.6);
+		margin-bottom: var(--space-lg);
+	}
+
+	.form-group {
+		margin-bottom: var(--space-md);
+		text-align: left;
+	}
+
+	label {
+		display: block;
+		margin-bottom: 0.5rem;
+		font-size: 0.9rem;
+		color: rgba(255, 255, 255, 0.8);
+	}
+
+	input, textarea {
+		width: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		border-radius: 4px;
+		padding: 0.8rem;
+		color: #fff;
+		font-family: var(--font-body);
+		font-size: 1rem;
+		transition: border-color var(--transition-fast);
+	}
+
+	input:focus, textarea:focus {
+		outline: none;
+		border-color: var(--color-accent);
+	}
+
+	.btn-primary {
+		width: 100%;
+		background: var(--color-accent);
+		color: #000;
+		border: none;
+		padding: 1rem;
+		border-radius: 4px;
+		font-weight: bold;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		cursor: pointer;
+		transition: all var(--transition-fast);
+		margin-top: var(--space-sm);
+	}
+
+	.btn-primary:hover {
+		background: #d4b88f;
+		box-shadow: 0 0 15px rgba(196, 167, 125, 0.5);
+	}
+
+	/* Dedications List */
+	.dedications-list {
+		width: 100%;
+		max-width: 800px;
+		border-top: 1px solid rgba(196, 167, 125, 0.2);
+		padding-top: var(--space-xl);
+	}
+
+	.dedications-list h3 {
+		text-align: center;
+		color: var(--color-accent);
+		font-size: 1.5rem;
+		margin-bottom: var(--space-xl);
+		letter-spacing: 2px;
+	}
+
+	.dedications-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-md);
+	}
+
+	:global(.dedication-card) {
+		background: rgba(255, 255, 255, 0.02);
+		border-left: 3px solid var(--color-accent);
+		padding: var(--space-lg);
+		border-radius: 0 4px 4px 0;
+	}
+
+	:global(.d-text) {
+		font-size: 1.1rem;
+		font-style: italic;
+		line-height: 1.6;
+		margin-bottom: var(--space-md);
+		color: rgba(255, 255, 255, 0.9);
+	}
+
+	:global(.d-meta) {
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.9rem;
+		color: rgba(196, 167, 125, 0.8);
+	}
+</style>

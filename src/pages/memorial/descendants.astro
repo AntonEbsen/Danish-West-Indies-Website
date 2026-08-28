@@ -1,0 +1,248 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AmbientSound from '../../components/AmbientSound.astro';
+
+const descendants = [
+  {
+    name: "Placeholder Descendant 1",
+    ancestor: "General Buddhoe",
+    quote: "My grandfather always told me stories of the man who marched on the fort. For a long time, it felt like myth, until I started looking into the archives.",
+    location: "St. Croix, USVI",
+    image: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    name: "Placeholder Descendant 2",
+    ancestor: "Queen Mary Thomas",
+    quote: "We were taught in school about the queens, but to know that her blood is my blood gives me a strength I cannot fully describe.",
+    location: "Copenhagen, Denmark",
+    image: "https://images.unsplash.com/photo-1507152832244-10d45c7eda57?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    name: "Placeholder Descendant 3",
+    ancestor: "Breffu",
+    quote: "She led a revolution on St. John, and though the history books tried to forget her, our families never did.",
+    location: "St. John, USVI",
+    image: "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?q=80&w=800&auto=format&fit=crop"
+  }
+];
+---
+
+<Layout title="Descendants' Voices | Danish West Indies">
+	<div class="descendants-page">
+		<header class="page-header animate-fade-in">
+			<a href="/memorial" class="back-link">← Back to Register</a>
+			<h1>The Living Legacy</h1>
+			<p class="subtitle">Voices of the descendants, proving that their lineage survived and thrived.</p>
+		</header>
+
+		<div class="gallery-container">
+			{descendants.map((person, index) => (
+				<article class="descendant-card animate-fade-in" style={`animation-delay: ${index * 0.2}s;`}>
+					<div class="card-image" style={`background-image: url('${person.image}')`}>
+						<button class="btn-play-audio" title="Play Testimony" aria-label="Play Testimony">
+							<span class="icon">▶</span>
+						</button>
+					</div>
+					<div class="card-content">
+						<blockquote>"{person.quote}"</blockquote>
+						<div class="card-meta">
+							<h3>{person.name}</h3>
+							<span class="location">{person.location}</span>
+							<span class="ancestor">Descendant of <strong>{person.ancestor}</strong></span>
+						</div>
+					</div>
+				</article>
+			))}
+		</div>
+		
+		<div class="call-to-action animate-fade-in" style="animation-delay: 1s;">
+			<p>Are you a descendant? We want to hear your story.</p>
+			<a href="/contribute" class="btn-primary">Share Your Story</a>
+		</div>
+	</div>
+
+	<AmbientSound />
+</Layout>
+
+<style>
+	.descendants-page {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: var(--space-xl) var(--space-md);
+	}
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-md);
+		color: rgba(196, 167, 125, 0.6);
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-size: 0.9rem;
+	}
+
+	.back-link:hover {
+		color: var(--color-accent);
+	}
+
+	.page-header h1 {
+		font-size: clamp(2.5rem, 6vw, 4rem);
+		color: var(--color-accent);
+		margin-bottom: var(--space-xs);
+	}
+
+	.subtitle {
+		font-size: 1.2rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+	}
+
+	.gallery-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: var(--space-xl);
+		margin-bottom: var(--space-xl);
+	}
+
+	.descendant-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(196, 167, 125, 0.1);
+		border-radius: 8px;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		transition: transform var(--transition-normal);
+	}
+
+	.descendant-card:hover {
+		transform: translateY(-5px);
+		border-color: rgba(196, 167, 125, 0.3);
+	}
+
+	.card-image {
+		height: 300px;
+		background-size: cover;
+		background-position: center;
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.card-image::after {
+		content: '';
+		position: absolute;
+		top: 0; left: 0; right: 0; bottom: 0;
+		background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.8) 100%);
+	}
+
+	.btn-play-audio {
+		background: rgba(0, 0, 0, 0.6);
+		border: 2px solid var(--color-accent);
+		color: var(--color-accent);
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		z-index: 2;
+		transition: all var(--transition-fast);
+		backdrop-filter: blur(4px);
+	}
+
+	.btn-play-audio:hover {
+		background: var(--color-accent);
+		color: #000;
+		transform: scale(1.1);
+	}
+
+	.btn-play-audio .icon {
+		margin-left: 5px; /* Visual center for play button */
+		font-size: 1.2rem;
+	}
+
+	.card-content {
+		padding: var(--space-lg);
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	blockquote {
+		font-size: 1.1rem;
+		line-height: 1.6;
+		font-style: italic;
+		color: rgba(255, 255, 255, 0.9);
+		margin-bottom: var(--space-lg);
+		flex: 1;
+	}
+
+	.card-meta {
+		border-top: 1px solid rgba(196, 167, 125, 0.1);
+		padding-top: var(--space-md);
+	}
+
+	.card-meta h3 {
+		font-size: 1.2rem;
+		color: var(--color-accent);
+		margin-bottom: 0.2rem;
+	}
+
+	.location {
+		display: block;
+		font-size: 0.9rem;
+		color: var(--color-text-muted);
+		margin-bottom: 0.8rem;
+	}
+
+	.ancestor {
+		display: inline-block;
+		background: rgba(196, 167, 125, 0.1);
+		padding: 0.4rem 0.8rem;
+		border-radius: 20px;
+		font-size: 0.85rem;
+		color: rgba(255, 255, 255, 0.8);
+	}
+
+	.ancestor strong {
+		color: var(--color-accent);
+	}
+
+	.call-to-action {
+		text-align: center;
+		margin-top: 4rem;
+		padding: 3rem;
+		background: rgba(196, 167, 125, 0.05);
+		border-radius: 8px;
+		border: 1px dashed rgba(196, 167, 125, 0.3);
+	}
+
+	.call-to-action p {
+		font-size: 1.2rem;
+		margin-bottom: var(--space-md);
+		color: var(--color-text-muted);
+	}
+
+	.btn-primary {
+		display: inline-block;
+		background: var(--color-accent);
+		color: #111;
+		padding: 0.8rem 2rem;
+		border-radius: 4px;
+		font-weight: bold;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		transition: all var(--transition-fast);
+	}
+
+	.btn-primary:hover {
+		background: #d4b88f;
+		transform: translateY(-2px);
+	}
+</style>
