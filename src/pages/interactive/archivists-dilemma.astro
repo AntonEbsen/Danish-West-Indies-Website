@@ -1,0 +1,464 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="The Archivist's Dilemma | Danish West Indies">
+	<div class="interactive-container animate-fade-in">
+		<header class="interactive-header">
+			<h1>The Archivist's Dilemma</h1>
+			<p>Step into the role of a historian. The colonial tax ledgers were designed to erase human identities, reducing people to taxable assets. By cross-referencing archival documents, you can rescue these identities from the margins of history.</p>
+		</header>
+
+		<main class="puzzle-area">
+			<!-- Left Side: The Ledger -->
+			<section class="ledger-panel">
+				<div class="panel-header">
+					<h2>Tax Ledger (Matrikel)</h2>
+					<span class="date">Estate La Grange, October 1803</span>
+				</div>
+				<div class="ledger-document">
+					<table class="historic-table">
+						<thead>
+							<tr>
+								<th>Asset Type</th>
+								<th>Condition</th>
+								<th>Name</th>
+								<th>Value (Rigsdaler)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Cattle (Ox)</td>
+								<td>Capable</td>
+								<td class="erased-text">--</td>
+								<td>20</td>
+							</tr>
+							<tr>
+								<td>Sugar Vat</td>
+								<td>Used</td>
+								<td class="erased-text">--</td>
+								<td>150</td>
+							</tr>
+							<tr class="target-row active-clue">
+								<td>Enslaved (Boy)</td>
+								<td>Approx. 12</td>
+								<td class="input-cell">
+									<input type="text" id="name-input" placeholder="[ERASED]" autocomplete="off" spellcheck="false" />
+									<button id="submit-name" aria-label="Submit Name">↵</button>
+								</td>
+								<td>50</td>
+							</tr>
+						</tbody>
+					</table>
+					<div id="feedback-message" class="feedback-msg"></div>
+				</div>
+			</section>
+
+			<!-- Right Side: The Archivist's Desk (Clues) -->
+			<section class="desk-panel">
+				<div class="panel-header">
+					<h2>Archival Documents</h2>
+					<p class="instruction">Cross-reference the documents below to deduce the boy's true African name.</p>
+				</div>
+				
+				<div class="clue-tabs">
+					<button class="clue-tab active" data-target="clue-1">Ship's Log</button>
+					<button class="clue-tab" data-target="clue-2">Moravian Record</button>
+					<button class="clue-tab" data-target="clue-3">Overseer's Diary</button>
+				</div>
+
+				<div class="clue-content">
+					<!-- Clue 1 -->
+					<div id="clue-1" class="clue-document active">
+						<h3>Log of the slave ship <em>Haabet</em></h3>
+						<span class="clue-meta">Arrived Charlotte Amalie, Sept 1803</span>
+						<p class="handwriting">"Cargo discharged: 150 souls. High mortality during passage. One Akwamu boy, approx 12 years old, highly defiant and prone to striking sailors, sold directly to Overseer Larsen of Estate La Grange."</p>
+					</div>
+					
+					<!-- Clue 2 -->
+					<div id="clue-2" class="clue-document hidden">
+						<h3>Moravian Baptismal Register</h3>
+						<span class="clue-meta">Friedensfeld Mission, Oct 1803</span>
+						<p class="handwriting">"By the grace of our Lord, we have baptized Overseer Larsen's newly purchased boy. The boy, whom Larsen calls <em>Jupiter</em>, has today received the Christian name <em>Christian</em>. May he learn obedience."</p>
+					</div>
+
+					<!-- Clue 3 -->
+					<div id="clue-3" class="clue-document hidden">
+						<h3>Diary of Overseer Larsen</h3>
+						<span class="clue-meta">Estate La Grange, Oct 1803</span>
+						<p class="handwriting">"The new boy from the <em>Haabet</em> remains deeply stubborn. He absolutely refuses to answer to the classical name 'Jupiter' I assigned him upon purchase, nor the name the missionaries gave him. He only responds when the other Gold Coast Africans call him by his birth name, <strong>Kwasi</strong>. I must break this insolence."</p>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- Success Modal -->
+		<div id="success-modal" class="modal hidden">
+			<div class="modal-content animate-fade-in-up">
+				<div class="modal-candle">🕯</div>
+				<h2>Identity Rescued</h2>
+				<p>You successfully read against the grain of the colonial archive. You refused to accept the dehumanizing label "1 Boy," rejected the mockery of the name "Jupiter," and ignored the imposed name "Christian."</p>
+				<p>His name was <strong>Kwasi</strong>.</p>
+				<p>This is the grueling, vital work of historical preservation. The ledger sought to erase him; you have remembered him.</p>
+				<a href="/memorial" class="btn-primary" style="margin-top: 1.5rem;">Visit the Memorial Register</a>
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.interactive-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: var(--space-xl) var(--space-md);
+	}
+
+	.interactive-header {
+		text-align: center;
+		margin-bottom: var(--space-xl);
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.interactive-header h1 {
+		font-family: var(--font-heading);
+		font-size: 2.5rem;
+		color: var(--color-accent);
+		margin-bottom: var(--space-sm);
+	}
+
+	.interactive-header p {
+		color: var(--color-text-muted);
+		font-size: 1.1rem;
+		line-height: 1.6;
+	}
+
+	.puzzle-area {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-xl);
+		align-items: start;
+	}
+
+	/* Common Panel Styles */
+	.ledger-panel, .desk-panel {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: var(--space-lg);
+		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+		min-height: 500px;
+	}
+
+	.panel-header {
+		margin-bottom: var(--space-lg);
+		border-bottom: 1px solid var(--color-border);
+		padding-bottom: var(--space-sm);
+	}
+
+	.panel-header h2 {
+		font-family: var(--font-heading);
+		font-size: 1.5rem;
+		color: var(--color-text);
+		margin: 0 0 0.2rem 0;
+	}
+
+	.date, .instruction {
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		font-style: italic;
+		margin: 0;
+	}
+
+	/* Ledger Specifics */
+	.ledger-document {
+		background: #f4ecd8; /* Aged paper color */
+		border-radius: 4px;
+		padding: var(--space-md);
+		color: #2c2c2c;
+		font-family: 'Times New Roman', Times, serif;
+		box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+	}
+
+	.historic-table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-bottom: var(--space-md);
+	}
+
+	.historic-table th, .historic-table td {
+		border: 1px solid rgba(0,0,0,0.2);
+		padding: 0.8rem;
+		text-align: left;
+	}
+
+	.historic-table th {
+		font-weight: bold;
+		text-transform: uppercase;
+		font-size: 0.8rem;
+		letter-spacing: 1px;
+		background: rgba(0,0,0,0.05);
+	}
+
+	.erased-text {
+		color: rgba(0,0,0,0.3);
+		font-style: italic;
+	}
+
+	.target-row {
+		background: rgba(196, 167, 125, 0.15); /* Accent highlight */
+		position: relative;
+	}
+
+	.input-cell {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	#name-input {
+		width: 100%;
+		padding: 0.4rem;
+		border: 1px solid rgba(0,0,0,0.4);
+		background: rgba(255,255,255,0.7);
+		font-family: 'Times New Roman', Times, serif;
+		font-size: 1.1rem;
+		color: #000;
+		font-weight: bold;
+		outline: none;
+	}
+	
+	#name-input:focus {
+		border-color: #8b0000;
+		background: #fff;
+	}
+
+	#submit-name {
+		background: #2c2c2c;
+		color: #fff;
+		border: none;
+		padding: 0 0.8rem;
+		cursor: pointer;
+		border-radius: 2px;
+	}
+
+	.feedback-msg {
+		min-height: 1.5rem;
+		font-style: italic;
+		font-size: 0.9rem;
+		color: #8b0000;
+	}
+
+	.feedback-msg.success {
+		color: #006400;
+	}
+
+	/* Desk Specifics */
+	.clue-tabs {
+		display: flex;
+		gap: 0.5rem;
+		margin-bottom: var(--space-md);
+		border-bottom: 1px solid rgba(255,255,255,0.1);
+	}
+
+	.clue-tab {
+		background: transparent;
+		border: none;
+		color: var(--color-text-muted);
+		padding: 0.5rem 1rem;
+		cursor: pointer;
+		font-family: var(--font-body);
+		font-size: 0.9rem;
+		transition: all 0.2s ease;
+		border-bottom: 2px solid transparent;
+	}
+
+	.clue-tab:hover {
+		color: var(--color-text);
+	}
+
+	.clue-tab.active {
+		color: var(--color-accent);
+		border-bottom-color: var(--color-accent);
+	}
+
+	.clue-document {
+		background: #1a1a1a;
+		padding: var(--space-lg);
+		border-radius: 4px;
+		border-left: 3px solid var(--color-border);
+		animation: fadeIn 0.3s ease-out;
+	}
+
+	.clue-document h3 {
+		color: var(--color-text);
+		margin: 0 0 0.2rem 0;
+		font-size: 1.2rem;
+	}
+
+	.clue-meta {
+		display: block;
+		font-size: 0.8rem;
+		color: var(--color-text-muted);
+		margin-bottom: 1rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	.handwriting {
+		font-family: 'Times New Roman', Times, serif;
+		font-size: 1.2rem;
+		line-height: 1.6;
+		color: rgba(255, 255, 255, 0.85);
+		font-style: italic;
+		padding-left: 1rem;
+		border-left: 2px solid rgba(255,255,255,0.1);
+	}
+
+	.hidden {
+		display: none !important;
+	}
+
+	/* Modal */
+	.modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.9);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 1000;
+		backdrop-filter: blur(5px);
+	}
+
+	.modal-content {
+		background: var(--color-surface);
+		border: 1px solid var(--color-accent);
+		padding: var(--space-2xl);
+		max-width: 600px;
+		text-align: center;
+		border-radius: 8px;
+		box-shadow: 0 0 50px rgba(196, 167, 125, 0.1);
+	}
+
+	.modal-candle {
+		font-size: 3rem;
+		margin-bottom: 1rem;
+		animation: flicker 4s infinite;
+	}
+
+	.modal-content h2 {
+		color: var(--color-accent);
+		font-size: 2rem;
+		margin-bottom: 1rem;
+		font-family: var(--font-heading);
+	}
+
+	.modal-content p {
+		color: var(--color-text);
+		font-size: 1.1rem;
+		line-height: 1.6;
+		margin-bottom: 1rem;
+	}
+
+	@keyframes flicker {
+		0%, 100% { opacity: 0.8; }
+		25% { opacity: 1; }
+		50% { opacity: 0.6; }
+		75% { opacity: 0.9; }
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; transform: translateY(5px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	.animate-fade-in-up {
+		animation: fadeIn 0.8s ease-out forwards;
+	}
+
+	/* Responsive */
+	@media (max-width: 900px) {
+		.puzzle-area {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+
+<script>
+	// Tab Logic
+	const tabs = document.querySelectorAll('.clue-tab');
+	const docs = document.querySelectorAll('.clue-document');
+
+	tabs.forEach(tab => {
+		tab.addEventListener('click', () => {
+			// Remove active class from all
+			tabs.forEach(t => t.classList.remove('active'));
+			docs.forEach(d => d.classList.add('hidden'));
+
+			// Add active class to clicked tab and corresponding doc
+			tab.classList.add('active');
+			const targetId = tab.getAttribute('data-target');
+			const targetDoc = document.getElementById(targetId);
+			if (targetDoc) {
+				targetDoc.classList.remove('hidden');
+			}
+		});
+	});
+
+	// Validation Logic
+	const nameInput = document.getElementById('name-input') as HTMLInputElement;
+	const submitBtn = document.getElementById('submit-name');
+	const feedbackMsg = document.getElementById('feedback-message');
+	const modal = document.getElementById('success-modal');
+
+	const validateAnswer = () => {
+		if (!nameInput || !feedbackMsg || !modal) return;
+		
+		const guess = nameInput.value.trim().toLowerCase();
+		
+		if (guess === '') {
+			feedbackMsg.textContent = 'Please enter a name.';
+			feedbackMsg.className = 'feedback-msg';
+			return;
+		}
+
+		if (guess === 'jupiter') {
+			feedbackMsg.textContent = 'Incorrect. "Jupiter" is a classical name imposed as a mockery by the enslaver.';
+			feedbackMsg.className = 'feedback-msg';
+		} else if (guess === 'christian') {
+			feedbackMsg.textContent = 'Incorrect. "Christian" is the name imposed by the Moravian missionaries.';
+			feedbackMsg.className = 'feedback-msg';
+		} else if (guess === 'kwasi') {
+			// Success!
+			feedbackMsg.textContent = 'Identity verified.';
+			feedbackMsg.className = 'feedback-msg success';
+			nameInput.value = 'Kwasi';
+			nameInput.disabled = true;
+			submitBtn?.setAttribute('disabled', 'true');
+			
+			// Show modal after slight delay
+			setTimeout(() => {
+				modal.classList.remove('hidden');
+			}, 800);
+		} else {
+			feedbackMsg.textContent = `Incorrect. Look closer at the Overseer's Diary.`;
+			feedbackMsg.className = 'feedback-msg';
+		}
+	};
+
+	if (submitBtn) {
+		submitBtn.addEventListener('click', validateAnswer);
+	}
+
+	if (nameInput) {
+		nameInput.addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') {
+				validateAnswer();
+			}
+		});
+	}
+</script>
