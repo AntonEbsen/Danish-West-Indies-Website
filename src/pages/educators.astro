@@ -1,0 +1,260 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="For Educators | Danish West Indies Research Portal">
+	<div class="page-container animate-fade-in">
+		
+		<!-- HERO SECTION -->
+		<header class="educator-hero no-print">
+			<div class="hero-content">
+				<span class="label">Academic Resources</span>
+				<h1>For Educators & Syllabi</h1>
+				<p class="lead">Bring rigorous economic history into your classroom. This portal packages the primary research, data analysis, and historical narratives of our Master's thesis into ready-to-use thematic modules for university and advanced high school courses.</p>
+				<div class="hero-actions">
+					<button class="btn-primary" onclick="window.print()">🖨️ Download Syllabus (PDF)</button>
+					<a href="#modules" class="btn-secondary">View Modules ↓</a>
+				</div>
+			</div>
+			<div class="hero-graphics">
+				<div class="academic-badge">🎓</div>
+				<ul class="curriculum-tags">
+					<li>Caribbean Studies</li>
+					<li>Economic History</li>
+					<li>European Colonialism</li>
+					<li>Data Analysis</li>
+				</ul>
+			</div>
+		</header>
+
+		<!-- PRINT HEADER (Only visible on PDF export) -->
+		<div class="print-header only-print">
+			<h1>Danish West Indies: A History of Economics and Resistance</h1>
+			<h2>Suggested Curriculum & Reading Guide</h2>
+			<p>Source: <strong>danishwestindies.org</strong> | Based on the Master's Thesis by J.A.S. Nielsen & S.Y.M. Chen.</p>
+			<hr />
+		</div>
+
+		<!-- MODULES SECTION -->
+		<section id="modules" class="modules-section">
+			<h2 class="section-title">Thematic Teaching Modules</h2>
+			
+			<!-- MODULE 1 -->
+			<div class="module-card">
+				<div class="module-header">
+					<span class="module-number">Module 01</span>
+					<h3>The Economics of Empire</h3>
+					<p class="module-theme">Focuses on the transatlantic structure, corporate monopolies, and the sheer scale of the plantation economy.</p>
+				</div>
+				<div class="module-body">
+					<div class="module-col">
+						<h4>Required Readings</h4>
+						<ul class="reading-list">
+							<li><a href="/history/west-india-company-monopoly">The Monopoly of the West India Company</a></li>
+							<li><a href="/history/the-colonial-ledger">The Colonial Ledger (Anatomy of an Estate)</a></li>
+							<li><a href="/history/schimmelmann-family">The Schimmelmann Family: Wealth & Power</a></li>
+						</ul>
+					</div>
+					<div class="module-col">
+						<h4>Interactive Data</h4>
+						<ul class="data-list">
+							<li><a href="/thesis/data">Explore: Sugar Production vs. Labor Force Charts</a></li>
+							<li><a href="/thesis/interactive-maps">GIS Map: The Major Sugar Estates of St. Croix</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="module-discussion">
+					<h4>Discussion Prompt</h4>
+					<p>How did the corporate structure of the Danish West India and Guinea Company distance European shareholders from the brutal realities of plantation labor? Discuss the ethical implications of joint-stock colonialism.</p>
+				</div>
+			</div>
+
+			<!-- MODULE 2 -->
+			<div class="module-card">
+				<div class="module-header">
+					<span class="module-number">Module 02</span>
+					<h3>The Architecture of Control</h3>
+					<p class="module-theme">Analyzes the legal frameworks, military infrastructure, and social hierarchies designed to maximize economic output.</p>
+				</div>
+				<div class="module-body">
+					<div class="module-col">
+						<h4>Required Readings</h4>
+						<ul class="reading-list">
+							<li><a href="/history/1733-slave-codes">The 1733 Slave Codes (Legal Dehumanization)</a></li>
+							<li><a href="/history/free-people-of-color">The In-Between Class: Free People of Color</a></li>
+						</ul>
+					</div>
+					<div class="module-col">
+						<h4>Interactive Data</h4>
+						<ul class="data-list">
+							<li><a href="/thesis/interactive-maps">GIS Map: The Infrastructure of Danish Forts</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="module-discussion">
+					<h4>Discussion Prompt</h4>
+					<p>Analyze Governor Philip Gardelin's 1733 Slave Codes. In what ways did the colonial legal system serve primarily as a tool for protecting economic capital (enslaved labor and property) rather than a moral or social framework?</p>
+				</div>
+			</div>
+
+			<!-- MODULE 3 -->
+			<div class="module-card">
+				<div class="module-header">
+					<span class="module-number">Module 03</span>
+					<h3>Resistance, Rebellion, and Emancipation</h3>
+					<p class="module-theme">Examines how the enslaved population actively disrupted the colonial economy, forcing the eventual collapse of the system.</p>
+				</div>
+				<div class="module-body">
+					<div class="module-col">
+						<h4>Required Readings</h4>
+						<ul class="reading-list">
+							<li><a href="/history/1733-st-john-rebellion">The 1733 Akwamu Rebellion (St. John)</a></li>
+							<li><a href="/history/1848-emancipation">1848: The Threat of Violence and Emancipation</a></li>
+							<li><a href="/history/mary-thomas">Queen Mary Thomas & The 1878 Fireburn</a></li>
+						</ul>
+					</div>
+					<div class="module-col">
+						<h4>Interactive Data</h4>
+						<ul class="data-list">
+							<li><a href="/thesis/interactive-maps">GIS Map: Tracing the Route of the 1878 Fireburn</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="module-discussion">
+					<h4>Discussion Prompt</h4>
+					<p>Emancipation in 1848 did not end economic exploitation, culminating in the 1878 Fireburn. Discuss the economic factors (like the 1849 Labor Act) that drove laborers to riot three decades *after* legal freedom was achieved.</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- ESSAY TOPICS SECTION -->
+		<section class="essays-section">
+			<h2 class="section-title">Suggested Essay Topics</h2>
+			<div class="essay-grid">
+				<div class="essay-card">
+					<div class="essay-icon">⚖️</div>
+					<h3>The Price of Emancipation</h3>
+					<p>When the transatlantic slave trade was officially abolished in 1792 (taking effect in 1803), the Danish Crown offered state-backed loans to planters to purchase as many enslaved people as possible before the deadline. Analyze the economic rationale behind this policy and its demographic impact on the islands.</p>
+				</div>
+				<div class="essay-card">
+					<div class="essay-icon">📈</div>
+					<h3>Data and Dehumanization</h3>
+					<p>Utilizing the data presented in *The Colonial Ledger*, write an econometric analysis of a typical St. Croix sugar estate in the 1780s. How did the meticulous bookkeeping of mortality, birth rates, and sugar output reflect the commodification of human life?</p>
+				</div>
+				<div class="essay-card">
+					<div class="essay-icon">🔥</div>
+					<h3>The Economics of the Fireburn</h3>
+					<p>Compare and contrast the economic motivations of the 1733 St. John Rebellion (led by enslaved Akwamu) and the 1878 Fireburn (led by legally free laborers like Mary Thomas). How did the shift from a slave economy to a contracted-wage economy alter the nature of resistance?</p>
+				</div>
+				<div class="essay-card">
+					<div class="essay-icon">🌍</div>
+					<h3>The Metropole and the Periphery</h3>
+					<p>Trace the flow of wealth from the plantations of the Danish West Indies to the palaces of Copenhagen (focusing on families like the Schimmelmanns). How did colonial extraction fund the "Golden Age" of Danish culture and architecture?</p>
+				</div>
+			</div>
+		</section>
+
+	</div>
+</Layout>
+
+<style>
+	.page-container { max-width: 1200px; margin: 0 auto; padding-bottom: var(--space-3xl); }
+	
+	/* HERO SECTION */
+	.educator-hero {
+		display: grid; grid-template-columns: 1.5fr 1fr; gap: 4rem; align-items: center;
+		background: linear-gradient(135deg, rgba(30,30,30,0.8) 0%, rgba(15,15,15,0.9) 100%);
+		border: 1px solid rgba(196, 167, 125, 0.3); border-radius: 12px;
+		padding: 4rem; margin-bottom: 4rem; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+	}
+	.label {
+		display: inline-block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;
+		color: var(--color-bg); background: var(--color-accent); padding: 0.4rem 1rem;
+		border-radius: 20px; margin-bottom: 1rem; font-weight: bold;
+	}
+	.hero-content h1 { font-family: var(--font-heading); font-size: 3.5rem; color: var(--color-text); margin-bottom: 1.5rem; line-height: 1.1; }
+	.hero-content .lead { font-size: 1.2rem; color: rgba(255, 255, 255, 0.85); line-height: 1.8; margin-bottom: 2rem; }
+	
+	.hero-actions { display: flex; gap: 1rem; }
+	.btn-primary { background: var(--color-accent); color: var(--color-bg); border: none; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: transform 0.2s, background 0.2s; }
+	.btn-primary:hover { transform: translateY(-2px); background: #d6b88a; }
+	.btn-secondary { background: transparent; color: var(--color-accent); border: 1px solid var(--color-accent); padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: bold; font-size: 1rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
+	.btn-secondary:hover { background: rgba(196, 167, 125, 0.1); }
+
+	.hero-graphics { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); padding: 3rem; border-radius: 50%; aspect-ratio: 1; border: 1px dashed rgba(196,167,125,0.4); }
+	.academic-badge { font-size: 5rem; margin-bottom: 1.5rem; }
+	.curriculum-tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; }
+	.curriculum-tags li { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.85rem; color: var(--color-text-muted); }
+
+	.section-title { font-family: var(--font-heading); font-size: 2.5rem; color: var(--color-text); margin-bottom: 2.5rem; text-align: center; }
+
+	/* MODULES */
+	.modules-section { margin-bottom: 5rem; }
+	.module-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; margin-bottom: 2rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.3s ease; }
+	.module-card:hover { transform: translateY(-5px); border-color: rgba(196, 167, 125, 0.4); }
+	
+	.module-header { background: rgba(196, 167, 125, 0.05); padding: 2rem; border-bottom: 1px solid var(--color-border); }
+	.module-number { font-family: monospace; font-size: 0.9rem; color: var(--color-accent); letter-spacing: 2px; display: block; margin-bottom: 0.5rem; }
+	.module-header h3 { font-family: var(--font-heading); font-size: 2rem; color: var(--color-text); margin: 0 0 0.5rem 0; }
+	.module-theme { color: var(--color-text-muted); font-size: 1.1rem; margin: 0; font-style: italic; }
+
+	.module-body { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 2rem; }
+	.module-col h4 { font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; }
+	.reading-list, .data-list { list-style: none; padding: 0; margin: 0; }
+	.reading-list li, .data-list li { margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative; }
+	.reading-list li::before { content: "📄"; position: absolute; left: 0; top: 2px; font-size: 0.9rem; }
+	.data-list li::before { content: "📊"; position: absolute; left: 0; top: 2px; font-size: 0.9rem; }
+	.reading-list a, .data-list a { color: var(--color-text); text-decoration: none; font-size: 1.05rem; transition: color 0.2s; }
+	.reading-list a:hover, .data-list a:hover { color: var(--color-accent); text-decoration: underline; }
+
+	.module-discussion { background: rgba(0,0,0,0.3); padding: 1.5rem 2rem; border-top: 1px solid var(--color-border); }
+	.module-discussion h4 { color: var(--color-accent); margin: 0 0 0.5rem 0; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
+	.module-discussion h4::before { content: "💬"; }
+	.module-discussion p { color: rgba(255,255,255,0.9); margin: 0; line-height: 1.6; font-size: 1.05rem; }
+
+	/* ESSAYS */
+	.essay-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+	.essay-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 2rem; border-radius: 12px; transition: background 0.3s; }
+	.essay-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(196, 167, 125, 0.2); }
+	.essay-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+	.essay-card h3 { font-family: var(--font-heading); color: var(--color-text); margin-bottom: 1rem; font-size: 1.3rem; }
+	.essay-card p { color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0; }
+
+	/* PRINT CSS */
+	.only-print { display: none; }
+	
+	@media print {
+		body { background: white !important; color: black !important; font-family: "Times New Roman", Times, serif; }
+		.no-print, nav, footer, .hero-graphics, .btn-primary, .btn-secondary { display: none !important; }
+		.only-print { display: block; margin-bottom: 2rem; }
+		.page-container { max-width: 100%; padding: 0; }
+		.print-header h1 { font-size: 24pt; margin-bottom: 0.5rem; }
+		.print-header h2 { font-size: 16pt; font-style: italic; color: #444; }
+		.section-title { font-size: 20pt; text-align: left; border-bottom: 2px solid black; padding-bottom: 0.5rem; }
+		
+		.module-card { border: none; box-shadow: none; border-bottom: 1px dashed #ccc; padding-bottom: 2rem; margin-bottom: 2rem; page-break-inside: avoid; }
+		.module-header { background: none; padding: 0 0 1rem 0; border: none; }
+		.module-header h3 { font-size: 16pt; color: black; }
+		.module-number { color: black; font-weight: bold; }
+		.module-theme { color: #333; }
+		
+		.module-body { grid-template-columns: 1fr; gap: 1rem; padding: 0; margin-bottom: 1rem; }
+		.reading-list a, .data-list a { color: black !important; text-decoration: underline; }
+		.module-discussion { background: #f9f9f9; border: 1px solid #ddd; padding: 1rem; page-break-inside: avoid; }
+		.module-discussion h4 { color: black; }
+		.module-discussion p { color: black; }
+
+		.essay-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+		.essay-card { border: none; padding: 0; margin-bottom: 1.5rem; page-break-inside: avoid; }
+		.essay-card h3 { font-size: 14pt; margin-bottom: 0.5rem; }
+		.essay-card p { color: black; }
+		.essay-icon { display: none; }
+	}
+
+	@media (max-width: 900px) {
+		.educator-hero { grid-template-columns: 1fr; padding: 2rem; gap: 2rem; text-align: center; }
+		.hero-actions { justify-content: center; }
+		.hero-graphics { display: none; }
+		.module-body { grid-template-columns: 1fr; }
+	}
+</style>
