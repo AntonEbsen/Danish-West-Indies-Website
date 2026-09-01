@@ -22,7 +22,21 @@ const { Content } = await render(chapter);
 			<span class="chapter-label">Chapter {chapter.data.chapterNumber.toString().padStart(2, '0')}</span>
 			<h1>{chapter.data.title}</h1>
 			{chapter.data.description && <p class="chapter-desc">{chapter.data.description}</p>}
+			
+			<button id="btn-summarize" class="ai-summarize-btn" data-slug={chapter.id}>
+				✨ Generate AI Summary
+			</button>
 		</header>
+
+		<div id="ai-summary-container" class="ai-summary-container hidden">
+			<div class="ai-summary-header">
+				<span class="ai-icon">✨</span>
+				<h3>Claude 3.5 Summary</h3>
+			</div>
+			<div id="ai-summary-content" class="ai-summary-content">
+				<!-- Streaming content goes here -->
+			</div>
+		</div>
 
 		<div class="chapter-content">
 			<Content />
@@ -101,4 +115,143 @@ const { Content } = await render(chapter);
 	.chapter-content :global(em) {
 		color: var(--color-text-muted);
 	}
+
+	/* AI Summary Styles */
+	.ai-summarize-btn {
+		margin-top: 1.5rem;
+		background: linear-gradient(135deg, rgba(196,167,125,0.2), rgba(196,167,125,0.05));
+		border: 1px solid rgba(196,167,125,0.4);
+		color: var(--color-accent);
+		padding: 0.6rem 1.2rem;
+		border-radius: 30px;
+		font-family: var(--font-heading);
+		font-size: 1rem;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	.ai-summarize-btn:hover {
+		background: rgba(196,167,125,0.3);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 15px rgba(196,167,125,0.2);
+	}
+	.ai-summarize-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		transform: none;
+	}
+
+	.ai-summary-container {
+		background: rgba(30, 30, 30, 0.6);
+		border: 1px solid rgba(196,167,125,0.3);
+		border-radius: 12px;
+		margin-bottom: 2rem;
+		overflow: hidden;
+		transition: all 0.3s ease;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+	}
+	.ai-summary-container.hidden {
+		display: none;
+	}
+	.ai-summary-header {
+		background: rgba(196,167,125,0.1);
+		padding: 1rem 1.5rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		border-bottom: 1px solid rgba(196,167,125,0.2);
+	}
+	.ai-summary-header h3 {
+		margin: 0;
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+		font-size: 1.2rem;
+	}
+	.ai-summary-content {
+		padding: 1.5rem;
+		line-height: 1.6;
+		color: rgba(255,255,255,0.9);
+		font-size: 1.05rem;
+	}
+	.ai-summary-content p {
+		margin-bottom: 1rem;
+	}
+	.ai-summary-content ul {
+		margin-left: 1.5rem;
+		margin-bottom: 1rem;
+	}
+	.ai-summary-content li {
+		margin-bottom: 0.5rem;
+	}
 </style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const btn = document.getElementById('btn-summarize');
+		const container = document.getElementById('ai-summary-container');
+		const content = document.getElementById('ai-summary-content');
+
+		if (btn && container && content) {
+			btn.addEventListener('click', async () => {
+				const slug = btn.getAttribute('data-slug');
+				if (!slug) return;
+
+				btn.disabled = true;
+				btn.innerHTML = '✨ Generating...';
+				container.classList.remove('hidden');
+				content.innerHTML = '<span class="loading-pulse">Thinking...</span>';
+
+				try {
+					const response = await fetch('/api/summarize', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ slug })
+					});
+
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
+
+					// We expect a streamed response from the AI SDK
+					const reader = response.body?.getReader();
+					const decoder = new TextDecoder();
+					let summaryText = '';
+
+					if (reader) {
+						content.innerHTML = '';
+						while (true) {
+							const { done, value } = await reader.read();
+							if (done) break;
+							
+							const chunk = decoder.decode(value, { stream: true });
+							summaryText += chunk;
+							
+							// A very naive markdown renderer for streaming
+							let html = summaryText
+								.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+								.replace(/\n\n/g, '</p><p>')
+								.replace(/\n- (.*)/g, '<li>$1</li>');
+							
+							// Wrap lists
+							html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+							
+							if (!html.startsWith('<p>')) html = '<p>' + html;
+							if (!html.endsWith('</p>')) html = html + '</p>';
+
+							content.innerHTML = html;
+						}
+					}
+					
+					btn.innerHTML = '✨ Summary Generated';
+				} catch (error) {
+					console.error("Error generating summary:", error);
+					content.innerHTML = '<p class="error">Sorry, there was an error generating the summary. Please check if the API key is configured correctly.</p>';
+					btn.disabled = false;
+					btn.innerHTML = '✨ Try Again';
+				}
+			});
+		}
+	});
+</script>

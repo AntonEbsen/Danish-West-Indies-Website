@@ -1,0 +1,251 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Essay Grader | Danish West Indies">
+	<div class="grader-container animate-fade-in">
+		<header class="grader-header">
+			<span class="label">AI Tool</span>
+			<h1>Peer-Review Essay Grader</h1>
+			<p>Paste your academic essay or paragraph on the Danish West Indies below. Our AI Archivist will evaluate it for historical accuracy, ethical terminology, and argument strength.</p>
+		</header>
+		
+		<div class="grader-layout">
+			<div class="input-section">
+				<form id="essay-form">
+					<textarea id="essay-input" class="essay-textarea" placeholder="Paste your essay here... (minimum 50 characters)&#10;&#10;For example: 'The slave trade in the Danish West Indies ended in 1848 when the slaves decided to riot...'" required minlength="50"></textarea>
+					<button type="submit" class="btn-grade" id="btn-grade">✨ Grade Essay</button>
+				</form>
+			</div>
+
+			<div class="feedback-section hidden" id="feedback-section">
+				<div class="feedback-header">
+					<h3>📝 AI Peer-Review</h3>
+				</div>
+				<div class="feedback-content" id="feedback-content">
+					<span class="loading-pulse">Analyzing text and checking historical archives...</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.grader-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 4rem 0;
+	}
+	.grader-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+	.label {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-bg);
+		background: var(--color-accent);
+		padding: 0.4rem 1rem;
+		border-radius: 20px;
+		margin-bottom: 1rem;
+		font-weight: bold;
+	}
+	.grader-header h1 {
+		font-family: var(--font-heading);
+		color: var(--color-text);
+		font-size: 2.8rem;
+		margin-bottom: 1rem;
+	}
+	.grader-header p {
+		font-size: 1.1rem;
+		color: var(--color-text-muted);
+		max-width: 700px;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
+	.grader-layout {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+		min-height: 60vh;
+	}
+	@media (max-width: 900px) {
+		.grader-layout { grid-template-columns: 1fr; }
+	}
+
+	.input-section {
+		display: flex;
+		flex-direction: column;
+	}
+	.essay-textarea {
+		width: 100%;
+		flex-grow: 1;
+		min-height: 400px;
+		background: rgba(255,255,255,0.02);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: 1.5rem;
+		color: var(--color-text);
+		font-family: var(--font-body);
+		font-size: 1rem;
+		line-height: 1.6;
+		resize: vertical;
+		margin-bottom: 1rem;
+		transition: border-color 0.3s;
+	}
+	.essay-textarea:focus {
+		outline: none;
+		border-color: var(--color-accent);
+	}
+	
+	.btn-grade {
+		background: var(--color-accent);
+		color: #111;
+		border: none;
+		padding: 1rem 2rem;
+		border-radius: 8px;
+		font-family: var(--font-heading);
+		font-size: 1.2rem;
+		font-weight: bold;
+		cursor: pointer;
+		width: 100%;
+		transition: all 0.3s;
+	}
+	.btn-grade:hover {
+		background: #d6b88a;
+		transform: translateY(-2px);
+	}
+	.btn-grade:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		transform: none;
+	}
+
+	.feedback-section {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+	.feedback-section.hidden {
+		display: none;
+	}
+	
+	.feedback-header {
+		background: rgba(196,167,125,0.1);
+		padding: 1rem 1.5rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+	.feedback-header h3 {
+		margin: 0;
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+	}
+	
+	.feedback-content {
+		flex-grow: 1;
+		padding: 2rem;
+		overflow-y: auto;
+		color: rgba(255,255,255,0.9);
+		line-height: 1.6;
+	}
+	.feedback-content :global(h3) {
+		color: var(--color-accent);
+		margin-top: 1.5rem;
+		margin-bottom: 0.5rem;
+		font-family: var(--font-heading);
+		border-bottom: 1px dashed rgba(196,167,125,0.3);
+		padding-bottom: 0.3rem;
+	}
+	.feedback-content :global(h3:first-child) { margin-top: 0; }
+	.feedback-content :global(ul) { padding-left: 1.5rem; }
+	.feedback-content :global(li) { margin-bottom: 0.5rem; }
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const form = document.getElementById('essay-form');
+		const input = document.getElementById('essay-input') as HTMLTextAreaElement;
+		const btn = document.getElementById('btn-grade') as HTMLButtonElement;
+		const feedbackSection = document.getElementById('feedback-section');
+		const feedbackContent = document.getElementById('feedback-content');
+
+		function parseMarkdown(text: string) {
+			let html = text
+				.replace(/### (.*?)\n/g, '<h3>$1</h3>')
+				.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+				.replace(/\*(.*?)\*/g, '<em>$1</em>')
+				.replace(/\n\n/g, '</p><p>')
+				.replace(/\n- (.*)/g, '<li>$1</li>');
+			
+			html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+			if (!html.startsWith('<p>') && !html.startsWith('<h3>')) html = '<p>' + html;
+			if (!html.endsWith('</p>')) html = html + '</p>';
+			return html;
+		}
+
+		form?.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const text = input.value.trim();
+			if (text.length < 50) {
+				alert("Please enter a longer essay (minimum 50 characters).");
+				return;
+			}
+
+			feedbackSection?.classList.remove('hidden');
+			feedbackContent!.innerHTML = '<span class="loading-pulse">Analyzing text against archival records...</span>';
+			btn.disabled = true;
+			btn.innerHTML = '✨ Grading...';
+
+			try {
+				const response = await fetch('/api/grade-essay', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ essayText: text })
+				});
+
+				if (!response.ok) {
+					const err = await response.json();
+					throw new Error(err.error || 'API Error');
+				}
+
+				const reader = response.body?.getReader();
+				const decoder = new TextDecoder();
+				let fullResponse = '';
+
+				if (reader) {
+					feedbackContent!.innerHTML = '';
+					while (true) {
+						const { done, value } = await reader.read();
+						if (done) break;
+						
+						const chunk = decoder.decode(value, { stream: true });
+						const lines = chunk.split('\n');
+						for (const line of lines) {
+							if (line.startsWith('0:')) {
+								try {
+									const textContent = JSON.parse(line.substring(2));
+									fullResponse += textContent;
+								} catch(err) {
+									fullResponse += line.substring(2).replace(/"/g, ''); 
+								}
+							}
+						}
+						
+						feedbackContent!.innerHTML = parseMarkdown(fullResponse);
+					}
+				}
+			} catch (err: any) {
+				feedbackContent!.innerHTML = `<p class="error">${err.message || 'Failed to grade essay.'}</p>`;
+			} finally {
+				btn.disabled = false;
+				btn.innerHTML = '✨ Grade Essay';
+			}
+		});
+	});
+</script>

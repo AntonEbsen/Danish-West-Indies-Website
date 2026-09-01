@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ChatInterface from '../components/ChatInterface.astro';
 import { getLangFromUrl } from '../i18n/utils';
 
 interface Props {
@@ -124,8 +125,24 @@ const breadcrumbSchema = {
 		<!-- GLOBAL IMAGE LIGHTBOX -->
 		<div id="global-lightbox" class="lightbox-overlay hidden">
 			<button id="lightbox-close" aria-label="Close image">✕</button>
-			<img id="lightbox-img" src="" alt="Enlarged view" />
+			<div class="lightbox-content-wrapper">
+				<img id="lightbox-img" src="" alt="Enlarged view" />
+				<div id="lightbox-ai-panel" class="lightbox-ai-panel hidden">
+					<div class="ai-panel-header">
+						<h3>✨ AI Analysis</h3>
+						<button id="ai-panel-close">✕</button>
+					</div>
+					<div id="ai-panel-content" class="ai-panel-content"></div>
+				</div>
+			</div>
+			<button id="lightbox-analyze-btn" class="lightbox-analyze-btn">✨ Analyze with AI</button>
 		</div>
+
+		<!-- GLOBAL FLOATING CHAT WIDGET -->
+		<ChatInterface isWidget={true} />
+		<button id="chat-widget-toggle" class="chat-widget-toggle" aria-label="Open Chat">
+			<span class="chat-icon">💬</span>
+		</button>
 	</body>
 </html>
 
@@ -133,22 +150,98 @@ const breadcrumbSchema = {
 	/* Lightbox Styles */
 	.lightbox-overlay {
 		position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-		background: rgba(0,0,0,0.9); z-index: 10000;
-		display: flex; justify-content: center; align-items: center;
-		opacity: 1; transition: opacity 0.3s ease;
+		background: rgba(0,0,0,0.9); 		z-index: 9999;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		opacity: 1;
+		transition: opacity var(--transition-normal);
 	}
 	.lightbox-overlay.hidden {
-		opacity: 0; pointer-events: none;
+		opacity: 0;
+		pointer-events: none;
 	}
-	#lightbox-img {
-		max-width: 90vw; max-height: 90vh;
-		object-fit: contain; border-radius: 4px;
-		box-shadow: 0 0 30px rgba(0,0,0,0.8);
-		transform: scale(1); transition: transform 0.3s ease;
+	
+	.lightbox-content-wrapper {
+		position: relative;
+		display: flex;
+		max-width: 90%;
+		max-height: 85vh;
+		background: rgba(0,0,0,0.5);
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 	}
-	.lightbox-overlay.hidden #lightbox-img {
-		transform: scale(0.95);
+
+	.lightbox-overlay img {
+		max-width: 100%;
+		max-height: 85vh;
+		object-fit: contain;
+		transition: transform var(--transition-normal);
 	}
+
+	.lightbox-ai-panel {
+		width: 400px;
+		background: var(--color-surface);
+		border-left: 1px solid var(--color-border);
+		display: flex;
+		flex-direction: column;
+		transition: transform 0.3s;
+	}
+	.lightbox-ai-panel.hidden {
+		display: none;
+	}
+	.ai-panel-header {
+		padding: 1rem;
+		background: rgba(196,167,125,0.1);
+		border-bottom: 1px solid var(--color-border);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.ai-panel-header h3 {
+		margin: 0;
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+	}
+	.ai-panel-header button {
+		background: none;
+		border: none;
+		color: white;
+		cursor: pointer;
+		font-size: 1.2rem;
+	}
+	.ai-panel-content {
+		padding: 1.5rem;
+		overflow-y: auto;
+		color: rgba(255,255,255,0.9);
+		line-height: 1.6;
+		font-size: 0.95rem;
+	}
+
+	.lightbox-analyze-btn {
+		margin-top: 1.5rem;
+		background: linear-gradient(135deg, rgba(196,167,125,0.2), rgba(196,167,125,0.05));
+		border: 1px solid rgba(196,167,125,0.4);
+		color: var(--color-accent);
+		padding: 0.6rem 1.2rem;
+		border-radius: 30px;
+		font-family: var(--font-heading);
+		font-size: 1rem;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+	.lightbox-analyze-btn:hover {
+		background: rgba(196,167,125,0.3);
+		transform: translateY(-2px);
+	}
+	.lightbox-analyze-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		transform: none;
+	}
+
 	#lightbox-close {
 		position: absolute; top: 20px; right: 30px;
 		background: none; border: none; color: white;
@@ -165,6 +258,34 @@ const breadcrumbSchema = {
 	:global(.article-content img:hover), :global(.thesis-content img:hover) {
 		filter: brightness(1.1);
 	}
+
+	/* Chat Widget Toggle Button */
+	.chat-widget-toggle {
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		background: var(--color-surface);
+		border: 1px solid var(--color-accent);
+		color: white;
+		font-size: 1.5rem;
+		cursor: pointer;
+		z-index: 9997;
+		box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+		transition: transform 0.2s, background 0.2s;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.chat-widget-toggle:hover {
+		transform: scale(1.05);
+		background: rgba(196,167,125,0.1);
+	}
+	.chat-widget-toggle.hidden {
+		display: none;
+	}
 </style>
 
 <script>
@@ -172,23 +293,10 @@ const breadcrumbSchema = {
 		const lightbox = document.getElementById('global-lightbox');
 		const lightboxImg = document.getElementById('lightbox-img');
 		const closeBtn = document.getElementById('lightbox-close');
-		if (!lightbox || !lightboxImg || !closeBtn) return;
-
-		// Find all content images
-		const images = document.querySelectorAll('.article-content img, .thesis-content img');
-		
-		images.forEach(img => {
-			img.addEventListener('click', (e) => {
-				// Don't open if it's already in a link that does something else
-				if (img.closest('a') && img.closest('a').getAttribute('href') !== img.src) return;
-				
-				e.preventDefault();
-				lightboxImg.src = img.src;
-				lightboxImg.alt = img.alt;
-				lightbox.classList.remove('hidden');
-				document.body.style.overflow = 'hidden'; // Prevent background scrolling
-			});
-		});
+		const analyzeBtn = document.getElementById('lightbox-analyze-btn');
+		const aiPanel = document.getElementById('lightbox-ai-panel');
+		const aiPanelClose = document.getElementById('ai-panel-close');
+		const aiPanelContent = document.getElementById('ai-panel-content');
 
 		function closeLightbox() {
 			lightbox.classList.add('hidden');
@@ -206,5 +314,24 @@ const breadcrumbSchema = {
 				closeLightbox();
 			}
 		});
+
+		// Chat Widget Logic
+		const chatToggle = document.getElementById('chat-widget-toggle');
+		const chatContainer = document.getElementById('chat-widget-container');
+		const chatCloseBtn = document.getElementById('close-chat-widget');
+		
+		if (chatToggle && chatContainer && chatCloseBtn) {
+			chatToggle.addEventListener('click', () => {
+				chatContainer.classList.add('open');
+				chatToggle.classList.add('hidden');
+			});
+			
+			chatCloseBtn.addEventListener('click', () => {
+				chatContainer.classList.remove('open');
+				setTimeout(() => {
+					chatToggle.classList.remove('hidden');
+				}, 300);
+			});
+		}
 	});
 </script>

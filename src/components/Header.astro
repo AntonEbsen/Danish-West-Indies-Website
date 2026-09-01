@@ -34,7 +34,16 @@ const currentLangName = languages[lang];
         <li><a href={translatePath('/memorial')}>{t('nav.memorial')}</a></li>
         <li><a href={translatePath('/languages')}>{t('nav.languages')}</a></li>
         <li><a href={translatePath('/resources')}>{t('nav.resources')}</a></li>
-        <li><a href={translatePath('/educators')}>Educators</a></li>
+        <li class="nav-dropdown">
+          <a href="#" class="dropdown-toggle">AI Tools ▼</a>
+          <ul class="dropdown-menu">
+            <li><a href={translatePath('/interview')}>Persona Interviews</a></li>
+            <li><a href={translatePath('/educators')}>Lesson Generator</a></li>
+            <li><a href={translatePath('/transcriber')}>Manuscript Decoder</a></li>
+            <li><a href={translatePath('/essay-grader')}>Essay Grader</a></li>
+            <li><a href={translatePath('/about-ai')}>About the AI</a></li>
+          </ul>
+        </li>
         <li><a href={translatePath('/interactive/archivists-dilemma')}>Interactive</a></li>
         <li><a href={translatePath('/thesis')}>{t('nav.thesis')}</a></li>
         <li><a href={translatePath('/faq')}>{t('nav.faq')}</a></li>
@@ -129,6 +138,45 @@ const currentLangName = languages[lang];
   
   .main-nav a:hover {
     color: var(--color-accent);
+  }
+
+  /* Dropdown Styles */
+  .nav-dropdown {
+    position: relative;
+  }
+
+  .nav-dropdown:hover .dropdown-menu {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    min-width: 200px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 1000;
+  }
+  
+  .dropdown-menu li {
+    margin: 0;
+  }
+  
+  .dropdown-menu a {
+    display: block;
+    padding: 0.8rem 1.5rem;
+    color: var(--color-text);
+    font-size: 0.9rem;
+  }
+  
+  .dropdown-menu a:hover {
+    background: rgba(196, 167, 125, 0.1);
   }
 
   /* Actions Area */

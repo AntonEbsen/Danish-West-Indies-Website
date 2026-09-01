@@ -1,0 +1,453 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Historical Interview | Danish West Indies">
+	<div class="interview-container animate-fade-in">
+		<header class="interview-header">
+			<h1>Historical Roleplay Interview</h1>
+			<p>Select a historical figure from the Danish West Indies to interview. The AI will adopt their persona, using archival facts to answer your questions from their perspective.</p>
+		</header>
+		
+		<div class="persona-selector" id="persona-selector">
+			<h2>Choose a Persona:</h2>
+			<div class="persona-grid">
+				<button class="persona-card" data-id="mary-thomas">
+					<div class="persona-icon">🔥</div>
+					<h3>Queen Mary Thomas</h3>
+					<p>Leader of the 1878 Fireburn</p>
+				</button>
+				<button class="persona-card" data-id="general-buddhoe">
+					<div class="persona-icon">⚔️</div>
+					<h3>General Buddhoe</h3>
+					<p>Leader of the 1848 Emancipation</p>
+				</button>
+				<button class="persona-card" data-id="peter-von-scholten">
+					<div class="persona-icon">📜</div>
+					<h3>Peter von Scholten</h3>
+					<p>Governor-General (1827-1848)</p>
+				</button>
+				<button class="persona-card" data-id="anna-heegaard">
+					<div class="persona-icon">👒</div>
+					<h3>Anna Heegaard</h3>
+					<p>Influential Free Woman of Color</p>
+				</button>
+			</div>
+		</div>
+
+		<div class="chat-interface hidden" id="interview-chat">
+			<button class="back-btn" id="back-to-personas">← Change Persona</button>
+			<div class="chat-header">
+				<div class="chat-title-group">
+					<h3 id="active-persona-name">Interviewing...</h3>
+					<span class="chat-subtitle">Historical AI Roleplay</span>
+				</div>
+			</div>
+			
+			<div class="chat-messages" id="interview-messages">
+				<div class="message assistant">
+					<div class="message-content">
+						<p id="greeting-text">Hello.</p>
+					</div>
+				</div>
+			</div>
+
+			<form class="chat-form" id="interview-form">
+				<div class="chat-input-group">
+					<input type="text" class="chat-input" id="interview-input" placeholder="Ask a question..." autocomplete="off" required />
+					<button type="button" class="mic-btn" id="interview-mic" title="Hold to speak">🎤</button>
+					<button type="submit" class="chat-submit-btn">Ask</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.interview-container {
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 4rem 0;
+	}
+	.interview-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+	.interview-header h1 {
+		font-family: var(--font-heading);
+		color: var(--color-accent);
+		font-size: 2.5rem;
+		margin-bottom: 1rem;
+	}
+	.interview-header p {
+		font-size: 1.1rem;
+		color: var(--color-text-muted);
+		line-height: 1.6;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.persona-selector h2 {
+		text-align: center;
+		margin-bottom: 2rem;
+		color: var(--color-text);
+	}
+	.persona-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1.5rem;
+	}
+	.persona-card {
+		background: rgba(196,167,125,0.05);
+		border: 1px solid rgba(196,167,125,0.2);
+		border-radius: 12px;
+		padding: 2rem 1rem;
+		text-align: center;
+		cursor: pointer;
+		transition: all 0.3s;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.persona-card:hover {
+		background: rgba(196,167,125,0.1);
+		transform: translateY(-5px);
+		border-color: var(--color-accent);
+	}
+	.persona-icon {
+		font-size: 3rem;
+		margin-bottom: 1rem;
+	}
+	.persona-card h3 {
+		color: var(--color-accent);
+		margin: 0 0 0.5rem 0;
+		font-family: var(--font-heading);
+		font-size: 1.2rem;
+	}
+	.persona-card p {
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		margin: 0;
+	}
+
+	.chat-interface {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+		height: 600px;
+		display: flex;
+		flex-direction: column;
+	}
+	.chat-interface.hidden {
+		display: none;
+	}
+	
+	.back-btn {
+		background: none;
+		border: none;
+		color: var(--color-text-muted);
+		padding: 1rem;
+		text-align: left;
+		cursor: pointer;
+		font-size: 0.9rem;
+		transition: color 0.2s;
+	}
+	.back-btn:hover {
+		color: var(--color-accent);
+	}
+
+	.chat-header {
+		background: rgba(196,167,125,0.1);
+		padding: 1rem 1.5rem;
+		border-bottom: 1px solid var(--color-border);
+		border-top: 1px solid var(--color-border);
+	}
+	.chat-title-group h3 {
+		margin: 0;
+		font-family: var(--font-heading);
+		color: var(--color-accent);
+		font-size: 1.3rem;
+	}
+	.chat-subtitle {
+		font-size: 0.8rem;
+		color: var(--color-text-muted);
+	}
+
+	.chat-messages {
+		flex-grow: 1;
+		overflow-y: auto;
+		padding: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.message {
+		max-width: 85%;
+		display: flex;
+	}
+	.message.user { align-self: flex-end; }
+	.message.assistant { align-self: flex-start; }
+
+	.message-content {
+		padding: 1rem 1.2rem;
+		border-radius: 12px;
+		font-size: 1rem;
+		line-height: 1.5;
+	}
+	.message.user .message-content {
+		background: var(--color-accent);
+		color: #111;
+		border-bottom-right-radius: 4px;
+	}
+	.message.assistant .message-content {
+		background: rgba(255,255,255,0.05);
+		border: 1px solid var(--color-border);
+		color: var(--color-text);
+		border-bottom-left-radius: 4px;
+	}
+	.message-content p { margin: 0 0 0.5rem 0; }
+	.message-content p:last-child { margin: 0; }
+
+	.chat-form {
+		display: flex;
+		padding: 1rem;
+		border-top: 1px solid var(--color-border);
+		background: rgba(0,0,0,0.2);
+	}
+	.chat-input-group {
+		display: flex;
+		gap: 0.5rem;
+		width: 100%;
+	}
+	.chat-input {
+		flex-grow: 1;
+		background: rgba(255,255,255,0.05);
+		border: 1px solid var(--color-border);
+		border-radius: 20px;
+		padding: 0.8rem 1.2rem;
+		color: white;
+		font-family: var(--font-body);
+		outline: none;
+		font-size: 1rem;
+	}
+	.chat-input:focus { border-color: var(--color-accent); }
+	
+	.mic-btn {
+		background: transparent;
+		border: none;
+		font-size: 1.2rem;
+		cursor: pointer;
+		transition: transform 0.2s;
+		padding: 0 0.5rem;
+	}
+	.mic-btn.recording {
+		color: #ef4444;
+		animation: pulse 1s infinite;
+	}
+	@keyframes pulse {
+		0% { transform: scale(1); }
+		50% { transform: scale(1.2); }
+		100% { transform: scale(1); }
+	}
+
+	.chat-submit-btn {
+		background: var(--color-accent);
+		border: none;
+		color: #111;
+		font-weight: bold;
+		padding: 0 1.5rem;
+		border-radius: 20px;
+		cursor: pointer;
+		transition: background 0.2s;
+	}
+	.chat-submit-btn:hover { background: #d6b88a; }
+	.chat-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const selector = document.getElementById('persona-selector');
+		const chatInterface = document.getElementById('interview-chat');
+		const cards = document.querySelectorAll('.persona-card');
+		const backBtn = document.getElementById('back-to-personas');
+		const activeNameEl = document.getElementById('active-persona-name');
+		const greetingEl = document.getElementById('greeting-text');
+		
+		const form = document.getElementById('interview-form');
+		const input = document.getElementById('interview-input') as HTMLInputElement;
+		const messagesContainer = document.getElementById('interview-messages');
+		const submitBtn = form?.querySelector('.chat-submit-btn') as HTMLButtonElement;
+
+		let activePersonaId = '';
+		let messages: any[] = [];
+
+		const greetings: Record<string, string> = {
+			'mary-thomas': 'You wish to speak with me? I am Mary Thomas, though the people call me Queen. Ask what you will about the Fireburn and our fight for justice.',
+			'general-buddhoe': 'I am John Gottlieb, known to the people as General Buddhoe. The time for waiting passed in 1848. What do you wish to know?',
+			'peter-von-scholten': 'I am Governor-General Peter von Scholten. I devoted my life to maintaining order and eventually granting emancipation in the Danish West Indies. What is your inquiry?',
+			'anna-heegaard': 'Welcome. I am Anna Heegaard. I have navigated the complex society of St. Croix as a free woman of color. What would you like to discuss?'
+		};
+
+		// Switch to chat
+		cards.forEach(card => {
+			card.addEventListener('click', () => {
+				const id = card.getAttribute('data-id');
+				if(!id) return;
+				activePersonaId = id;
+				const name = card.querySelector('h3')?.textContent || 'Interview';
+				
+				activeNameEl!.textContent = `Interviewing: ${name}`;
+				greetingEl!.textContent = greetings[id] || 'Hello.';
+				
+				// Reset chat
+				messagesContainer!.innerHTML = `
+					<div class="message assistant">
+						<div class="message-content">
+							<p>${greetingEl!.textContent}</p>
+						</div>
+					</div>
+				`;
+				messages = [];
+
+				selector!.classList.add('hidden');
+				chatInterface!.classList.remove('hidden');
+			});
+		});
+
+		// Switch back
+		backBtn?.addEventListener('click', () => {
+			chatInterface!.classList.add('hidden');
+			selector!.classList.remove('hidden');
+		});
+
+		function parseMarkdown(text: string) {
+			let html = text
+				.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+				.replace(/\*(.*?)\*/g, '<em>$1</em>')
+				.replace(/\n\n/g, '</p><p>')
+				.replace(/\n- (.*)/g, '<li>$1</li>');
+			html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+			if (!html.startsWith('<p>')) html = '<p>' + html;
+			if (!html.endsWith('</p>')) html = html + '</p>';
+			return html;
+		}
+
+		form?.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const text = input.value.trim();
+			if (!text || !activePersonaId) return;
+
+			// Add user message
+			const userMsg = document.createElement('div');
+			userMsg.className = 'message user';
+			userMsg.innerHTML = `<div class="message-content"><p>${text}</p></div>`;
+			messagesContainer?.appendChild(userMsg);
+			
+			messages.push({ role: 'user', content: text });
+			input.value = '';
+			input.disabled = true;
+			submitBtn.disabled = true;
+			messagesContainer!.scrollTop = messagesContainer!.scrollHeight;
+
+			// Add assistant placeholder
+			const assistantMsg = document.createElement('div');
+			assistantMsg.className = 'message assistant';
+			const assistantContent = document.createElement('div');
+			assistantContent.className = 'message-content';
+			assistantContent.innerHTML = '<span class="typing-indicator">Formulating response...</span>';
+			assistantMsg.appendChild(assistantContent);
+			messagesContainer?.appendChild(assistantMsg);
+			messagesContainer!.scrollTop = messagesContainer!.scrollHeight;
+
+			try {
+				const response = await fetch('/api/interview', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ messages, personaId: activePersonaId })
+				});
+
+				if (!response.ok) throw new Error('API Error');
+
+				const reader = response.body?.getReader();
+				const decoder = new TextDecoder();
+				let fullResponse = '';
+
+				if (reader) {
+					assistantContent.innerHTML = '';
+					while (true) {
+						const { done, value } = await reader.read();
+						if (done) break;
+						
+						const chunk = decoder.decode(value, { stream: true });
+						const lines = chunk.split('\n');
+						for (const line of lines) {
+							if (line.startsWith('0:')) {
+								try {
+									const textContent = JSON.parse(line.substring(2));
+									fullResponse += textContent;
+								} catch(e) {
+									fullResponse += line.substring(2).replace(/"/g, ''); 
+								}
+							}
+						}
+						
+						assistantContent.innerHTML = parseMarkdown(fullResponse);
+						messagesContainer!.scrollTop = messagesContainer!.scrollHeight;
+					}
+				}
+				
+				messages.push({ role: 'assistant', content: fullResponse });
+			} catch (err) {
+				assistantContent.innerHTML = '<p class="error">Sorry, I encountered an error communicating with this persona.</p>';
+			} finally {
+				input.disabled = false;
+				submitBtn.disabled = false;
+				input.focus();
+			}
+		});
+
+		// Speech-to-Text setup
+		const micBtn = document.getElementById('interview-mic');
+		if (micBtn && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+			const SpeechRecognition = window.webkitSpeechRecognition || (window as any).SpeechRecognition;
+			const recognition = new SpeechRecognition();
+			recognition.continuous = false;
+			recognition.interimResults = true;
+
+			recognition.onstart = () => {
+				micBtn.classList.add('recording');
+				input.placeholder = "Listening...";
+			};
+
+			recognition.onresult = (event: any) => {
+				const transcript = Array.from(event.results)
+					.map((result: any) => result[0].transcript)
+					.join('');
+				input.value = transcript;
+			};
+
+			recognition.onend = () => {
+				micBtn.classList.remove('recording');
+				input.placeholder = "Ask a question...";
+				if (input.value.trim().length > 0 && !submitBtn.disabled) {
+					submitBtn.click();
+				}
+			};
+
+			recognition.onerror = () => {
+				micBtn.classList.remove('recording');
+				input.placeholder = "Ask a question...";
+			};
+
+			micBtn.addEventListener('mousedown', () => recognition.start());
+			micBtn.addEventListener('mouseup', () => recognition.stop());
+			micBtn.addEventListener('touchstart', (e) => { e.preventDefault(); recognition.start(); });
+			micBtn.addEventListener('touchend', (e) => { e.preventDefault(); recognition.stop(); });
+		} else if (micBtn) {
+			micBtn.style.display = 'none';
+		}
+	});
+</script>

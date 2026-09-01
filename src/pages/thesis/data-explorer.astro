@@ -31,6 +31,22 @@ import Layout from '../../layouts/Layout.astro';
 				</div>
 			</div>
 		</div>
+
+		<!-- Ask the Data UI -->
+		<div class="data-chat-section">
+			<h2>✨ Chat with the Data</h2>
+			<p>Ask Claude to analyze the datasets above. Try asking: "What was the average mortality rate across all recorded years?"</p>
+			
+			<div class="data-chat-box">
+				<div id="data-chat-messages" class="data-chat-messages">
+					<div class="msg ai">Hello! I am ready to analyze the demographic and sugar yield datasets. Ask me a statistical or historical question.</div>
+				</div>
+				<form id="data-chat-form" class="data-chat-form">
+					<input type="text" id="data-chat-input" placeholder="Ask the data..." required />
+					<button type="submit">Ask</button>
+				</form>
+			</div>
+		</div>
 		
 		<div class="data-methodology">
 			<h2>Methodological Notes</h2>
@@ -136,6 +152,79 @@ import Layout from '../../layouts/Layout.astro';
 				}
 			});
 		}
+
+		// Chat with the Data Logic
+		const chatForm = document.getElementById('data-chat-form');
+		const chatInput = document.getElementById('data-chat-input');
+		const chatMessages = document.getElementById('data-chat-messages');
+		let messages = [];
+
+		chatForm?.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const text = chatInput.value.trim();
+			if (!text) return;
+
+			// Add User message
+			const userMsg = document.createElement('div');
+			userMsg.className = 'msg user';
+			userMsg.textContent = text;
+			chatMessages.appendChild(userMsg);
+			
+			messages.push({ role: 'user', content: text });
+			chatInput.value = '';
+			chatMessages.scrollTop = chatMessages.scrollHeight;
+
+			// Add AI placeholder
+			const aiMsg = document.createElement('div');
+			aiMsg.className = 'msg ai';
+			aiMsg.innerHTML = '<span class="loading-pulse">Analyzing dataset...</span>';
+			chatMessages.appendChild(aiMsg);
+			chatMessages.scrollTop = chatMessages.scrollHeight;
+
+			try {
+				const response = await fetch('/api/data-chat', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ messages })
+				});
+
+				if (!response.ok) throw new Error('API Error');
+
+				const reader = response.body?.getReader();
+				const decoder = new TextDecoder();
+				let fullResponse = '';
+
+				if (reader) {
+					aiMsg.innerHTML = '';
+					while (true) {
+						const { done, value } = await reader.read();
+						if (done) break;
+						
+						const chunk = decoder.decode(value, { stream: true });
+						const lines = chunk.split('\n');
+						for (const line of lines) {
+							if (line.startsWith('0:')) {
+								try {
+									const textContent = JSON.parse(line.substring(2));
+									fullResponse += textContent;
+								} catch(err) {
+									fullResponse += line.substring(2).replace(/"/g, ''); 
+								}
+							}
+						}
+						
+						let html = fullResponse
+							.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+							.replace(/\n\n/g, '<br><br>');
+						aiMsg.innerHTML = html;
+						chatMessages.scrollTop = chatMessages.scrollHeight;
+					}
+				}
+				messages.push({ role: 'assistant', content: fullResponse });
+			} catch (err) {
+				aiMsg.textContent = 'Error querying the dataset.';
+			}
+		});
 	});
 </script>
 
@@ -254,5 +343,77 @@ import Layout from '../../layouts/Layout.astro';
 		background: #d4b88f;
 		transform: translateY(-2px);
 		box-shadow: 0 5px 15px rgba(196, 167, 125, 0.3);
+	}
+
+	/* Chat with the Data */
+	.data-chat-section {
+		background: rgba(196, 167, 125, 0.05);
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		border-radius: 12px;
+		padding: var(--space-xl);
+		margin-bottom: var(--space-2xl);
+	}
+	.data-chat-section h2 { color: var(--color-accent); margin-bottom: 0.5rem; }
+	.data-chat-section p { color: var(--color-text-muted); margin-bottom: 1.5rem; }
+	
+	.data-chat-box {
+		background: rgba(0,0,0,0.3);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		height: 400px;
+	}
+	.data-chat-messages {
+		flex-grow: 1;
+		padding: 1.5rem;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	.msg {
+		max-width: 85%;
+		padding: 1rem;
+		border-radius: 8px;
+		line-height: 1.5;
+	}
+	.msg.user {
+		align-self: flex-end;
+		background: var(--color-accent);
+		color: #111;
+		border-bottom-right-radius: 0;
+	}
+	.msg.ai {
+		align-self: flex-start;
+		background: rgba(255,255,255,0.05);
+		border: 1px solid rgba(255,255,255,0.1);
+		color: var(--color-text);
+		border-bottom-left-radius: 0;
+	}
+	.data-chat-form {
+		display: flex;
+		padding: 1rem;
+		background: rgba(0,0,0,0.5);
+		border-top: 1px solid var(--color-border);
+	}
+	.data-chat-form input {
+		flex-grow: 1;
+		background: rgba(255,255,255,0.05);
+		border: 1px solid rgba(255,255,255,0.1);
+		padding: 0.8rem;
+		border-radius: 4px;
+		color: white;
+		margin-right: 1rem;
+	}
+	.data-chat-form button {
+		background: var(--color-accent);
+		color: #111;
+		border: none;
+		padding: 0 1.5rem;
+		border-radius: 4px;
+		font-weight: bold;
+		cursor: pointer;
 	}
 </style>

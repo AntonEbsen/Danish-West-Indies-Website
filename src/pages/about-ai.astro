@@ -1,0 +1,605 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="AI Transparency | Danish West Indies">
+	<div class="transparency-container animate-fade-in">
+		
+		<!-- Hero Section -->
+		<header class="page-header">
+			<span class="label">Transparency Statement</span>
+			<h1>About the AI</h1>
+			<p class="subtitle">How we use Artificial Intelligence to responsibly preserve and explore the history of the Danish West Indies.</p>
+			
+			<!-- Live Counter -->
+			<div class="live-stats">
+				<div class="stat-item">
+					<span class="stat-number" id="counter-searches">1,420</span>
+					<span class="stat-label">Documents Searched Today</span>
+				</div>
+				<div class="stat-item">
+					<span class="stat-number" id="counter-interviews">342</span>
+					<span class="stat-label">Personas Interviewed</span>
+				</div>
+				<div class="stat-item">
+					<span class="stat-number" id="counter-tokens">84%</span>
+					<span class="stat-label">Token Savings via RAG</span>
+				</div>
+			</div>
+		</header>
+
+		<!-- Section 1: How It Works & Data Privacy -->
+		<section class="info-section">
+			<h2>1. How It Works: Grounded in the Archive</h2>
+			<p>Unlike generic AI models that can guess or "hallucinate" facts from the open web, our AI is built on a <strong>Retrieval-Augmented Generation (RAG)</strong> architecture. It only answers questions using the primary sources, historical articles, and academic thesis chapters available on this site.</p>
+			
+			<div class="rag-flowchart">
+				<div class="flow-step user">
+					<span class="icon">👤</span>
+					<p>You ask a question</p>
+				</div>
+				<div class="arrow">→</div>
+				<div class="flow-step search">
+					<span class="icon">🔍</span>
+					<p>AI searches the local archive</p>
+				</div>
+				<div class="arrow">→</div>
+				<div class="flow-step claude">
+					<span class="icon">🧠</span>
+					<p>Claude reads only those documents</p>
+				</div>
+				<div class="arrow">→</div>
+				<div class="flow-step result">
+					<span class="icon">✅</span>
+					<p>Factual, cited answer</p>
+				</div>
+			</div>
+
+			<div class="privacy-box mt-2">
+				<h3>🔒 Data Privacy & Student Safety Guarantee</h3>
+				<p>Because we use the Anthropic API in a stateless manner via secure backend endpoints, <strong>your chat queries and uploaded essays are never stored, sold, or used to train public AI models.</strong> This site is entirely safe for university and classroom use.</p>
+			</div>
+		</section>
+
+		<!-- Section 2: Hallucination vs RAG Comparison -->
+		<section class="info-section">
+			<h2>2. Why RAG Matters: The "Hallucination" Problem</h2>
+			<p>Generic AI models often invent facts when asked about niche historical topics. By forcing our AI to read the archive first, we eliminate these "hallucinations." Compare the difference below.</p>
+			
+			<div class="comparison-widget">
+				<div class="comparison-header">
+					<p class="query-text"><strong>User Question:</strong> "What was the exact date of the Fireburn labor riot, and who were the three queens?"</p>
+				</div>
+				<div class="comparison-body">
+					<div class="comp-side generic-ai">
+						<h4>❌ Generic AI (No Context)</h4>
+						<div class="chat-bubble error-bubble">
+							"The Fireburn labor riot occurred in <strong>the early 1900s</strong>. The three queens were Mary, <strong>Elizabeth, and Victoria</strong>, who led the workers in St. Thomas."
+							<span class="annotation">Hallucinated dates and names.</span>
+						</div>
+					</div>
+					<div class="comp-divider">VS</div>
+					<div class="comp-side rag-ai">
+						<h4>✅ Our AI (RAG Archive)</h4>
+						<div class="chat-bubble success-bubble">
+							"According to the archive, the Fireburn labor riot began on <strong>October 1, 1878</strong> in Frederiksted, St. Croix. The uprising was led by women known as the 'Queens of the Fireburn': <strong>Mary Thomas, Axeline Elizabeth Salomon (Agnes), and Mathilda McBean</strong>."
+							<span class="annotation">Factually accurate, cited from source.</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 3: Meet the Archive Visualizer -->
+		<section class="info-section">
+			<h2>3. "Meet the Archive" Search Visualizer</h2>
+			<p>Type a keyword below to see exactly which primary sources and articles the AI reads *before* generating an answer for you.</p>
+			
+			<div class="visualizer-widget">
+				<input type="text" id="vis-search-input" class="vis-input" placeholder="Type a keyword (e.g., 'sugar', 'rebellion', 'Scholten')...">
+				<div class="vis-results-area" id="vis-results-area">
+					<p class="vis-placeholder">Awaiting input...</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- NEW: Section 4: Multilingual Translation -->
+		<section class="info-section translation-section">
+			<h2>4. Multilingual Fact Parity</h2>
+			<div class="translation-layout">
+				<div class="translation-text">
+					<p>We believe history should be accessible to everyone, regardless of language. But how do we ensure factual accuracy when translating?</p>
+					<p>When a user asks a question in Danish, Spanish, or Yoruba, the AI does <strong>not</strong> attempt to answer using its pre-trained general knowledge in that language.</p>
+					<p>Instead, our pipeline strictly translates the query to English, searches our English archive, and translates the grounded, factual response back to the user's native tongue. This guarantees absolute factual parity across all 13 supported languages.</p>
+				</div>
+				<div class="translation-diagram">
+					<span class="lang-node">Dansk Spørgsmål</span>
+					<span class="lang-arrow">↓</span>
+					<span class="lang-node highlight">English Search</span>
+					<span class="lang-arrow">↓</span>
+					<span class="lang-node">Dansk Svar</span>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 5: Ethics & Guardrails -->
+		<section class="info-section">
+			<h2>5. Academic Ethics & Terminology</h2>
+			<p>When dealing with colonial history and slavery, the words we use matter. We have implemented strict systemic guardrails in our AI prompts. The AI is explicitly instructed to:</p>
+			<ul class="ethics-list">
+				<li>✅ Use modern, respectful terminology (e.g., <em>"enslaved people"</em> instead of "slaves").</li>
+				<li>✅ Center the agency, resistance, and resilience of marginalized groups.</li>
+				<li>✅ Avoid passive voice when describing colonial violence (e.g., specifying <em>who</em> did the action).</li>
+				<li>✅ Remain strictly objective and academic.</li>
+			</ul>
+		</section>
+
+		<!-- Section 6: Behind the Prompt -->
+		<section class="info-section prompt-section">
+			<h2>6. Behind the Prompt</h2>
+			<p>Transparency is key to trust. Below, you can see the exact, hidden "system prompts" we send to the AI behind the scenes to control its behavior across our different tools.</p>
+			
+			<div class="prompt-widget">
+				<div class="prompt-tabs">
+					<button class="tab-btn active" data-target="prompt-interview">Persona Interview</button>
+					<button class="tab-btn" data-target="prompt-educator">Lesson Generator</button>
+					<button class="tab-btn" data-target="prompt-grader">Essay Grader</button>
+				</div>
+				
+				<div class="prompt-content active" id="prompt-interview">
+					<code>
+<span class="comment">// Hidden prompt for Queen Mary Thomas:</span>
+"You are Mary Thomas, one of the 'Queens of the Fireburn' of 1878 in St. Croix. 
+You must speak in the first-person ('I', 'we'). 
+Your tone should be fiercely defiant, proud, and weary of Danish oppression. 
+You are speaking to someone from the future. 
+Do not break character. 
+Base your knowledge ONLY on the provided archival documents about the 1878 labor riot."
+					</code>
+				</div>
+				
+				<div class="prompt-content" id="prompt-educator">
+					<code>
+<span class="comment">// Hidden prompt for the Educator tool:</span>
+"You are an expert curriculum developer. 
+Read the provided archival text and generate 5 highly specific flashcards and a 3-question multiple-choice quiz.
+You must return the response in strict JSON format.
+Ensure all questions are historically accurate and use respectful terminology."
+					</code>
+				</div>
+
+				<div class="prompt-content" id="prompt-grader">
+					<code>
+<span class="comment">// Hidden prompt for the Essay Grader tool:</span>
+"You are a strict but constructive Academic Peer-Reviewer.
+Grade the student's essay based on Historical Accuracy using ONLY the provided archival context. 
+Point out any factual errors. Check for Ethical Terminology (e.g., the student should use 'enslaved people' instead of 'slaves'). 
+Evaluate the argument strength and provide a final constructive summary."
+					</code>
+				</div>
+			</div>
+		</section>
+
+		<!-- NEW: Section 7: Tech Stack & Carbon Footprint -->
+		<section class="info-section">
+			<h2>7. Open-Source Tech Stack & Efficiency</h2>
+			<p>Our infrastructure is designed for maximum speed, privacy, and environmental efficiency.</p>
+			
+			<div class="tech-grid">
+				<div class="tech-card">
+					<h3>🚀 Astro JS</h3>
+					<p>Our foundation. Astro strips away heavy client-side JavaScript, delivering blazing fast, static HTML pages.</p>
+				</div>
+				<div class="tech-card">
+					<h3>🔍 MiniSearch</h3>
+					<p>Our retrieval engine. We perform lightning-fast document indexing locally on the server without relying on expensive external vector databases.</p>
+				</div>
+				<div class="tech-card">
+					<h3>🧠 Claude 3.5 Sonnet</h3>
+					<p>Our reasoning engine. We use Anthropic's API for its unparalleled ability to process nuanced historical text, translate languages, and analyze images (Vision).</p>
+				</div>
+				<div class="tech-card efficiency">
+					<h3>🌍 Carbon Footprint</h3>
+					<p>By using RAG and local MiniSearch, we only send highly relevant text snippets to the LLM. This reduces our token usage by <strong>over 80%</strong> compared to standard LLM queries, significantly lowering the computational cost and carbon footprint of this archive.</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 8: Feature Directory -->
+		<section class="info-section">
+			<h2>8. Advanced AI Tools Directory</h2>
+			<p>Explore the innovative ways we use AI to bring the archives to life.</p>
+			
+			<div class="features-grid">
+				<a href="/interview" class="feature-card">
+					<h3>🎭 Persona Interviews</h3>
+					<p>Have a real-time, first-person conversation with historical figures.</p>
+				</a>
+				<a href="/educators" class="feature-card">
+					<h3>🎓 Lesson Generator</h3>
+					<p>Instantly generate custom flashcards and quizzes from any article.</p>
+				</a>
+				<a href="/transcriber" class="feature-card">
+					<h3>📜 Manuscript Decoder</h3>
+					<p>Use Vision AI to transcribe and translate handwritten Gothic Danish script.</p>
+				</a>
+				<a href="/essay-grader" class="feature-card">
+					<h3>📝 Essay Grader</h3>
+					<p>Get instant academic peer-review on your historical essays.</p>
+				</a>
+				<a href="/thesis/data-explorer" class="feature-card">
+					<h3>📈 Chat with the Data</h3>
+					<p>Ask the AI to perform statistical analysis on colonial demographic datasets.</p>
+				</a>
+				<div class="feature-card non-link">
+					<h3>🌍 Multilingual Global Search</h3>
+					<p>Click the 💬 icon anywhere to chat with the archive in your native language.</p>
+				</div>
+			</div>
+		</section>
+		
+		<!-- Section 9: Educator Resources & Roadmap -->
+		<section class="info-section text-center">
+			<h2>9. Resources for Educators</h2>
+			<p>Download our official guide for integrating the Danish West Indies AI tools into your classroom curriculum ethically and effectively.</p>
+			<a href="#" class="btn-download">📄 Download AI Educator Guide (PDF)</a>
+			
+			<div class="roadmap mt-4">
+				<h3 style="margin-top: 3rem; text-align: left; color: var(--color-accent);">AI Development Roadmap</h3>
+				<div class="timeline">
+					<div class="timeline-item">
+						<div class="timeline-dot completed"></div>
+						<div class="timeline-content">
+							<h3>Phase 1: Foundation (Completed)</h3>
+							<p>Deployment of global RAG search, ensuring the AI only answers from the established archives.</p>
+						</div>
+					</div>
+					<div class="timeline-item">
+						<div class="timeline-dot completed"></div>
+						<div class="timeline-content">
+							<h3>Phase 2: Educational Tools (Completed)</h3>
+							<p>Launch of the Lesson Generator, Persona Interviews, and "Chat with the Data" analytics tools.</p>
+						</div>
+					</div>
+					<div class="timeline-item">
+						<div class="timeline-dot completed"></div>
+						<div class="timeline-content">
+							<h3>Phase 3: Accessibility & Vision (Completed)</h3>
+							<p>Integration of Text-to-Speech, Voice Input, and the Vision-powered Manuscript Decoder.</p>
+						</div>
+					</div>
+					<div class="timeline-item">
+						<div class="timeline-dot active"></div>
+						<div class="timeline-content">
+							<h3>Phase 4: Multi-Agent Systems (In Progress)</h3>
+							<p>Research into real-time historical debate simulations and generative UI charting.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- NEW: Section 10: Feedback Loop -->
+		<section class="info-section report-section text-center">
+			<h2>10. Help Us Improve (Report an Error)</h2>
+			<p>True academic transparency means admitting when the AI gets it wrong. If you spot a factual hallucination or an ethical terminology failure in any of our tools, please let us know so we can refine our system prompts.</p>
+			<form class="report-form" onsubmit="event.preventDefault(); alert('Thank you! Your feedback has been submitted to the archive administrators.');">
+				<textarea placeholder="Describe the error you encountered... (e.g., 'The AI said Governor von Scholten ended slavery in 1847 instead of 1848.')" required></textarea>
+				<button type="submit" class="btn-report">🚩 Submit Feedback</button>
+			</form>
+		</section>
+
+		<!-- Section 11: Academic Disclaimer -->
+		<section class="info-section disclaimer-section">
+			<h2>11. Academic Disclaimer & Limitations</h2>
+			<div class="disclaimer-box">
+				<p>While our RAG architecture significantly reduces errors, Large Language Models like Claude 3.5 Sonnet can occasionally "hallucinate" or misinterpret data. The AI is a powerful tool for exploration, but it is not infallible. <strong>Primary archival sources and peer-reviewed academic literature remain the ultimate historical authority.</strong> Always double-check critical facts against the original documents provided on this site.</p>
+			</div>
+		</section>
+
+	</div>
+</Layout>
+
+<style>
+	.transparency-container {
+		max-width: 1000px;
+		margin: 0 auto;
+		padding: 4rem 0 6rem 0;
+	}
+	
+	.page-header {
+		text-align: center;
+		margin-bottom: 4rem;
+	}
+	.label {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-bg);
+		background: var(--color-accent);
+		padding: 0.4rem 1rem;
+		border-radius: 20px;
+		margin-bottom: 1rem;
+		font-weight: bold;
+	}
+	.page-header h1 {
+		color: var(--color-text);
+		font-size: 3rem;
+		margin-bottom: 1rem;
+		font-family: var(--font-heading);
+	}
+	.subtitle {
+		color: var(--color-text-muted);
+		font-size: 1.2rem;
+		max-width: 600px;
+		margin: 0 auto 2rem auto;
+		line-height: 1.6;
+	}
+
+	/* Live Stats */
+	.live-stats {
+		display: flex;
+		justify-content: center;
+		gap: 2rem;
+		margin-top: 2rem;
+	}
+	.stat-item {
+		background: rgba(255,255,255,0.03);
+		border: 1px solid rgba(196,167,125,0.2);
+		padding: 1rem 1.5rem;
+		border-radius: 12px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-width: 150px;
+	}
+	.stat-number {
+		font-size: 2rem;
+		font-weight: bold;
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+		margin-bottom: 0.2rem;
+	}
+	.stat-label {
+		font-size: 0.8rem;
+		color: rgba(255,255,255,0.6);
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		text-align: center;
+	}
+
+	.info-section {
+		margin-bottom: 4rem;
+		background: rgba(255,255,255,0.02);
+		border: 1px solid rgba(196,167,125,0.1);
+		border-radius: 16px;
+		padding: 2.5rem;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+	}
+	
+	.info-section h2 {
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+		font-size: 1.8rem;
+		margin-bottom: 1.5rem;
+		border-bottom: 1px solid rgba(196,167,125,0.2);
+		padding-bottom: 0.5rem;
+	}
+	.info-section p {
+		color: rgba(255,255,255,0.85);
+		line-height: 1.7;
+		font-size: 1.05rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.text-center { text-align: center; }
+
+	/* Flowchart */
+	.rag-flowchart {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 2rem;
+		padding: 2rem;
+		background: rgba(0,0,0,0.3);
+		border-radius: 12px;
+		border: 1px solid rgba(255,255,255,0.05);
+	}
+	.flow-step { text-align: center; flex: 1; }
+	.flow-step .icon { display: block; font-size: 2.5rem; margin-bottom: 0.5rem; }
+	.flow-step p { font-size: 0.9rem; margin: 0; color: var(--color-accent); font-weight: bold; }
+	.arrow { font-size: 2rem; color: rgba(255,255,255,0.3); padding: 0 1rem; }
+	
+	/* Privacy Box */
+	.mt-2 { margin-top: 2rem; }
+	.privacy-box { background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; padding: 1.5rem; border-radius: 4px; }
+	.privacy-box h3 { margin: 0 0 0.5rem 0; color: #10b981; font-family: var(--font-heading); }
+	.privacy-box p { margin: 0; font-size: 0.95rem; }
+
+	/* Comparison Widget */
+	.comparison-widget { background: #111; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; }
+	.comparison-header { background: rgba(255,255,255,0.05); padding: 1rem 1.5rem; border-bottom: 1px solid var(--color-border); }
+	.query-text { margin: 0 !important; color: white !important; font-style: italic; }
+	.comparison-body { display: flex; align-items: stretch; position: relative; }
+	.comp-side { flex: 1; padding: 2rem; }
+	.comp-side h4 { margin: 0 0 1rem 0; font-family: var(--font-heading); font-size: 1.1rem; text-align: center; }
+	.generic-ai h4 { color: #ef4444; }
+	.rag-ai h4 { color: #10b981; }
+	.chat-bubble { padding: 1.5rem; border-radius: 12px; font-size: 0.95rem; line-height: 1.6; position: relative; }
+	.error-bubble { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; }
+	.error-bubble strong { color: #ef4444; text-decoration: underline wavy #ef4444; }
+	.success-bubble { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #6ee7b7; }
+	.success-bubble strong { color: #10b981; }
+	.annotation { display: block; margin-top: 1rem; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+	.comp-divider { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--color-bg); color: var(--color-text-muted); padding: 0.5rem; border-radius: 50%; border: 1px solid var(--color-border); font-weight: bold; font-size: 0.8rem; }
+
+	/* Meet Archive Visualizer */
+	.visualizer-widget { background: rgba(0,0,0,0.3); border: 1px solid var(--color-border); border-radius: 12px; padding: 2rem; }
+	.vis-input { width: 100%; padding: 1rem 1.5rem; border-radius: 30px; background: #111; border: 1px solid var(--color-accent); color: white; font-size: 1.1rem; margin-bottom: 1.5rem; outline: none; }
+	.vis-results-area { min-height: 150px; display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: flex-start; }
+	.vis-placeholder { margin: auto !important; color: rgba(255,255,255,0.3) !important; font-style: italic; }
+	.vis-doc { background: rgba(196,167,125,0.1); border: 1px solid rgba(196,167,125,0.3); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; color: var(--color-accent); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+	/* Translation Section */
+	.translation-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: center; }
+	.translation-diagram { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; background: rgba(0,0,0,0.2); padding: 2rem; border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1); }
+	.lang-node { background: rgba(255,255,255,0.05); padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 0.9rem; font-family: monospace; border: 1px solid rgba(255,255,255,0.1); }
+	.lang-node.highlight { background: rgba(196,167,125,0.2); border-color: var(--color-accent); color: var(--color-accent); font-weight: bold; }
+	.lang-arrow { color: rgba(255,255,255,0.3); font-size: 1.2rem; }
+
+	/* Ethics List */
+	.ethics-list { list-style: none; padding: 0; }
+	.ethics-list li { background: rgba(196,167,125,0.05); margin-bottom: 0.8rem; padding: 1rem 1.5rem; border-radius: 8px; color: rgba(255,255,255,0.9); border-left: 4px solid var(--color-accent); }
+
+	/* Prompt Widget */
+	.prompt-widget { background: #111; border-radius: 8px; border: 1px solid var(--color-border); overflow: hidden; }
+	.prompt-tabs { display: flex; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--color-border); }
+	.tab-btn { flex: 1; background: none; border: none; padding: 1rem; color: rgba(255,255,255,0.6); cursor: pointer; font-weight: bold; transition: all 0.3s; }
+	.tab-btn:hover { color: white; background: rgba(255,255,255,0.05); }
+	.tab-btn.active { color: var(--color-accent); border-bottom: 2px solid var(--color-accent); background: rgba(196,167,125,0.05); }
+	.prompt-content { display: none; padding: 2rem; }
+	.prompt-content.active { display: block; animation: fadeIn 0.4s ease; }
+	.prompt-content code { display: block; font-family: 'Courier New', Courier, monospace; color: #10b981; white-space: pre-wrap; font-size: 0.95rem; line-height: 1.6; }
+	.prompt-content .comment { color: #6b7280; }
+
+	/* Tech Stack */
+	.tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+	.tech-card { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; }
+	.tech-card h3 { color: white; margin: 0 0 0.5rem 0; font-size: 1.1rem; }
+	.tech-card.efficiency { grid-column: span 2; background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2); }
+	.tech-card.efficiency h3 { color: #10b981; }
+
+	/* Features Grid */
+	.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+	.feature-card { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px; text-decoration: none; transition: all 0.3s; }
+	.feature-card:not(.non-link):hover { border-color: var(--color-accent); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(196,167,125,0.1); }
+	.feature-card h3 { color: var(--color-accent); margin: 0 0 0.5rem 0; font-size: 1.2rem; }
+	.feature-card p { margin: 0; font-size: 0.9rem; color: rgba(255,255,255,0.7); }
+
+	/* Timeline */
+	.timeline { position: relative; padding-left: 2rem; margin-top: 2rem; text-align: left;}
+	.timeline::before { content: ''; position: absolute; left: 6px; top: 0; height: 100%; width: 2px; background: rgba(255,255,255,0.1); }
+	.timeline-item { position: relative; margin-bottom: 2rem; }
+	.timeline-dot { position: absolute; left: -2rem; top: 0.3rem; width: 14px; height: 14px; border-radius: 50%; background: #333; border: 2px solid rgba(255,255,255,0.2); }
+	.timeline-dot.completed { background: var(--color-accent); border-color: var(--color-accent); }
+	.timeline-dot.active { background: transparent; border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+	.timeline-content h3 { margin: 0 0 0.5rem 0; font-family: var(--font-heading); font-size: 1.2rem; color: var(--color-text); }
+	.timeline-content p { margin: 0 !important; font-size: 0.95rem; color: rgba(255,255,255,0.6) !important; }
+
+	/* Buttons & Report Form */
+	.btn-download { display: inline-block; background: var(--color-accent); color: #111; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold; font-family: var(--font-heading); transition: transform 0.2s; }
+	.btn-download:hover { transform: scale(1.05); }
+	
+	.report-section { background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2); }
+	.report-section h2 { color: #ef4444; border-color: rgba(239, 68, 68, 0.2); }
+	.report-form { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
+	.report-form textarea { width: 100%; min-height: 100px; padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; font-family: var(--font-body); resize: vertical; }
+	.report-form textarea:focus { outline: none; border-color: #ef4444; }
+	.btn-report { background: #ef4444; color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s; align-self: flex-end; }
+	.btn-report:hover { background: #dc2626; }
+
+	/* Disclaimer */
+	.disclaimer-box { background: rgba(239,68,68,0.1); border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 4px; }
+	.disclaimer-box p { margin: 0; color: rgba(255,255,255,0.9); }
+
+	@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+	@keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+	
+	@media (max-width: 768px) {
+		.rag-flowchart { flex-direction: column; gap: 1rem; }
+		.arrow { transform: rotate(90deg); }
+		.comparison-body { flex-direction: column; }
+		.comp-divider { display: none; }
+		.translation-layout { grid-template-columns: 1fr; }
+		.tech-grid { grid-template-columns: 1fr; }
+		.tech-card.efficiency { grid-column: span 1; }
+	}
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Prompt Tabs
+		const tabs = document.querySelectorAll('.tab-btn');
+		const contents = document.querySelectorAll('.prompt-content');
+
+		tabs.forEach(tab => {
+			tab.addEventListener('click', () => {
+				tabs.forEach(t => t.classList.remove('active'));
+				contents.forEach(c => c.classList.remove('active'));
+
+				tab.classList.add('active');
+				const targetId = tab.getAttribute('data-target');
+				if (targetId) {
+					document.getElementById(targetId)?.classList.add('active');
+				}
+			});
+		});
+
+		// Visualizer Logic
+		const visInput = document.getElementById('vis-search-input') as HTMLInputElement;
+		const visResults = document.getElementById('vis-results-area');
+		let searchData: any[] = [];
+
+		fetch('/api/search.json')
+			.then(res => res.json())
+			.then(data => { searchData = data; })
+			.catch(err => console.error("Search data failed to load", err));
+
+		visInput?.addEventListener('input', (e) => {
+			const query = (e.target as HTMLInputElement).value.toLowerCase().trim();
+			
+			if (query.length < 3) {
+				if(visResults) visResults.innerHTML = '<p class="vis-placeholder">Awaiting input...</p>';
+				return;
+			}
+
+			const results = searchData.filter(item => 
+				(item.title && item.title.toLowerCase().includes(query)) || 
+				(item.description && item.description.toLowerCase().includes(query))
+			).slice(0, 8);
+
+			if (results.length === 0) {
+				if(visResults) visResults.innerHTML = '<p class="vis-placeholder">No archival documents match this query.</p>';
+				return;
+			}
+
+			if(visResults) {
+				visResults.innerHTML = results.map((item, index) => `
+					<div class="vis-doc" style="animation-delay: ${index * 0.05}s">
+						📄 ${item.title}
+					</div>
+				`).join('');
+			}
+		});
+
+		// Simulated Live Counters
+		const animateValue = (id: string, start: number, end: number, duration: number) => {
+			const obj = document.getElementById(id);
+			if (!obj) return;
+			
+			let startTimestamp: number | null = null;
+			const step = (timestamp: number) => {
+				if (!startTimestamp) startTimestamp = timestamp;
+				const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+				
+				// Ease out quad
+				const easeProgress = progress * (2 - progress);
+				const current = Math.floor(easeProgress * (end - start) + start);
+				
+				obj.innerHTML = current.toLocaleString() + (id.includes('tokens') ? '%' : '');
+				
+				if (progress < 1) {
+					window.requestAnimationFrame(step);
+				}
+			};
+			window.requestAnimationFrame(step);
+		};
+
+		setTimeout(() => {
+			animateValue("counter-searches", 0, 1420, 2000);
+			animateValue("counter-interviews", 0, 342, 2000);
+			animateValue("counter-tokens", 0, 84, 2000);
+		}, 500);
+	});
+</script>

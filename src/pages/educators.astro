@@ -1,5 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const historyDocs = await getCollection('history');
+const thesisDocs = await getCollection('thesis');
 ---
 
 <Layout title="For Educators | Danish West Indies Research Portal">
@@ -131,6 +135,27 @@ import Layout from '../layouts/Layout.astro';
 		<section class="interactive-tools-section no-print">
 			<h2 class="section-title">Interactive Classroom Tools</h2>
 			
+			<div class="ai-generator-panel">
+				<h3>✨ AI Dynamic Lesson Generator</h3>
+				<p>Select any historical article or thesis chapter below. Our AI will read the text and instantly generate custom flashcards and a knowledge check quiz based on its contents!</p>
+				<div class="generator-controls">
+					<select id="lesson-source-select" class="lesson-select">
+						<optgroup label="History Articles">
+							{historyDocs.map(doc => (
+								<option value={`history|${doc.id}`}>{doc.data.title}</option>
+							))}
+						</optgroup>
+						<optgroup label="Master's Thesis">
+							{thesisDocs.map(doc => (
+								<option value={`thesis|${doc.id}`}>{doc.data.title}</option>
+							))}
+						</optgroup>
+					</select>
+					<button id="btn-generate-lesson" class="btn-generate">✨ Generate Resources</button>
+				</div>
+				<div id="generator-status" class="generator-status hidden"></div>
+			</div>
+
 			<div class="tools-grid">
 				<!-- Flashcards -->
 				<div class="tool-card flashcards-container">
@@ -271,6 +296,17 @@ import Layout from '../layouts/Layout.astro';
 	.btn-tool { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--color-text); padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; }
 	.btn-tool:hover { background: rgba(196,167,125,0.1); border-color: var(--color-accent); color: var(--color-accent); }
 	.hidden { display: none !important; }
+
+	/* AI Generator Panel */
+	.ai-generator-panel { background: rgba(196,167,125,0.05); border: 1px solid rgba(196,167,125,0.3); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; text-align: center; }
+	.ai-generator-panel h3 { color: var(--color-accent); font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem; }
+	.ai-generator-panel p { color: var(--color-text-muted); margin-bottom: 1.5rem; font-size: 1.05rem; }
+	.generator-controls { display: flex; gap: 1rem; justify-content: center; max-width: 600px; margin: 0 auto; }
+	.lesson-select { flex-grow: 1; padding: 0.8rem; border-radius: 6px; border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); font-size: 1rem; }
+	.btn-generate { background: linear-gradient(135deg, rgba(196,167,125,0.2), rgba(196,167,125,0.05)); border: 1px solid rgba(196,167,125,0.4); color: var(--color-accent); padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+	.btn-generate:hover { transform: translateY(-2px); background: rgba(196,167,125,0.3); }
+	.btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+	.generator-status { margin-top: 1rem; color: var(--color-accent); font-style: italic; }
 
 	/* Flashcards */
 	.flashcard-deck { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
@@ -416,33 +452,35 @@ import Layout from '../layouts/Layout.astro';
 		function loadQuestion() {
 			if (!qEl) return;
 			const q = questions[currentQ];
-			qEl.textContent = q.q;
+			qEl.textContent = q.question || q.q; // support both keys
 			optsEl.innerHTML = '';
 			feedbackEl.classList.add('hidden');
 			nextBtn.classList.add('hidden');
 
-			q.opts.forEach((opt, idx) => {
+			const options = q.options || q.opts;
+			const ansIdx = q.answerIndex !== undefined ? q.answerIndex : q.ans;
+
+			options.forEach((opt, idx) => {
 				const btn = document.createElement('button');
 				btn.className = 'quiz-option';
 				btn.textContent = opt;
-				btn.addEventListener('click', () => handleAnswer(idx, btn));
+				btn.addEventListener('click', () => handleAnswer(idx, btn, ansIdx, q.explanation || q.expl));
 				optsEl.appendChild(btn);
 			});
 		}
 
-		function handleAnswer(idx, btn) {
-			const q = questions[currentQ];
+		function handleAnswer(idx, btn, correctIdx, expl) {
 			const allBtns = optsEl.querySelectorAll('.quiz-option');
 			allBtns.forEach(b => b.style.pointerEvents = 'none'); // Disable clicks
 
-			if (idx === q.ans) {
+			if (idx === correctIdx) {
 				btn.classList.add('correct');
-				feedbackEl.textContent = `Correct! ${q.expl}`;
+				feedbackEl.textContent = `Correct! ${expl}`;
 				feedbackEl.className = 'quiz-feedback success';
 			} else {
 				btn.classList.add('wrong');
-				allBtns[q.ans].classList.add('correct');
-				feedbackEl.textContent = `Incorrect. ${q.expl}`;
+				allBtns[correctIdx].classList.add('correct');
+				feedbackEl.textContent = `Incorrect. ${expl}`;
 				feedbackEl.className = 'quiz-feedback error';
 			}
 			
@@ -460,5 +498,60 @@ import Layout from '../layouts/Layout.astro';
 		});
 
 		loadQuestion();
+
+		// --- AI GENERATOR LOGIC ---
+		const btnGenerate = document.getElementById('btn-generate-lesson');
+		const selectSource = document.getElementById('lesson-source-select');
+		const statusEl = document.getElementById('generator-status');
+
+		if (btnGenerate && selectSource && statusEl) {
+			btnGenerate.addEventListener('click', async () => {
+				const val = selectSource.value;
+				if (!val) return;
+				const [type, slug] = val.split('|');
+				
+				btnGenerate.disabled = true;
+				btnGenerate.innerHTML = '✨ Generating...';
+				statusEl.classList.remove('hidden');
+				statusEl.innerHTML = '<span class="loading-pulse">Analyzing text and generating lesson plan...</span>';
+
+				try {
+					const response = await fetch('/api/generate-lesson', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ type, slug })
+					});
+
+					if (!response.ok) throw new Error('Failed to generate lesson');
+					
+					const data = await response.json();
+					
+					// Update Flashcards
+					if (data.flashcards && Array.isArray(data.flashcards)) {
+						glossary.length = 0; // Clear array
+						data.flashcards.forEach(fc => glossary.push({ term: fc.term, def: fc.definition || fc.def }));
+						currentCard = 0;
+						updateCard();
+					}
+
+					// Update Quiz
+					if (data.quiz && Array.isArray(data.quiz)) {
+						questions.length = 0;
+						data.quiz.forEach(q => questions.push(q));
+						currentQ = 0;
+						loadQuestion();
+					}
+
+					statusEl.innerHTML = '✨ Lesson successfully generated!';
+					setTimeout(() => statusEl.classList.add('hidden'), 3000);
+				} catch (err) {
+					console.error(err);
+					statusEl.innerHTML = '<span style="color:#ef4444;">Error generating lesson plan. Please try again.</span>';
+				} finally {
+					btnGenerate.disabled = false;
+					btnGenerate.innerHTML = '✨ Generate Resources';
+				}
+			});
+		}
 	});
 </script>

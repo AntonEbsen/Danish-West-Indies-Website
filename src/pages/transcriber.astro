@@ -1,0 +1,307 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Manuscript Transcriber | Danish West Indies">
+	<div class="transcriber-container animate-fade-in">
+		<header class="transcriber-header">
+			<span class="label">AI Tool</span>
+			<h1>Manuscript Transcriber & Translator</h1>
+			<p>Select an archival manuscript written in Gothic Danish script. The AI will analyze the image, transcribe the cursive text, and translate it into modern English.</p>
+		</header>
+		
+		<div class="gallery-section">
+			<h2>Select a Manuscript to Decode:</h2>
+			<div class="manuscript-grid">
+				<div class="manuscript-card" data-url="/images/colonial_ledger.jpg">
+					<img src="/images/colonial_ledger.jpg" alt="Colonial Ledger" />
+					<div class="card-overlay">
+						<h3>The Colonial Ledger</h3>
+						<button class="select-btn">Select for Analysis</button>
+					</div>
+				</div>
+				<div class="manuscript-card" data-url="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=800">
+					<img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=800" alt="1733 Slave Codes" />
+					<div class="card-overlay">
+						<h3>1733 Slave Codes</h3>
+						<button class="select-btn">Select for Analysis</button>
+					</div>
+				</div>
+				<div class="manuscript-card" data-url="https://images.unsplash.com/photo-1518001691361-9c1626da4e19?auto=format&fit=crop&q=80&w=800">
+					<img src="https://images.unsplash.com/photo-1518001691361-9c1626da4e19?auto=format&fit=crop&q=80&w=800" alt="Royal Decree" />
+					<div class="card-overlay">
+						<h3>1792 Abolition Decree</h3>
+						<button class="select-btn">Select for Analysis</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="analysis-section hidden" id="analysis-section">
+			<button class="back-btn" id="back-to-gallery">← Back to Gallery</button>
+			<div class="analysis-layout">
+				<div class="image-viewer">
+					<img id="selected-image" src="" alt="Selected Manuscript" />
+				</div>
+				<div class="transcription-panel">
+					<div class="panel-header">
+						<h3>✨ AI Analysis</h3>
+					</div>
+					<div class="panel-content" id="panel-content">
+						<span class="loading-pulse">Analyzing Gothic script...</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.transcriber-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 4rem 0;
+	}
+	.transcriber-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+	.label {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: var(--color-bg);
+		background: var(--color-accent);
+		padding: 0.4rem 1rem;
+		border-radius: 20px;
+		margin-bottom: 1rem;
+		font-weight: bold;
+	}
+	.transcriber-header h1 {
+		font-family: var(--font-heading);
+		color: var(--color-text);
+		font-size: 2.8rem;
+		margin-bottom: 1rem;
+	}
+	.transcriber-header p {
+		font-size: 1.1rem;
+		color: var(--color-text-muted);
+		max-width: 700px;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
+	.gallery-section h2 {
+		text-align: center;
+		color: var(--color-accent);
+		margin-bottom: 2rem;
+	}
+	.manuscript-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+	}
+	.manuscript-card {
+		position: relative;
+		border-radius: 12px;
+		overflow: hidden;
+		border: 1px solid var(--color-border);
+		aspect-ratio: 4/3;
+		cursor: pointer;
+		group: true;
+	}
+	.manuscript-card img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.5s;
+	}
+	.manuscript-card:hover img {
+		transform: scale(1.05);
+	}
+	.card-overlay {
+		position: absolute;
+		bottom: 0; left: 0; width: 100%;
+		background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+		padding: 2rem 1rem 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		transform: translateY(40px);
+		transition: transform 0.3s;
+	}
+	.manuscript-card:hover .card-overlay {
+		transform: translateY(0);
+	}
+	.card-overlay h3 {
+		color: white;
+		margin: 0 0 1rem 0;
+		font-family: var(--font-heading);
+		text-align: center;
+	}
+	.select-btn {
+		background: var(--color-accent);
+		color: #111;
+		border: none;
+		padding: 0.6rem 1.5rem;
+		border-radius: 20px;
+		font-weight: bold;
+		cursor: pointer;
+		opacity: 0;
+		transition: opacity 0.3s;
+	}
+	.manuscript-card:hover .select-btn {
+		opacity: 1;
+	}
+
+	.analysis-section.hidden {
+		display: none;
+	}
+	.back-btn {
+		background: none;
+		border: none;
+		color: var(--color-text-muted);
+		padding: 1rem 0;
+		cursor: pointer;
+		font-size: 1rem;
+		margin-bottom: 1rem;
+		transition: color 0.2s;
+	}
+	.back-btn:hover { color: var(--color-accent); }
+
+	.analysis-layout {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+		height: 75vh;
+	}
+	@media (max-width: 900px) {
+		.analysis-layout { grid-template-columns: 1fr; height: auto; }
+	}
+
+	.image-viewer {
+		background: rgba(0,0,0,0.5);
+		border-radius: 12px;
+		border: 1px solid var(--color-border);
+		overflow: hidden;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.image-viewer img {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+	}
+
+	.transcription-panel {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+	.panel-header {
+		background: rgba(196,167,125,0.1);
+		padding: 1rem 1.5rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+	.panel-header h3 {
+		margin: 0;
+		color: var(--color-accent);
+		font-family: var(--font-heading);
+	}
+	.panel-content {
+		flex-grow: 1;
+		padding: 2rem;
+		overflow-y: auto;
+		color: rgba(255,255,255,0.9);
+		line-height: 1.6;
+	}
+	.panel-content :global(h3) {
+		color: var(--color-accent);
+		margin-top: 1.5rem;
+		margin-bottom: 0.5rem;
+		font-family: var(--font-heading);
+		border-bottom: 1px solid rgba(255,255,255,0.1);
+		padding-bottom: 0.3rem;
+	}
+	.panel-content :global(h3:first-child) { margin-top: 0; }
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const gallery = document.querySelector('.gallery-section');
+		const analysisSection = document.getElementById('analysis-section');
+		const backBtn = document.getElementById('back-to-gallery');
+		const selectedImg = document.getElementById('selected-image') as HTMLImageElement;
+		const panelContent = document.getElementById('panel-content');
+		const cards = document.querySelectorAll('.manuscript-card');
+
+		cards.forEach(card => {
+			card.addEventListener('click', async () => {
+				const url = card.getAttribute('data-url');
+				if (!url) return;
+
+				gallery?.classList.add('hidden');
+				analysisSection?.classList.remove('hidden');
+				selectedImg.src = url;
+				panelContent!.innerHTML = '<span class="loading-pulse">Analyzing Gothic script...</span>';
+
+				try {
+					const response = await fetch('/api/transcribe', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ imageUrl: url })
+					});
+
+					if (!response.ok) throw new Error('API Error');
+
+					const reader = response.body?.getReader();
+					const decoder = new TextDecoder();
+					let fullResponse = '';
+
+					if (reader) {
+						panelContent!.innerHTML = '';
+						while (true) {
+							const { done, value } = await reader.read();
+							if (done) break;
+							
+							const chunk = decoder.decode(value, { stream: true });
+							const lines = chunk.split('\n');
+							for (const line of lines) {
+								if (line.startsWith('0:')) {
+									try {
+										const textContent = JSON.parse(line.substring(2));
+										fullResponse += textContent;
+									} catch(e) {
+										fullResponse += line.substring(2).replace(/"/g, ''); 
+									}
+								}
+							}
+							
+							// Quick markdown parse
+							let html = fullResponse
+								.replace(/### (.*?)\n/g, '<h3>$1</h3>')
+								.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+								.replace(/\n\n/g, '</p><p>');
+							if (!html.startsWith('<p>') && !html.startsWith('<h3>')) html = '<p>' + html;
+							if (!html.endsWith('</p>')) html = html + '</p>';
+							
+							panelContent!.innerHTML = html;
+						}
+					}
+				} catch (err) {
+					panelContent!.innerHTML = '<p class="error">Failed to transcribe the document.</p>';
+				}
+			});
+		});
+
+		backBtn?.addEventListener('click', () => {
+			analysisSection?.classList.add('hidden');
+			gallery?.classList.remove('hidden');
+		});
+	});
+</script>
