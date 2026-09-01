@@ -127,6 +127,55 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 		</section>
 
+		<!-- INTERACTIVE TOOLS SECTION -->
+		<section class="interactive-tools-section no-print">
+			<h2 class="section-title">Interactive Classroom Tools</h2>
+			
+			<div class="tools-grid">
+				<!-- Flashcards -->
+				<div class="tool-card flashcards-container">
+					<h3>Historical Glossary Flashcards</h3>
+					<p>Test your knowledge of key terminology from the Danish West Indies.</p>
+					
+					<div class="flashcard-deck">
+						<div class="flashcard" id="flashcard">
+							<div class="flashcard-inner" id="flashcard-inner">
+								<div class="flashcard-front">
+									<span class="card-hint">Click to flip</span>
+									<h4 id="fc-term">Middle Passage</h4>
+								</div>
+								<div class="flashcard-back">
+									<p id="fc-def">The horrific transatlantic journey of enslaved Africans from the West African coast to the Americas.</p>
+								</div>
+							</div>
+						</div>
+						<div class="flashcard-controls">
+							<button id="fc-prev" class="btn-tool">← Previous</button>
+							<span id="fc-counter" class="card-counter">1 / 6</span>
+							<button id="fc-next" class="btn-tool">Next →</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Quiz -->
+				<div class="tool-card quiz-container">
+					<h3>Knowledge Check</h3>
+					<p>Quick assessment on key events and dates.</p>
+					
+					<div class="quiz-box" id="quiz-box">
+						<h4 id="quiz-question">Loading...</h4>
+						<div class="quiz-options" id="quiz-options">
+							<!-- Populated by JS -->
+						</div>
+						<div id="quiz-feedback" class="quiz-feedback hidden"></div>
+						<div class="quiz-controls">
+							<button id="quiz-next" class="btn-tool hidden">Next Question →</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
 		<!-- ESSAY TOPICS SECTION -->
 		<section class="essays-section">
 			<h2 class="section-title">Suggested Essay Topics</h2>
@@ -212,6 +261,44 @@ import Layout from '../layouts/Layout.astro';
 	.module-discussion h4::before { content: "💬"; }
 	.module-discussion p { color: rgba(255,255,255,0.9); margin: 0; line-height: 1.6; font-size: 1.05rem; }
 
+	/* INTERACTIVE TOOLS */
+	.interactive-tools-section { margin-bottom: 5rem; }
+	.tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+	.tool-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+	.tool-card h3 { font-family: var(--font-heading); color: var(--color-accent); font-size: 1.5rem; margin-bottom: 0.5rem; }
+	.tool-card p { color: var(--color-text-muted); font-size: 0.95rem; margin-bottom: 2rem; }
+	
+	.btn-tool { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--color-text); padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; }
+	.btn-tool:hover { background: rgba(196,167,125,0.1); border-color: var(--color-accent); color: var(--color-accent); }
+	.hidden { display: none !important; }
+
+	/* Flashcards */
+	.flashcard-deck { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+	.flashcard { width: 100%; height: 200px; perspective: 1000px; cursor: pointer; }
+	.flashcard-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+	.flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+	.flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; border: 1px solid rgba(196,167,125,0.3); }
+	.flashcard-front { background: linear-gradient(135deg, rgba(30,30,30,0.9), rgba(15,15,15,0.9)); color: var(--color-text); }
+	.flashcard-back { background: rgba(196,167,125,0.1); color: var(--color-text); transform: rotateY(180deg); }
+	.card-hint { position: absolute; top: 10px; font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px; }
+	.flashcard-front h4 { font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: var(--color-accent); }
+	.flashcard-back p { font-size: 1.1rem; line-height: 1.6; margin: 0; color: rgba(255,255,255,0.9); }
+	.flashcard-controls { display: flex; align-items: center; gap: 1rem; }
+	.card-counter { font-family: monospace; color: var(--color-text-muted); }
+
+	/* Quiz */
+	.quiz-box { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 1.5rem; }
+	.quiz-box h4 { font-size: 1.15rem; color: var(--color-text); margin-bottom: 1.5rem; line-height: 1.4; }
+	.quiz-options { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+	.quiz-option { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: var(--color-text); padding: 1rem; border-radius: 6px; cursor: pointer; text-align: left; font-size: 1rem; transition: all 0.2s; }
+	.quiz-option:hover { background: rgba(255,255,255,0.08); }
+	.quiz-option.correct { background: rgba(34, 197, 94, 0.2); border-color: #22c55e; }
+	.quiz-option.wrong { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; }
+	.quiz-feedback { padding: 1rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.95rem; line-height: 1.5; }
+	.quiz-feedback.success { background: rgba(34, 197, 94, 0.1); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2); }
+	.quiz-feedback.error { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+	.quiz-controls { display: flex; justify-content: flex-end; }
+
 	/* ESSAYS */
 	.essay-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
 	.essay-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 2rem; border-radius: 12px; transition: background 0.3s; }
@@ -256,5 +343,122 @@ import Layout from '../layouts/Layout.astro';
 		.hero-actions { justify-content: center; }
 		.hero-graphics { display: none; }
 		.module-body { grid-template-columns: 1fr; }
+		.tools-grid { grid-template-columns: 1fr; }
 	}
 </style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// --- FLASHCARDS LOGIC ---
+		const glossary = [
+			{ term: "Middle Passage", def: "The horrific transatlantic journey of enslaved Africans from the West African coast to the Americas." },
+			{ term: "Chattel Slavery", def: "A form of slavery where humans are treated as personal property to be bought, sold, and inherited." },
+			{ term: "Rix-dollar", def: "The official currency used in the Danish West Indies (Rigsdaler)." },
+			{ term: "Marronage", def: "The act of enslaved people escaping and forming independent settlements (Maroons)." },
+			{ term: "Bamboula", def: "A traditional drum dance originating from enslaved Africans in the Virgin Islands, often used for communication and resistance." },
+			{ term: "Fireburn", def: "The massive 1878 labor riot on St. Croix where workers demanded better wages and working conditions." }
+		];
+
+		let currentCard = 0;
+		const flashcard = document.getElementById('flashcard');
+		const termEl = document.getElementById('fc-term');
+		const defEl = document.getElementById('fc-def');
+		const counterEl = document.getElementById('fc-counter');
+		
+		function updateCard() {
+			flashcard.classList.remove('flipped');
+			setTimeout(() => {
+				termEl.textContent = glossary[currentCard].term;
+				defEl.textContent = glossary[currentCard].def;
+				counterEl.textContent = `${currentCard + 1} / ${glossary.length}`;
+			}, 150);
+		}
+
+		flashcard?.addEventListener('click', () => flashcard.classList.toggle('flipped'));
+		document.getElementById('fc-prev')?.addEventListener('click', () => {
+			currentCard = (currentCard - 1 + glossary.length) % glossary.length;
+			updateCard();
+		});
+		document.getElementById('fc-next')?.addEventListener('click', () => {
+			currentCard = (currentCard + 1) % glossary.length;
+			updateCard();
+		});
+		updateCard();
+
+		// --- QUIZ LOGIC ---
+		const questions = [
+			{
+				q: "When did Denmark formally issue the decree to abolish the transatlantic slave trade?",
+				opts: ["1733", "1792", "1803", "1848"],
+				ans: 1,
+				expl: "The decree was issued in 1792, though it intentionally included a 10-year transition period and didn't take effect until 1803."
+			},
+			{
+				q: "Which event directly caused the final emancipation of enslaved people in the Danish West Indies?",
+				opts: ["The 1733 St. John Rebellion", "The 1878 Fireburn", "The 1848 Emancipation Rebellion led by General Buddhoe", "A royal decree by the King of Denmark"],
+				ans: 2,
+				expl: "In 1848, thousands of enslaved people marched on Fort Frederik, forcing Governor Peter von Scholten to declare immediate emancipation to avoid a massacre."
+			},
+			{
+				q: "What was the primary purpose of the 1733 Slave Codes?",
+				opts: ["To provide basic human rights to laborers", "To organize the first labor union", "To protect economic capital through brutal legal oppression and punishment", "To establish a free press"],
+				ans: 2,
+				expl: "The 1733 codes were a horrific set of laws designed solely to punish resistance and protect the planters' economic investments in human property."
+			}
+		];
+
+		let currentQ = 0;
+		const qEl = document.getElementById('quiz-question');
+		const optsEl = document.getElementById('quiz-options');
+		const feedbackEl = document.getElementById('quiz-feedback');
+		const nextBtn = document.getElementById('quiz-next');
+
+		function loadQuestion() {
+			if (!qEl) return;
+			const q = questions[currentQ];
+			qEl.textContent = q.q;
+			optsEl.innerHTML = '';
+			feedbackEl.classList.add('hidden');
+			nextBtn.classList.add('hidden');
+
+			q.opts.forEach((opt, idx) => {
+				const btn = document.createElement('button');
+				btn.className = 'quiz-option';
+				btn.textContent = opt;
+				btn.addEventListener('click', () => handleAnswer(idx, btn));
+				optsEl.appendChild(btn);
+			});
+		}
+
+		function handleAnswer(idx, btn) {
+			const q = questions[currentQ];
+			const allBtns = optsEl.querySelectorAll('.quiz-option');
+			allBtns.forEach(b => b.style.pointerEvents = 'none'); // Disable clicks
+
+			if (idx === q.ans) {
+				btn.classList.add('correct');
+				feedbackEl.textContent = `Correct! ${q.expl}`;
+				feedbackEl.className = 'quiz-feedback success';
+			} else {
+				btn.classList.add('wrong');
+				allBtns[q.ans].classList.add('correct');
+				feedbackEl.textContent = `Incorrect. ${q.expl}`;
+				feedbackEl.className = 'quiz-feedback error';
+			}
+			
+			nextBtn.classList.remove('hidden');
+			if (currentQ === questions.length - 1) {
+				nextBtn.textContent = "Restart Quiz";
+			} else {
+				nextBtn.textContent = "Next Question →";
+			}
+		}
+
+		nextBtn?.addEventListener('click', () => {
+			currentQ = (currentQ + 1) % questions.length;
+			loadQuestion();
+		});
+
+		loadQuestion();
+	});
+</script>

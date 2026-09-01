@@ -3,6 +3,7 @@ title: "The 1792 Decree: The Abolition of the Transatlantic Slave Trade"
 description: "An in-depth look at how Denmark became the first European nation to formally ban the transatlantic slave trade, the economic motivations behind the decree, and the horrific reality of the 10-year transition period."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Disasters']
 ---
 
 # The 1792 Decree: The Abolition of the Transatlantic Slave Trade
@@ -10,6 +11,9 @@ author: "Jonas Amasa Skov Nielsen"
 On March 16, 1792, King Christian VII of Denmark issued a Royal Decree that formally prohibited the transportation of enslaved Africans across the Atlantic under the Danish flag. This decree made Denmark the first European colonial power to legally ban the transatlantic slave trade, predating the British and American bans by 15 years. 
 
 For many years, this was taught in Danish schools as a triumph of Enlightenment humanitarianism. However, modern historical research paints a far more cynical and economically driven picture.
+
+> "With the beginning of the year 1803, all trade in Negroes from our subjects' side on the coast of Africa and elsewhere shall cease... During the intervening time, from now until the end of the year 1802, it shall be permitted to all nations without exception, and under all flags, to import Negroes to Our West Indian Islands."
+> — Royal Decree of Christian VII, March 16, 1792
 
 ## The Great Slave Trade Commission (1792)
 
@@ -28,12 +32,20 @@ The commission determined that it would be more profitable in the long run to ma
 
 While the decree to ban the trade was issued in 1792, it included a massive, deliberate loophole: a **10-year transition period**. The ban would not take effect until January 1, 1803.
 
-During this decade, the Danish government aggressively encouraged plantation owners to buy as many enslaved people as possible before the ban took effect.
-*   The state offered highly favorable, government-backed loans to planters specifically for the purchase of enslaved Africans.
-*   Customs duties on imported enslaved women (who were needed for "natural reproduction") were entirely abolished.
-*   The export of enslaved people from the Danish West Indies to foreign islands was banned to keep the labor force captive.
-
-The result of this transition period was horrific. Driven by panic and state subsidies, Danish planters accelerated their human trafficking operations. Tens of thousands of captive Africans were rushed across the Middle Passage in heavily overcrowded ships during this final decade.
+<div class="mini-timeline no-print">
+	<div class="timeline-event">
+		<span class="timeline-year">1792</span>
+		<p class="timeline-desc">The Decree is issued, but the 10-year loophole is intentionally created to allow planters to stock up on labor.</p>
+	</div>
+	<div class="timeline-event">
+		<span class="timeline-year">1792-1802</span>
+		<p class="timeline-desc">The Danish state offers massive loans to planters and abolishes duties on enslaved women. Driven by panic and state subsidies, tens of thousands of captive Africans are rushed across the Middle Passage in overcrowded ships.</p>
+	</div>
+	<div class="timeline-event">
+		<span class="timeline-year">1803</span>
+		<p class="timeline-desc">The transatlantic ban officially takes effect. However, slavery itself remains entirely legal on the islands.</p>
+	</div>
+</div>
 
 ## The Distinction: Trade vs. Slavery
 

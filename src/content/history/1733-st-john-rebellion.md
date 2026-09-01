@@ -3,6 +3,8 @@ title: "The 1733 St. John Rebellion"
 description: "One of the earliest and most significant uprisings in the Americas, where enslaved Akwamu people seized control of St. John for six months."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Disasters']
+coordinates: [18.3472, -64.7107]
 ---
 
 # The 1733 St. John Rebellion

@@ -3,6 +3,7 @@ title: "The Schimmelmann Family: Architects of Danish Colonial Wealth"
 description: "An examination of the Schimmelmann dynasty, the most powerful and wealthy family in 18th-century Denmark, whose fortune was built almost entirely on the transatlantic slave trade and Caribbean sugar plantations."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Disasters']
 ---
 
 # The Schimmelmann Family: Architects of Danish Colonial Wealth

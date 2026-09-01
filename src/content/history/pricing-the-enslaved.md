@@ -3,6 +3,7 @@ title: "Pricing the Enslaved: The Matrikler Data"
 description: "An economic analysis of the Danish colonial ledgers (matrikler), revealing how human beings were coldly priced, commodified, and depreciated as financial assets."
 date: 2026-08-28
 author: "Sheng Ye Michael Chen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Society & Culture', 'Disasters']
 ---
 
 # Pricing the Enslaved: The Matrikler Data

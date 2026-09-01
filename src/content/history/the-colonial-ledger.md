@@ -3,6 +3,7 @@ title: "The Colonial Ledger as an Instrument of Power"
 description: "How the Danish colonial bureaucracy used paperwork to erase African identities and reduce human beings to taxable capital assets."
 date: 2026-08-28
 author: "Anton Meier Ebsen Jørgensen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Disasters']
 ---
 
 # The Colonial Ledger as an Instrument of Power

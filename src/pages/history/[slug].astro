@@ -11,7 +11,9 @@ export async function getStaticPaths() {
 }
 
 const { article } = Astro.props;
-const { Content } = await render(article);
+const { Content, headings } = await render(article);
+
+const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
 
 // 1. Data Explorer Check
 const dataArticles = ['the-colonial-ledger', 'pricing-the-enslaved', 'profit-margins-middle-passage', 'the-rum-trade'];
@@ -33,6 +35,10 @@ mappedArticles.sort((a, b) => {
 const currentIndex = mappedArticles.findIndex(a => a.id === article.id);
 const nextArticle = currentIndex >= 0 && currentIndex < mappedArticles.length - 1 ? mappedArticles[currentIndex + 1] : null;
 
+// Reading time calculation
+const wordCount = article.body.split(/\s+/).length;
+const readingTime = Math.ceil(wordCount / 200);
+
 // APA Citation Generation
 const currentYear = new Date().getFullYear();
 const author = article.data.author || "Nielsen, J. A. S. & Chen, S. Y. M.";
@@ -41,8 +47,14 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 ---
 
 <Layout title={`${article.data.title} | History | Danish West Indies`}>
+	{article.data.coordinates && (
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+	)}
 	
-	<!-- Floating Tooltip for Footnotes -->
+	<!-- Reading Progress Bar -->
+	<div id="reading-progress-bar" class="reading-progress-bar no-print"></div>
+
+	<!-- Floating Tooltip for Footnotes & Glossary -->
 	<div id="footnote-tooltip" class="footnote-tooltip hidden">
 		<div class="tooltip-content" id="tooltip-text"></div>
 		<div class="tooltip-arrow"></div>
@@ -57,25 +69,39 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 		</div>
 
 		<header class="article-header">
-			<span class="article-date">{article.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+			<div class="article-meta">
+				<span class="article-date">{article.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+				<span class="reading-time">⏱️ {readingTime} min read</span>
+			</div>
 			<h1>{article.data.title}</h1>
 			{article.data.author && <div class="article-author">By {article.data.author}</div>}
+			{article.data.tags && article.data.tags.length > 0 && (
+				<div class="article-tags">
+					{article.data.tags.map(tag => <span class="tag-badge">{tag}</span>)}
+				</div>
+			)}
 		</header>
 
-		<!-- AUDIOBOOK TEASER UI -->
+		{article.data.coverImage && (
+			<div class="article-cover no-print">
+				<img src={article.data.coverImage} alt={`Cover for ${article.data.title}`} />
+			</div>
+		)}
+
+		<!-- TEXT-TO-SPEECH (AUDIOBOOK) UI -->
 		<div class="audio-player-wrapper no-print">
 			<div class="audio-header">
-				<span class="audio-badge">🎧 Audiobook Teaser</span>
-				<span class="audio-title">Narrated by {article.data.author || "the authors"}</span>
+				<span class="audio-badge">🎧 Listen to Article</span>
+				<span class="audio-title">Web Speech API</span>
 			</div>
 			<div class="audio-controls">
-				<button class="btn-play" onclick="alert('The full audiobook is coming in early 2027! Sign up on the Book page to be notified.')">▶ Play Chapter</button>
+				<button class="btn-play" id="btn-tts-play">▶ Play</button>
+				<button class="btn-pause hidden" id="btn-tts-pause">⏸ Pause</button>
+				<button class="btn-stop hidden" id="btn-tts-stop">⏹ Stop</button>
 				<div class="audio-progress">
-					<div class="progress-bar"><div class="progress-fill"></div></div>
-					<div class="time-readout">0:00 / 15:30</div>
+					<span class="tts-status" id="tts-status">Ready to listen</span>
 				</div>
 			</div>
-			<a href="/thesis/book" class="audio-promo-link">Get notified when the audiobook releases →</a>
 		</div>
 
 		<!-- DATA EXPLORER INTEGRATION -->
@@ -90,9 +116,36 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 			</div>
 		)}
 
-		<div class="article-content">
-			{article.data.description && <p class="lead-desc">{article.data.description}</p>}
-			<Content />
+		<div class="article-layout">
+			<!-- MAIN CONTENT -->
+			<div class="article-content">
+				{article.data.description && <p class="lead-desc">{article.data.description}</p>}
+				
+				{article.data.coordinates && (
+					<div class="article-mini-map no-print">
+						<div id="mini-map" data-lat={article.data.coordinates[0]} data-lng={article.data.coordinates[1]}></div>
+						<div class="map-caption">Historical Location</div>
+					</div>
+				)}
+
+				<Content />
+			</div>
+
+			<!-- TABLE OF CONTENTS SIDEBAR -->
+			{tocHeadings.length > 0 && (
+				<aside class="table-of-contents no-print">
+					<div class="toc-sticky">
+						<h3>On This Page</h3>
+						<ul class="toc-list">
+							{tocHeadings.map(heading => (
+								<li class={`toc-item depth-${heading.depth}`}>
+									<a href={`#${heading.slug}`}>{heading.text}</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				</aside>
+			)}
 		</div>
 		
 		<!-- AUTO-GENERATED CITATION (PRINT ONLY) -->
@@ -101,6 +154,42 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 			<h3>Citation (APA Format)</h3>
 			<p>{apaCitation}</p>
 		</div>
+
+		<!-- RELATED RESOURCES HUB -->
+		{article.data.tags && article.data.tags.length > 0 && (
+			<div class="related-resources no-print">
+				<span class="related-label">Explore Related Resources</span>
+				<div class="related-grid">
+					{article.data.tags.includes('Economics') && (
+						<a href="/thesis/data-explorer" class="related-card">
+							<div class="related-icon">📊</div>
+							<div class="related-info">
+								<h4>Data Explorer</h4>
+								<p>View the raw economic ledgers and production data.</p>
+							</div>
+						</a>
+					)}
+					{article.data.tags.includes('Resistance') && (
+						<a href="/thesis/interactive-maps" class="related-card">
+							<div class="related-icon">🗺️</div>
+							<div class="related-info">
+								<h4>Interactive Maps</h4>
+								<p>Explore the physical geography of resistance and rebellion.</p>
+							</div>
+						</a>
+					)}
+					{(article.data.tags.includes('Laws & Governance') || article.data.tags.includes('Pre-Danish Era')) && (
+						<a href="/thesis" class="related-card">
+							<div class="related-icon">📖</div>
+							<div class="related-info">
+								<h4>Thesis Chapters</h4>
+								<p>Read the academic analysis of colonial governance and history.</p>
+							</div>
+						</a>
+					)}
+				</div>
+			</div>
+		)}
 
 		<!-- NEXT IN TIMELINE NAVIGATION -->
 		{nextArticle && (
@@ -116,15 +205,64 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 				</a>
 			</div>
 		)}
+
+		<!-- LEAFLET JS FOR MINI-MAP -->
+		{article.data.coordinates && (
+			<>
+				<script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+				<script is:inline>
+					document.addEventListener('DOMContentLoaded', () => {
+						const mapEl = document.getElementById('mini-map');
+						if (!mapEl) return;
+						const lat = parseFloat(mapEl.dataset.lat);
+						const lng = parseFloat(mapEl.dataset.lng);
+						
+						const map = L.map('mini-map', {
+							zoomControl: true,
+							dragging: false,
+							scrollWheelZoom: false,
+							doubleClickZoom: false,
+						}).setView([lat, lng], 13);
+
+						L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+							attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>',
+							subdomains: 'abcd',
+							maxZoom: 18, minZoom: 10
+						}).addTo(map);
+
+						const customIcon = L.divIcon({
+							className: 'custom-leaflet-marker',
+							html: `<div style="background-color: #ef4444; width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px #ef4444; display: flex; align-items: center; justify-content: center; font-size: 12px;">📍</div>`,
+							iconSize: [24, 24], iconAnchor: [12, 12]
+						});
+
+						L.marker([lat, lng], { icon: customIcon }).addTo(map);
+					});
+				</script>
+			</>
+		)}
 	</article>
 </Layout>
 
 <style>
 	.history-article {
-		max-width: 800px;
+		max-width: 1100px; /* Increased to accommodate sidebar */
 		margin: 0 auto;
 		padding-bottom: var(--space-2xl);
 		position: relative;
+	}
+
+	.article-layout {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 3rem;
+		align-items: start;
+	}
+
+	@media (min-width: 1024px) {
+		.article-layout {
+			grid-template-columns: minmax(0, 1fr) 280px;
+		}
 	}
 
 	.article-top-bar {
@@ -158,7 +296,39 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 		margin-bottom: 1rem; line-height: 1.2;
 	}
 
-	.article-author { color: var(--color-text-muted); font-style: italic; font-size: 1.1rem; }
+	.article-author { color: var(--color-text-muted); font-style: italic; font-size: 1.1rem; margin-bottom: 1rem; }
+
+	.article-meta { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: var(--space-sm); }
+	
+	.reading-time {
+		font-size: 0.85rem; color: var(--color-text-muted); background: rgba(0,0,0,0.2);
+		padding: 0.3rem 0.8rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+	}
+
+	.article-tags {
+		display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;
+	}
+	.tag-badge {
+		font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;
+		color: var(--color-bg); background: var(--color-accent); padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: bold;
+	}
+
+	.article-cover {
+		width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: var(--space-xl);
+		border: 1px solid rgba(196, 167, 125, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+	}
+	.article-cover img {
+		width: 100%; height: auto; display: block;
+	}
+
+	/* =========================================
+	   READING PROGRESS BAR
+	   ========================================= */
+	.reading-progress-bar {
+		position: fixed; top: 0; left: 0; width: 0%; height: 4px;
+		background: var(--color-accent); z-index: 9999;
+		transition: width 0.1s ease-out;
+	}
 
 	/* =========================================
 	   AUDIO PLAYER UI
@@ -172,19 +342,18 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 	.audio-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
 	.audio-badge { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--color-accent); font-weight: bold; }
 	.audio-title { font-size: 0.85rem; color: var(--color-text-muted); font-style: italic; }
-	.audio-controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
-	.btn-play {
+	.audio-controls { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.4rem; }
+	.btn-play, .btn-pause, .btn-stop {
 		background: var(--color-accent); color: var(--color-bg); border: none; border-radius: 50px;
-		padding: 0.6rem 1.2rem; font-weight: bold; cursor: pointer; transition: transform 0.2s;
-		display: flex; align-items: center; gap: 0.5rem;
+		padding: 0.5rem 1rem; font-weight: bold; cursor: pointer; transition: transform 0.2s, background 0.2s;
+		display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;
 	}
-	.btn-play:hover { transform: scale(1.05); background: #d6b88a; }
-	.audio-progress { flex: 1; display: flex; align-items: center; gap: 1rem; }
-	.progress-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
-	.progress-fill { width: 0%; height: 100%; background: var(--color-accent); }
-	.time-readout { font-family: monospace; font-size: 0.85rem; color: var(--color-text-muted); }
-	.audio-promo-link { display: block; text-align: right; font-size: 0.8rem; color: var(--color-accent); text-decoration: none; }
-	.audio-promo-link:hover { text-decoration: underline; }
+	.btn-play:hover, .btn-pause:hover, .btn-stop:hover { transform: scale(1.05); background: #d6b88a; }
+	.btn-stop { background: rgba(255, 255, 255, 0.1); color: var(--color-text); }
+	.btn-stop:hover { background: rgba(255, 255, 255, 0.2); }
+	.hidden { display: none !important; }
+	.audio-progress { flex: 1; display: flex; align-items: center; gap: 1rem; margin-left: 1rem; }
+	.tts-status { font-family: monospace; font-size: 0.85rem; color: var(--color-text-muted); }
 
 	/* =========================================
 	   DATA EXPLORER CARD
@@ -212,6 +381,27 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 		font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-style: italic; line-height: 1.6;
 		margin-bottom: 2rem; padding-left: 1rem; border-left: 3px solid var(--color-accent);
 	}
+	.print-citation hr { margin: 2rem 0; border: 0; border-top: 1px solid var(--color-border); }
+
+	/* =========================================
+	   RELATED RESOURCES
+	   ========================================= */
+	.related-resources { margin: 3rem 0; padding-top: 2rem; border-top: 1px dashed rgba(196, 167, 125, 0.3); }
+	.related-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--color-text-muted); display: block; margin-bottom: 1rem; }
+	.related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+	.related-card {
+		display: flex; gap: 1rem; align-items: flex-start;
+		background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+		padding: 1rem; border-radius: 8px; text-decoration: none; transition: all 0.2s;
+	}
+	.related-card:hover {
+		background: rgba(255,255,255,0.05); border-color: rgba(196, 167, 125, 0.3);
+		transform: translateY(-3px);
+	}
+	.related-icon { font-size: 1.5rem; background: rgba(0,0,0,0.3); width: 40px; height: 40px; border-radius: 8px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+	.related-info h4 { margin: 0 0 0.3rem 0; color: var(--color-text); font-size: 1rem; }
+	.related-info p { margin: 0; color: var(--color-text-muted); font-size: 0.85rem; line-height: 1.4; }
+
 	.article-content { line-height: 1.8; font-size: 1.1rem; color: rgba(255, 255, 255, 0.85); }
 	.article-content :global(h1), .article-content :global(h2), .article-content :global(h3) {
 		color: var(--color-accent); font-family: var(--font-heading); margin-top: 2.5rem; margin-bottom: 1rem; line-height: 1.3;
@@ -221,6 +411,93 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 	.article-content :global(li) { margin-bottom: 0.5rem; }
 	.article-content :global(strong) { color: var(--color-text); }
 	.article-content :global(em) { color: var(--color-text-muted); }
+
+	/* Mini-Map Styles */
+	.article-mini-map {
+		margin: 2rem 0;
+		border-radius: 12px;
+		overflow: hidden;
+		border: 1px solid rgba(196, 167, 125, 0.3);
+		box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+		background: rgba(15, 15, 15, 0.9);
+	}
+	#mini-map {
+		height: 300px;
+		width: 100%;
+		z-index: 1;
+	}
+	.map-caption {
+		padding: 0.8rem;
+		text-align: center;
+		font-size: 0.85rem;
+		color: var(--color-text-muted);
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		background: rgba(0, 0, 0, 0.5);
+		font-weight: bold;
+	}
+	:global(.custom-leaflet-marker) { display: flex; justify-content: center; align-items: center; }
+	
+	/* Glossary Terms */
+	.article-content :global(.glossary-term) {
+		border-bottom: 1px dotted var(--color-accent);
+		cursor: help;
+		transition: all 0.2s;
+	}
+	.article-content :global(.glossary-term:hover) {
+		color: var(--color-accent);
+		background: rgba(196, 167, 125, 0.1);
+	}
+
+	/* Primary Source Blockquotes */
+	.article-content :global(blockquote) {
+		margin: 2rem 0;
+		padding: 2rem 2.5rem;
+		background: rgba(196, 167, 125, 0.05);
+		border-left: 4px solid var(--color-accent);
+		border-radius: 0 12px 12px 0;
+		position: relative;
+		font-family: 'Georgia', serif;
+		font-size: 1.15rem;
+		line-height: 1.8;
+		color: rgba(255, 255, 255, 0.9);
+		font-style: italic;
+		box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+	}
+	.article-content :global(blockquote::before) {
+		content: '“';
+		position: absolute;
+		top: -10px;
+		left: 10px;
+		font-size: 5rem;
+		color: rgba(196, 167, 125, 0.15);
+		font-family: 'Georgia', serif;
+		line-height: 1;
+	}
+
+	/* =========================================
+	   MINI TIMELINE (Markdown Injection)
+	   ========================================= */
+	.article-content :global(.mini-timeline) {
+		margin: 2rem 0; padding: 1rem 0 1rem 1.5rem;
+		border-left: 2px solid rgba(196, 167, 125, 0.3);
+		display: flex; flex-direction: column; gap: 1.5rem;
+	}
+	.article-content :global(.timeline-event) {
+		position: relative; padding-left: 1.5rem;
+	}
+	.article-content :global(.timeline-event::before) {
+		content: ''; position: absolute; left: -1.85rem; top: 0.3rem;
+		width: 12px; height: 12px; border-radius: 50%;
+		background: var(--color-bg); border: 2px solid var(--color-accent);
+	}
+	.article-content :global(.timeline-year) {
+		font-family: var(--font-heading); font-size: 1.2rem;
+		color: var(--color-accent); display: block; margin-bottom: 0.2rem;
+	}
+	.article-content :global(.timeline-desc) {
+		color: var(--color-text); font-size: 0.95rem; margin: 0; line-height: 1.5;
+	}
 	
 	/* Hide standard markdown footnotes at the bottom since we use tooltips */
 	.article-content :global(.footnotes) { display: none; }
@@ -236,6 +513,59 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 	}
 	.article-content :global(sup[id^="fnref"] a:hover) {
 		background: #d6b88a; box-shadow: 0 0 5px rgba(196,167,125,0.5);
+	}
+
+	/* =========================================
+	   TABLE OF CONTENTS
+	   ========================================= */
+	.table-of-contents {
+		display: none;
+	}
+	@media (min-width: 1024px) {
+		.table-of-contents {
+			display: block;
+		}
+	}
+	.toc-sticky {
+		position: sticky;
+		top: 100px; /* Space from top of viewport */
+		background: rgba(196, 167, 125, 0.05);
+		border: 1px solid rgba(196, 167, 125, 0.2);
+		border-radius: 8px;
+		padding: 1.5rem;
+		max-height: calc(100vh - 120px);
+		overflow-y: auto;
+	}
+	.toc-sticky h3 {
+		font-family: var(--font-heading);
+		font-size: 1.1rem;
+		color: var(--color-text);
+		margin-bottom: 1rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		border-bottom: 1px solid rgba(196, 167, 125, 0.2);
+		padding-bottom: 0.5rem;
+	}
+	.toc-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.toc-item {
+		margin-bottom: 0.8rem;
+		line-height: 1.4;
+	}
+	.toc-item.depth-3 {
+		padding-left: 1rem;
+		font-size: 0.9rem;
+	}
+	.toc-item a {
+		color: var(--color-text-muted);
+		text-decoration: none;
+		transition: color 0.2s;
+	}
+	.toc-item a:hover {
+		color: var(--color-accent);
 	}
 
 	/* =========================================
@@ -371,6 +701,193 @@ const apaCitation = `${author}. (${currentYear}). ${article.data.title}. Danish 
 			if (tooltip && tooltip.classList.contains('visible')) {
 				tooltip.classList.remove('visible');
 			}
+		});
+	});
+	
+	// ==========================================
+	// READING PROGRESS BAR
+	// ==========================================
+	document.addEventListener('DOMContentLoaded', () => {
+		const progressBar = document.getElementById('reading-progress-bar');
+		const articleContent = document.querySelector('.article-content');
+		if (!progressBar || !articleContent) return;
+
+		window.addEventListener('scroll', () => {
+			const contentRect = articleContent.getBoundingClientRect();
+			const contentTop = contentRect.top + window.scrollY;
+			const contentHeight = contentRect.height;
+			const windowHeight = window.innerHeight;
+			
+			// How far we have scrolled past the start of the content
+			let scrolled = window.scrollY - contentTop + windowHeight;
+			
+			// Calculate percentage
+			let progress = (scrolled / contentHeight) * 100;
+			
+			// Clamp between 0 and 100
+			progress = Math.max(0, Math.min(100, progress));
+			
+			// Only show progress if we are actually looking at the article
+			if (window.scrollY + windowHeight < contentTop) progress = 0;
+			
+			progressBar.style.width = `${progress}%`;
+		});
+	});
+
+	// ==========================================
+	// TEXT-TO-SPEECH (TTS)
+	// ==========================================
+	document.addEventListener('DOMContentLoaded', () => {
+		const btnPlay = document.getElementById('btn-tts-play');
+		const btnPause = document.getElementById('btn-tts-pause');
+		const btnStop = document.getElementById('btn-tts-stop');
+		const statusText = document.getElementById('tts-status');
+		const articleContent = document.querySelector('.article-content');
+		
+		if (!btnPlay || !articleContent || !window.speechSynthesis) return;
+
+		let speechUtterance = null;
+		let isPlaying = false;
+		let isPaused = false;
+
+		function getCleanText() {
+			// Extract text and remove footnote links or hidden tooltip texts
+			const clone = articleContent.cloneNode(true);
+			const footnotes = clone.querySelectorAll('.footnotes, sup');
+			footnotes.forEach(el => el.remove());
+			return clone.textContent.replace(/\s+/g, ' ').trim();
+		}
+
+		function setupUtterance() {
+			const text = getCleanText();
+			speechUtterance = new SpeechSynthesisUtterance(text);
+			speechUtterance.lang = 'en-US';
+			speechUtterance.rate = 1.0;
+			
+			speechUtterance.onend = () => {
+				resetTTS();
+			};
+			speechUtterance.onerror = (e) => {
+				console.error("TTS Error", e);
+				resetTTS();
+			};
+		}
+
+		function resetTTS() {
+			window.speechSynthesis.cancel();
+			isPlaying = false;
+			isPaused = false;
+			btnPlay.classList.remove('hidden');
+			btnPause.classList.add('hidden');
+			btnStop.classList.add('hidden');
+			statusText.textContent = "Ready to listen";
+		}
+
+		btnPlay.addEventListener('click', () => {
+			if (isPaused) {
+				window.speechSynthesis.resume();
+				isPaused = false;
+			} else {
+				if (!speechUtterance) setupUtterance();
+				window.speechSynthesis.speak(speechUtterance);
+			}
+			isPlaying = true;
+			btnPlay.classList.add('hidden');
+			btnPause.classList.remove('hidden');
+			btnStop.classList.remove('hidden');
+			statusText.textContent = "Playing...";
+		});
+
+		btnPause.addEventListener('click', () => {
+			if (isPlaying && !isPaused) {
+				window.speechSynthesis.pause();
+				isPaused = true;
+				btnPause.classList.add('hidden');
+				btnPlay.classList.remove('hidden');
+				statusText.textContent = "Paused";
+			}
+		});
+
+		btnStop.addEventListener('click', () => {
+			resetTTS();
+		});
+		
+		// Stop TTS if user navigates away
+		window.addEventListener('beforeunload', () => {
+			window.speechSynthesis.cancel();
+		});
+	});
+
+	// ==========================================
+	// AUTO-GLOSSARY SYSTEM
+	// ==========================================
+	document.addEventListener('DOMContentLoaded', () => {
+		const articleContent = document.querySelector('.article-content');
+		if (!articleContent) return;
+
+		const glossary = {
+			"middle passage": "The horrific transatlantic journey of enslaved Africans from the West African coast to the Americas.",
+			"chattel": "A form of slavery where humans are treated as personal property to be bought, sold, and inherited.",
+			"rix-dollar": "The official currency used in the Danish West Indies (Rigsdaler).",
+			"marronage": "The act of enslaved people escaping and forming independent settlements (Maroons).",
+			"bamboula": "A traditional drum dance originating from enslaved Africans in the Virgin Islands, often used for communication and resistance.",
+			"fireburn": "The massive 1878 labor riot on St. Croix where workers demanded better wages and working conditions."
+		};
+
+		const terms = Object.keys(glossary).sort((a, b) => b.length - a.length);
+		const regex = new RegExp(`\\b(${terms.join('|')})\\b`, 'gi');
+
+		const walker = document.createTreeWalker(articleContent, NodeFilter.SHOW_TEXT, null, false);
+		const nodesToReplace = [];
+		let node;
+		while (node = walker.nextNode()) {
+			const parent = node.parentNode;
+			if (parent && (parent.nodeName === 'A' || parent.nodeName === 'BLOCKQUOTE' || parent.nodeName === 'SCRIPT' || parent.nodeName === 'H1' || parent.nodeName === 'H2' || parent.nodeName === 'H3' || parent.classList.contains('glossary-term') || parent.closest('#mini-map'))) {
+				continue;
+			}
+			if (regex.test(node.nodeValue)) {
+				nodesToReplace.push(node);
+			}
+		}
+
+		nodesToReplace.forEach(textNode => {
+			const span = document.createElement('span');
+			span.innerHTML = textNode.nodeValue.replace(regex, (match) => {
+				const term = match.toLowerCase();
+				return `<span class="glossary-term" data-definition="${glossary[term]}">${match}</span>`;
+			});
+			textNode.parentNode.replaceChild(span, textNode);
+		});
+
+		const tooltip = document.getElementById('footnote-tooltip');
+		const tooltipText = document.getElementById('tooltip-text');
+		
+		document.querySelectorAll('.glossary-term').forEach(termEl => {
+			termEl.addEventListener('mouseenter', (e) => {
+				const def = termEl.getAttribute('data-definition');
+				if (!def || !tooltip || !tooltipText) return;
+				
+				tooltipText.innerHTML = def;
+				
+				const rect = termEl.getBoundingClientRect();
+				const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+				const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+				
+				const top = rect.top + scrollTop - tooltip.offsetHeight - 15;
+				let left = rect.left + scrollLeft + (rect.width / 2) - (tooltip.offsetWidth / 2);
+				if (left < 10) left = 10;
+				if (left + tooltip.offsetWidth > window.innerWidth - 10) {
+					left = window.innerWidth - tooltip.offsetWidth - 10;
+				}
+				
+				tooltip.style.top = `${top}px`;
+				tooltip.style.left = `${left}px`;
+				tooltip.classList.add('visible');
+			});
+			
+			termEl.addEventListener('mouseleave', () => {
+				if (tooltip) tooltip.classList.remove('visible');
+			});
 		});
 	});
 </script>

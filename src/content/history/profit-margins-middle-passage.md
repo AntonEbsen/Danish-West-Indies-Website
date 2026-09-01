@@ -3,6 +3,7 @@ title: "Profit Margins of the Middle Passage"
 description: "A financial breakdown of the Danish slaving voyages, analyzing how merchants financed expeditions, calculated human mortality as 'cargo loss,' and extracted massive returns on investment."
 date: 2026-08-28
 author: "Sheng Ye Michael Chen"
+tags: ['Economics', 'Laws & Governance', 'Pre-Danish Era', 'Disasters']
 ---
 
 # Profit Margins of the Middle Passage

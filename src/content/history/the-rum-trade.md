@@ -3,6 +3,7 @@ title: "The Rum Trade: Molasses and Distillation"
 description: "Exploring the lucrative byproduct of sugar production, and how Cruzan rum drove the triangular trade economy of the Danish West Indies."
 date: 2026-08-28
 author: "Sheng Ye Michael Chen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Society & Culture']
 ---
 
 # The Rum Trade: Molasses and Distillation

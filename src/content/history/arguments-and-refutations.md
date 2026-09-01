@@ -3,6 +3,7 @@ title: "Historical Justifications for Slavery (and Their Refutations)"
 description: "An examination of the economic, racial, and religious arguments used by Danish colonial powers to justify chattel slavery, and why these arguments are historically and morally bankrupt."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Society & Culture', 'Disasters']
 ---
 
 # Historical Justifications for Slavery (and Their Refutations)
@@ -44,7 +45,7 @@ As the abolitionist movement gained traction in the late 18th and early 19th cen
 The archival record—including the *matrikler* (ledgers) and police records—destroys the myth of the benevolent master.
 *   **The Mortality Reality:** The "care" provided by planters was abysmal. The death rate on St. Croix was so high that the enslaved population could not sustain itself through natural reproduction until the very end of the colonial era. Planters calculated that it was often cheaper to work a person to death and buy a new captive than to provide adequate food and rest.
 *   **Systemic Violence:** Paternalism was enforced by the whip. Governor Gardelin’s 1733 Slave Codes mandated amputation and execution for minor offenses. 
-*   **The Ultimate Rejection:** The enslaved people themselves categorically rejected this "benevolence" through constant resistance. The 1733 St. John rebellion, widespread marronage (escaping to the hills), and the final 1848 Emancipation uprising led by General Buddhoe prove that the enslaved population constantly fought for self-determination, completely undermining the myth that they accepted or needed white "guardianship."
+*   **The Ultimate Rejection:** The enslaved people themselves categorically rejected this "benevolence" through constant resistance. The 1733 St. John rebellion, widespread marronage (escaping to the hills), and the final 1848 Emancipation uprising led by [General Buddhoe](/history/general-buddhoe) prove that the enslaved population constantly fought for self-determination, completely undermining the myth that they accepted or needed white "guardianship."
 
 ## 4. The "Legal and Precedent" Argument
 

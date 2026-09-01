@@ -3,6 +3,7 @@ title: "Marronage and The Puerto Rican Escape"
 description: "The economic impact of self-emancipation, and the dangerous maritime escapes to Spanish Puerto Rico undertaken by enslaved people from the Danish colonies."
 date: 2026-08-28
 author: "Anton Meier Ebsen Jørgensen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era']
 ---
 
 # Marronage and The Puerto Rican Escape

@@ -3,6 +3,7 @@ title: "Sugar and the Destruction of the Caribbean Environment"
 description: "How the Danish pursuit of 'White Gold' resulted in the total deforestation, soil exhaustion, and permanent ecological alteration of the Danish West Indies."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Laws & Governance', 'Pre-Danish Era', 'Society & Culture']
 ---
 
 # Sugar and the Destruction of the Caribbean Environment

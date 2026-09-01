@@ -3,6 +3,7 @@ title: "The Sugar Beet Threat: The Collapse of 'White Gold'"
 description: "An economic analysis of how the European sugar beet broke the Caribbean cane sugar monopoly, crashing global prices and driving the Danish West Indies into bankruptcy."
 date: 2026-08-28
 author: "Sheng Ye Michael Chen"
+tags: ['Economics', 'Laws & Governance', 'Pre-Danish Era']
 ---
 
 # The Sugar Beet Threat: The Collapse of "White Gold"

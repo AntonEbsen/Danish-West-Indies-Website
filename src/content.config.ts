@@ -8,6 +8,9 @@ const historyCollection = defineCollection({
     description: z.string().optional(),
     date: z.date(),
     author: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    coverImage: z.string().optional(),
+    coordinates: z.array(z.number()).optional(),
   }),
 });
 

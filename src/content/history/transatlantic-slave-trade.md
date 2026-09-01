@@ -3,6 +3,7 @@ title: "The Transatlantic Slave Trade"
 description: "Denmark's role in the global slave trade, the triangular route, and the eventual 1792 decree to abolish the transatlantic trade (effective 1803)."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Disasters']
 ---
 
 # The Transatlantic Slave Trade

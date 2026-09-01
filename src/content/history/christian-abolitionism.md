@@ -3,6 +3,7 @@ title: "Christian Abolitionism: The Religious Roots of the Anti-Slavery Movement
 description: "An exploration of how Christian denominations, particularly Quakers and later Evangelical movements, became the first organized groups to collectively protest and campaign against the transatlantic slave trade and chattel slavery."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Society & Culture']
 ---
 
 # Christian Abolitionism: The Religious Roots of the Anti-Slavery Movement

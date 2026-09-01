@@ -3,6 +3,7 @@ title: "Osu Castle & The Danish Gold Coast"
 description: "The African origin point of the Danish transatlantic slave trade, focusing on Christiansborg (Osu Castle) and the economic alliances with local kingdoms."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Laws & Governance', 'Pre-Danish Era', 'Disasters']
 ---
 
 # Osu Castle & The Danish Gold Coast

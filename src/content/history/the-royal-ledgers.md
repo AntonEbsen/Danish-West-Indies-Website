@@ -3,6 +3,7 @@ title: "The Royal Ledgers: The Crown's Direct Investments"
 description: "Tracing the direct financial pipeline of colonial wealth from the Caribbean cane fields straight into the Danish royal palaces of Copenhagen."
 date: 2026-08-28
 author: "Anton Meier Ebsen Jørgensen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Society & Culture', 'Disasters']
 ---
 
 # The Royal Ledgers: The Crown's Direct Investments

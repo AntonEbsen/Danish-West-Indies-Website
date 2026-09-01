@@ -3,6 +3,7 @@ title: "The Monopoly of the West India Company"
 description: "An analysis of the Danish West India and Guinea Company, how it established a state-sponsored monopoly to extract colonial wealth, and why the Crown eventually dissolved it to maximize taxation."
 date: 2026-08-28
 author: "Sheng Ye Michael Chen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era']
 ---
 
 # The Monopoly of the West India Company

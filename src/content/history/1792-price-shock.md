@@ -3,6 +3,7 @@ title: "The 1792 Price Shock: Market Warping and Human Trafficking"
 description: "An economic analysis of how the 1792 decree to abolish the transatlantic slave trade triggered a 10-year period of massive market distortion, panic buying, and state-subsidized human trafficking."
 date: 2026-08-28
 author: "Sheng Ye Michael Chen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Disasters']
 ---
 
 # The 1792 Price Shock: Market Warping and Human Trafficking

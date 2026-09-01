@@ -3,11 +3,13 @@ title: "The 1878 Fireburn (St. Croix Labor Riot)"
 description: "The massive 1878 labor revolt led by the 'Queens of the Fireburn' that challenged the oppressive 1849 Labor Act and reshaped St. Croix."
 date: 2026-08-28
 author: "Anton Meier Ebsen Jørgensen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Culture & Society']
+coordinates: [17.7150, -64.8800]
 ---
 
 # The 1878 Fireburn
 
-While chattel slavery was legally abolished in the Danish West Indies in 1848, true economic freedom did not follow. The transition from slavery was immediately hijacked by the colonial administration to maintain total control over the Black workforce, leading inevitably to the explosive 1878 labor revolt known as the **Fireburn**.
+While chattel slavery was legally abolished in the Danish West Indies in 1848, true economic freedom did not follow. The transition from slavery was immediately hijacked by the colonial administration to maintain total control over the Black workforce, leading inevitably to the explosive 1878 labor revolt known as the **[Fireburn](/history/1878-fireburn-st-croix)**.
 
 ## Slavery by Another Name: The 1849 Labor Act
 
@@ -21,10 +23,10 @@ For thirty years, anger simmered. By 1878, conditions on St. Croix were desperat
 
 On October 1, 1878—Contract Day—workers gathered in the town of Frederiksted to demand better wages and the right to freely negotiate their labor. When the authorities refused to listen and a violent altercation occurred with the police, the crowd's frustration erupted.
 
-## The Queens of the Fireburn
+## The Queens of the [Fireburn](/history/1878-fireburn-st-croix)
 
-The rebellion was largely organized and led by women, who would become immortalized in Virgin Islands history as the **Queens of the Fireburn**. The most famous among them were:
-* **Queen Mary** (Mary Thomas)
+The rebellion was largely organized and led by women, who would become immortalized in Virgin Islands history as the **Queens of the [Fireburn](/history/1878-fireburn-st-croix)**. The most famous among them were:
+* **Queen Mary** ([Mary Thomas](/history/mary-thomas))
 * **Queen Agnes** (Agnes Salomon)
 * **Queen Mathilda** (Mathilda McBean)
 * **Bottom Belly** (Susanna Abramsen)
@@ -35,8 +37,8 @@ For several days, the workers moved across the island, setting fire to the sugar
 
 ## Suppression and Legacy
 
-The Danish military eventually suppressed the revolt with brutal force. Over a hundred laborers were killed, and hundreds more were imprisoned. The Queens of the Fireburn were arrested, tried, and shipped across the Atlantic to serve harsh prison sentences in a women's prison in Copenhagen (though they were eventually pardoned and returned to St. Croix years later).
+The Danish military eventually suppressed the revolt with brutal force. Over a hundred laborers were killed, and hundreds more were imprisoned. The Queens of the [Fireburn](/history/1878-fireburn-st-croix) were arrested, tried, and shipped across the Atlantic to serve harsh prison sentences in a women's prison in Copenhagen (though they were eventually pardoned and returned to St. Croix years later).
 
-Despite the brutal suppression, the Fireburn was a success in its primary goal: it broke the back of the 1849 Labor Act. In the aftermath of the massive economic destruction, the colonial government was forced to repeal the annual contract system, finally allowing Black workers the freedom to move and negotiate their own labor.
+Despite the brutal suppression, the [Fireburn](/history/1878-fireburn-st-croix) was a success in its primary goal: it broke the back of the 1849 Labor Act. In the aftermath of the massive economic destruction, the colonial government was forced to repeal the annual contract system, finally allowing Black workers the freedom to move and negotiate their own labor.
 
-Today, Queen Mary and the leaders of the Fireburn are celebrated as towering heroes of resistance in the US Virgin Islands.
+Today, Queen Mary and the leaders of the [Fireburn](/history/1878-fireburn-st-croix) are celebrated as towering heroes of resistance in the US Virgin Islands.

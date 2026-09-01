@@ -3,6 +3,7 @@ title: "The Great Migration: The Harlem Connection"
 description: "Exploring the economic aftermath of the 1917 Transfer, and how the mass migration of Virgin Islanders to New York reshaped the islands' economy."
 date: 2026-08-28
 author: "Sheng Ye Michael Chen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Disasters']
 ---
 
 # The Great Migration: The Harlem Connection
@@ -13,7 +14,7 @@ The collapse of the sugar industry, which had been the singular focus of the col
 
 ## The Collapse of the Sugar Economy
 
-The economic engine of St. Croix had been failing long before the Americans arrived. The abolition of slavery in 1848, the breaking of the exploitative labor contracts in the 1878 Fireburn, and the devastating competition from European sugar beets had rendered Caribbean cane sugar largely unprofitable.
+The economic engine of St. Croix had been failing long before the Americans arrived. The abolition of slavery in 1848, the breaking of the exploitative labor contracts in the 1878 [Fireburn](/history/1878-fireburn-st-croix), and the devastating competition from European sugar beets had rendered Caribbean cane sugar largely unprofitable.
 
 When the U.S. Navy took administrative control of the islands in 1917, they offered little in the way of economic development or agricultural diversification. The passage of the Volstead Act (Prohibition) in the United States in 1920 delivered a final, devastating blow, legally shutting down the St. Croix rum industry, which had been one of the few remaining sources of export revenue.
 

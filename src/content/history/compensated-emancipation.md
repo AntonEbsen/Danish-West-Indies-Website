@@ -3,11 +3,12 @@ title: "Compensated Emancipation: Who Got Paid in 1848?"
 description: "An economic analysis of how the Danish state bailed out plantation owners after emancipation, reinforcing colonial wealth inequality that persists today."
 date: 2026-08-28
 author: "Anton Meier Ebsen Jørgensen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures']
 ---
 
 # Compensated Emancipation: Who Got Paid in 1848?
 
-When Governor-General Peter von Scholten declared the end of chattel slavery on July 3, 1848, the legal framework of the Danish West Indies was shattered. However, the economic hierarchy was deliberately preserved. 
+When Governor-General [Peter von Scholten](/history/peter-von-scholten) declared the end of chattel slavery on July 3, 1848, the legal framework of the Danish West Indies was shattered. However, the economic hierarchy was deliberately preserved. 
 
 The most glaring example of this preservation is the policy of **Compensated Emancipation**. When slavery ended, reparations were paid—but not to the enslaved people who had suffered generations of unpaid labor, torture, and trauma. The reparations were paid exclusively to the plantation owners who had enslaved them.
 

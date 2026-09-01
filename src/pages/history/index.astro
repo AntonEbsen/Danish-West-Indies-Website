@@ -4,19 +4,14 @@ import { getCollection } from 'astro:content';
 
 const allArticles = await getCollection('history');
 
-// Define manual category mapping
-const getCategory = (id: string) => {
-	const economics = ['the-colonial-ledger', 'the-royal-ledgers', 'west-india-company-monopoly', 'pricing-the-enslaved', 'profit-margins-middle-passage', 'sugar-beet-threat', 'the-rum-trade', 'disease-and-the-mortality-ledger', 'anatomy-of-a-danish-sugar-estate', 'compensated-emancipation', 'st-thomas-free-port'];
-	const resistance = ['1733-st-john-rebellion', '1878-fireburn-st-croix', 'marronage-puerto-rican-escape', 'bamboula-and-cultural-survival'];
-	const laws = ['1733-slave-codes', '1792-abolition-decree', '1848-emancipation', '1849-labor-act', '1917-transfer-to-us', '1792-price-shock'];
-	const figures = ['anna-heegaard', 'peter-von-scholten', 'schimmelmann-family', 'mary-thomas'];
-
-	if (economics.includes(id)) return 'economics';
-	if (resistance.includes(id)) return 'resistance';
-	if (laws.includes(id)) return 'laws';
-	if (figures.includes(id)) return 'figures';
-	return 'general';
-};
+// Extract all unique tags
+const allTagsSet = new Set<string>();
+allArticles.forEach(article => {
+	if (article.data.tags) {
+		article.data.tags.forEach(tag => allTagsSet.add(tag));
+	}
+});
+const allTags = Array.from(allTagsSet).sort();
 
 // Map articles and extract years
 const mappedArticles = allArticles.map(article => {
@@ -27,7 +22,7 @@ const mappedArticles = allArticles.map(article => {
 
 	return {
 		...article,
-		category: getCategory(article.id),
+		...article,
 		year: year,
 		sortYear: sortYear
 	};
@@ -91,11 +86,9 @@ const generalArticles = mappedArticles.filter(a => !foundationalIds.includes(a.i
 			<div class="controls-row">
 				<div class="filter-bar">
 					<button class="btn-filter active" data-filter="all">All Articles</button>
-					<button class="btn-filter" data-filter="economics">Economics</button>
-					<button class="btn-filter" data-filter="resistance">Resistance</button>
-					<button class="btn-filter" data-filter="laws">Laws & Bureaucracy</button>
-					<button class="btn-filter" data-filter="figures">Key Figures</button>
-					<button class="btn-filter" data-filter="general">General</button>
+					{allTags.map(tag => (
+						<button class="btn-filter" data-filter={tag}>{tag}</button>
+					))}
 				</div>
 				<div class="view-toggle">
 					<button class="btn-view active" id="btn-grid" aria-label="Grid View">⊞ Grid</button>
@@ -110,11 +103,13 @@ const generalArticles = mappedArticles.filter(a => !foundationalIds.includes(a.i
 			<!-- GRID VIEW -->
 			<div class="articles-grid" id="view-grid">
 				{generalArticles.map((article) => (
-					<a href={`/history/${article.id}`} class="article-card article-item" data-id={article.id} data-category={article.category} data-search={article.data.title.toLowerCase() + ' ' + (article.data.description?.toLowerCase() || '')}>
+					<a href={`/history/${article.id}`} class="article-card article-item" data-id={article.id} data-tags={article.data.tags?.join(',')} data-search={article.data.title.toLowerCase() + ' ' + (article.data.description?.toLowerCase() || '')}>
 						<div class="card-content">
 							<div class="card-meta">
 								{article.year ? <span class="year-badge">{article.year}</span> : <span class="year-badge thematic">Thematic</span>}
-								<span class="category-badge">{article.category}</span>
+								<div class="tags-wrapper">
+									{article.data.tags?.map(tag => <span class="category-badge">{tag}</span>)}
+								</div>
 							</div>
 							<h2>{article.data.title}</h2>
 							{article.data.description && <p>{article.data.description}</p>}
@@ -135,12 +130,14 @@ const generalArticles = mappedArticles.filter(a => !foundationalIds.includes(a.i
 			<div class="articles-timeline hidden" id="view-timeline">
 				<div class="timeline-line"></div>
 				{generalArticles.map((article) => (
-					<div class="timeline-node article-item" data-id={article.id} data-category={article.category} data-search={article.data.title.toLowerCase() + ' ' + (article.data.description?.toLowerCase() || '')}>
+					<div class="timeline-node article-item" data-id={article.id} data-tags={article.data.tags?.join(',')} data-search={article.data.title.toLowerCase() + ' ' + (article.data.description?.toLowerCase() || '')}>
 						<div class="timeline-marker">
 							{article.year ? <span class="timeline-year">{article.year}</span> : <span class="timeline-year thematic">✱</span>}
 						</div>
 						<a href={`/history/${article.id}`} class="timeline-card">
-							<span class="category-badge">{article.category}</span>
+							<div class="tags-wrapper">
+								{article.data.tags?.map(tag => <span class="category-badge">{tag}</span>)}
+							</div>
 							<h2>{article.data.title}</h2>
 							{article.data.description && <p>{article.data.description}</p>}
 							<div class="card-footer">
@@ -296,9 +293,12 @@ const generalArticles = mappedArticles.filter(a => !foundationalIds.includes(a.i
 	.article-item.is-bookmarked .btn-bookmark { background: rgba(196, 167, 125, 0.2); border-color: var(--color-accent); color: var(--color-accent); }
 	.article-item:hover { opacity: 1 !important; } /* Restore opacity on hover */
 
+	.tags-wrapper {
+		display: flex; gap: 0.3rem; flex-wrap: wrap; justify-content: flex-end;
+	}
 	.category-badge {
-		font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;
-		color: var(--color-accent); padding: 0.1rem 0;
+		font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px;
+		color: var(--color-bg); background: var(--color-accent); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: bold;
 	}
 
 	/* =========================================
@@ -390,10 +390,11 @@ const generalArticles = mappedArticles.filter(a => !foundationalIds.includes(a.i
 
 		articleItems.forEach(item => {
 			const el = item as HTMLElement;
-			const category = el.getAttribute('data-category');
+			const tagsAttr = el.getAttribute('data-tags');
+			const tags = tagsAttr ? tagsAttr.split(',') : [];
 			const searchText = el.getAttribute('data-search') || '';
 			
-			const matchesFilter = currentFilter === 'all' || category === currentFilter;
+			const matchesFilter = currentFilter === 'all' || tags.includes(currentFilter);
 			const matchesSearch = searchText.includes(currentSearch);
 
 			if (matchesFilter && matchesSearch) {

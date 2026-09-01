@@ -3,6 +3,7 @@ title: "The 1917 Transfer: Selling the Danish West Indies"
 description: "Exploring the economic decline and geopolitical pressures that led Denmark to sell its Caribbean colonies to the United States for $25 million in gold."
 date: 2026-08-28
 author: "Sheng Ye Michael Chen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era']
 ---
 
 # The 1917 Transfer: Selling the Danish West Indies
@@ -15,7 +16,7 @@ This transfer was the result of a massive transaction: the United States purchas
 
 By the dawn of the 20th century, the Danish West Indies had shifted from an economic crown jewel to a financial burden for the Danish state.
 
-The golden age of Caribbean sugar had collapsed. As explored in our article on the *Sugar Beet Threat*, the rise of government-subsidized European sugar beets decimated the global price of cane sugar. Without the brutal efficiency of unpaid enslaved labor (which had ended in 1848), and without the restrictive contracts of the Labor Act (broken by the 1878 Fireburn), the St. Croix sugar estates could no longer compete on the global market. 
+The golden age of Caribbean sugar had collapsed. As explored in our article on the *Sugar Beet Threat*, the rise of government-subsidized European sugar beets decimated the global price of cane sugar. Without the brutal efficiency of unpaid enslaved labor (which had ended in 1848), and without the restrictive contracts of the Labor Act (broken by the 1878 [Fireburn](/history/1878-fireburn-st-croix)), the St. Croix sugar estates could no longer compete on the global market. 
 
 Simultaneously, St. Thomas, which had thrived as a free port and a crucial coaling station for steamships, saw its economic relevance plummet. The advent of modern shipping and the opening of the Panama Canal in 1914 shifted global trade routes, bypassing the Danish islands. 
 

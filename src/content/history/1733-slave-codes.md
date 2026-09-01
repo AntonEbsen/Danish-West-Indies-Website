@@ -3,6 +3,7 @@ title: "The 1733 Slave Codes: State-Sanctioned Terror"
 description: "An examination of Governor Philip Gardelin's draconian 1733 slave codes, which legally mandated torture and execution to enforce white supremacy in the Danish West Indies."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Society & Culture']
 ---
 
 # The 1733 Slave Codes: State-Sanctioned Terror
@@ -19,13 +20,16 @@ Gardelin’s codes were explicitly designed to break the spirit of the enslaved 
 
 ## The Mandates of Torture
 
-The 1733 Slave Codes contained 19 specific articles. They did not suggest punishments; they legally mandated them. Examples of the codes included:
+The 1733 Slave Codes contained 19 specific articles. They did not suggest punishments; they legally mandated them. Governor Gardelin’s chilling edict was published and read aloud to the terrorized population:
 
-*   **Article 1:** The leader of a runaway group was to be pinched three times with red-hot irons and then hanged.
-*   **Article 2:** Anyone participating in a plot against the white population was to lose a leg, or, if the owner pardoned them, to lose an ear and receive 150 lashes.
-*   **Article 8:** Any enslaved person who raised a hand against a white person in anger was to be pinched with hot irons and then hanged, or have their right hand chopped off.
-*   **Article 10:** An enslaved person caught stealing was to be branded on the forehead and receive 150 lashes. Repeat offenses resulted in hanging.
-*   **Article 16:** Enslaved people were forbidden from carrying sticks or knives, holding dances, or gathering in groups after sunset.
+> "The leader of runaway negroes shall be pinched three times with red-hot iron, and then hanged." 
+> — Article 1, 1733 Slave Code
+
+> "A negro who lifts his hand to strike a white person, or threaten him with violence, shall be pinched and hanged, should the white person demand it, if not, to lose his right hand."
+> — Article 8, 1733 Slave Code
+
+> "One negro who steals to the value of 4 rix-dollars, shall be pinched and hanged; less than 4 rix-dollars, to be branded, and receive 150 stripes."
+> — Article 10, 1733 Slave Code
 
 Furthermore, the codes legally insulated the planters. It was explicitly declared that an owner could not be punished if an enslaved person died as a result of "lawful" correction.
 

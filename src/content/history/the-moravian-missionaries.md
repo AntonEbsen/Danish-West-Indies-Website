@@ -3,6 +3,7 @@ title: "The Moravian Missionaries: The Religion of Compliance"
 description: "Examining the complex role of the Herrnhuters, who provided education to the enslaved while preaching strict submission to colonial authority and owning enslaved people themselves."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Society & Culture']
 ---
 
 # The Moravian Missionaries: The Religion of Compliance

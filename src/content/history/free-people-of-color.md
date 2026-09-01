@@ -3,6 +3,7 @@ title: "The Free People of Color: Navigating a Divided Society"
 description: "An exploration of the complex, heavily regulated lives of the 'Frikulørte' (Free Colored) population in the Danish West Indies, their economic roles, and their fight for legal equality."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Society & Culture']
 ---
 
 # The Free People of Color: Navigating a Divided Society
@@ -34,11 +35,11 @@ Economic data from the early 19th century reveals a startling reality: a signifi
 
 This was not necessarily due to cruelty, but to the inescapable economic logic of the colonial Caribbean. Enslaved labor was the foundation of all wealth and status. For a Free Colored artisan to run a successful cooperage, or a Free Colored woman to run a profitable boarding house, they purchased enslaved laborers. In some heartbreaking cases, Free Colored individuals purchased their own family members (spouses or children) when they could not legally manumit them due to strict bureaucratic fees.
 
-## Anna Heegaard and the Fight for Equality
+## [Anna Heegaard](/history/anna-heegaard) and the Fight for Equality
 
 As the Free Colored class grew in wealth and education, they began aggressively petitioning the Danish Crown for civil rights.
 
-One of the most influential figures of this era was **Anna Heegaard**, a wealthy, free woman of color who owned significant property and enslaved people. She became the common-law wife of Governor General Peter von Scholten. Through her influence, her lavish social gatherings that forced white elites to mingle with Free Colored elites, and the relentless petitioning of Free Colored leaders, von Scholten was pushed to reform the racial laws.
+One of the most influential figures of this era was **[Anna Heegaard](/history/anna-heegaard)**, a wealthy, free woman of color who owned significant property and enslaved people. She became the common-law wife of Governor General [Peter von Scholten](/history/peter-von-scholten). Through her influence, her lavish social gatherings that forced white elites to mingle with Free Colored elites, and the relentless petitioning of Free Colored leaders, von Scholten was pushed to reform the racial laws.
 
 In **1830**, the Danish Crown issued a decree granting "full equality" to Free People of Color. However, it was a deeply elitist reform: it tied civil rights to wealth and property ownership, meaning only the richest Free Colored individuals actually gained equal footing with whites. 
 

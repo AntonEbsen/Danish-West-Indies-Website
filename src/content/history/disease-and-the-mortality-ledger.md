@@ -3,6 +3,7 @@ title: "Disease, 'Seasoning,' and the Mortality Ledger"
 description: "Examining the brutal economic calculus of the Caribbean disease environment and how colonial ledgers accounted for catastrophic mortality rates."
 date: 2026-08-28
 author: "Jonas Amasa Skov Nielsen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era', 'Disasters']
 ---
 
 # Disease, "Seasoning," and the Mortality Ledger

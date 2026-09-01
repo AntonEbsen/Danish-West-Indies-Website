@@ -3,6 +3,7 @@ title: "The Anatomy of a Danish Sugar Estate"
 description: "A detailed look at the physical and economic layout of an 18th-century sugar plantation in the Danish West Indies, and the horrific human cost of sugar production."
 date: 2026-08-28
 author: "Anton Meier Ebsen Jørgensen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Society & Culture', 'Disasters']
 ---
 
 # The Anatomy of a Danish Sugar Estate

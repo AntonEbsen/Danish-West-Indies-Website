@@ -3,6 +3,7 @@ title: "St. Thomas as a Free Port: The Commercial Hub"
 description: "Contrasting the agricultural engine of St. Croix with the chaotic, mercantile free port of St. Thomas, a haven for shipping, smuggling, and privateers."
 date: 2026-08-28
 author: "Sheng Ye Michael Chen"
+tags: ['Economics', 'Laws & Governance', 'Key Figures', 'Pre-Danish Era']
 ---
 
 # St. Thomas as a Free Port: The Commercial Hub

@@ -3,11 +3,12 @@ title: "The Bamboula and Cultural Survival"
 description: "How enslaved Africans used music, dance, and language to preserve their humanity, organize resistance, and defy colonial erasure."
 date: 2026-08-28
 author: "Sheng Ye Michael Chen"
+tags: ['Economics', 'Resistance', 'Laws & Governance', 'Pre-Danish Era', 'Society & Culture']
 ---
 
 # The Bamboula and Cultural Survival
 
-When we study colonial resistance, we often focus on the spectacular moments of armed rebellion, such as the 1733 St. John uprising or the 1878 Fireburn. However, the most consistent and pervasive form of resistance in the Danish West Indies was not military, but cultural. 
+When we study colonial resistance, we often focus on the spectacular moments of armed rebellion, such as the 1733 St. John uprising or the 1878 [Fireburn](/history/1878-fireburn-st-croix). However, the most consistent and pervasive form of resistance in the Danish West Indies was not military, but cultural. 
 
 Facing an economic and legal system designed to strip them of their humanity, enslaved Africans forged new cultural practices to survive, communicate, and preserve their dignity.
 
