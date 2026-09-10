@@ -16,7 +16,7 @@
     "@astrojs/node": "^11.1.5",
     "@astrojs/sitemap": "^3.7.3",
     "ai": "^7.0.87",
-    "astro": "^7.2.2",
+    "astro": "^7.3.2",
     "minisearch": "^7.2.0"
   }
 }
