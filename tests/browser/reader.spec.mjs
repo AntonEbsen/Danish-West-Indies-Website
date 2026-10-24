@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-const routes = ['/', '/history/', '/history/1792-abolition-decree/', '/history/1848-emancipation/', '/history/1878-fireburn-st-croix/', '/source-to-data/', '/about/', '/thesis/', '/sources/', '/about-ai/'];
+const routes = ['/', '/history/', '/history/1792-abolition-decree/', '/history/1848-emancipation/', '/history/1878-fireburn-st-croix/', '/source-to-data/', '/about/', '/thesis/', '/sources/', '/about-ai/', '/methods/linkage/', '/teaching/', '/teaching/teacher-notes/', '/memorial/', '/memorial/hans-jonathan/', '/memorial/queen-mary/'];
 
 for (const prefix of ['', '/da']) {
   for (const route of routes) {
@@ -88,4 +88,36 @@ test('capture desktop, mobile and source-example review images', async ({ page }
   await page.screenshot({ path: 'test-results/home-mobile.png', fullPage: true });
   await page.goto('/source-to-data/');
   await page.screenshot({ path: 'test-results/example-mobile.png', fullPage: true });
+  for (const [route, name] of [['/methods/linkage/', 'methods'], ['/teaching/', 'teaching'], ['/memorial/', 'memorial'], ['/memorial/queen-mary/', 'queen-mary']]) {
+    await page.goto(route);
+    await page.screenshot({ path: `test-results/${name}-mobile.png`, fullPage: true });
+  }
+});
+
+test('teaching pages separate student material, teacher notes and all four real downloads', async ({ page }) => {
+  for (const lang of ['en', 'da']) {
+    const prefix = lang === 'da' ? '/da' : '';
+    for (const [route, filename] of [['/teaching/', `student-worksheet-${lang}.pdf`], ['/teaching/teacher-notes/', `teacher-notes-${lang}.pdf`]]) {
+      await page.goto(prefix + route);
+      const event = page.waitForEvent('download');
+      await page.getByRole('link', { name: /Download printable PDF|Hent PDF til udskrift/ }).click();
+      const download = await event;
+      expect(download.suggestedFilename()).toBe(filename);
+      expect(await download.failure()).toBeNull();
+      await expect(page.locator('form, textarea, input')).toHaveCount(0);
+    }
+  }
+});
+
+test('memorial is discoverable and shows corrected sources and uncertainty, not an archival census', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Memorial', exact: true }).click();
+  await expect(page.getByRole('link', { name: 'Hans Jonathan (Hans Jónatan)', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'Mary Thomas (Queen Mary)', exact: true }).click();
+  await expect(page.locator('main')).toContainText('December 1887');
+  await expect(page.locator('main')).toContainText('around 1842');
+  await expect(page.locator('main')).toContainText('around 1848');
+  await page.getByRole('link', { name: 'Dansk', exact: true }).click();
+  await expect(page).toHaveURL(/\/da\/memorial\/queen-mary\/$/);
+  await expect(page.locator('h1')).toHaveText('Mary Thomas (Queen Mary)');
 });

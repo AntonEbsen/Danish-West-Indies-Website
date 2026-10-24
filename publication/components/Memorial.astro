@@ -1,0 +1,21 @@
+---
+import { memorialPeople, type MemorialPerson } from '../data/memorial';
+import type { Language } from '../data/articles';
+interface Props { lang: Language; person?: MemorialPerson }
+const { lang, person } = Astro.props;
+const da = lang === 'da';
+const route = (path: string) => `${da ? '/da' : ''}/${path}/`;
+---
+{person ? <article class="prose">
+  <p class="meta">{da ? 'Kildebaseret mindeprofil · AI-assisteret · gennemgået 24. oktober 2026' : 'Source-linked memorial profile · AI-assisted · checked 24 October 2026'}</p>
+  <h2>{da ? 'Et liv, ikke blot en registrering' : 'A life, not just a record'}</h2>
+  {person.paragraphs[lang].map(text => <p>{text}</p>)}
+  <div class="notice"><h2>{da ? 'Usikkerhed og kildernes stemmer' : 'Uncertainty and the voices of the sources'}</h2><p>{person.uncertainty[lang]}</p></div>
+  <h2>{da ? 'Kilder' : 'Sources'}</h2>
+  <ol class="sources">{person.sources.map(source => <li><a href={source.url}>{source.title}</a><span class="small">{source.kind}</span><span>{source.locator}</span></li>)}</ol>
+  <p><a href={route('memorial')}>← {da ? 'Tilbage til mindeudvalget' : 'Back to the memorial selection'}</a></p>
+</article> : <>
+  <div class="notice prose"><p>{da ? 'Her forbindes overleverede navne og korte livsbeskrivelser med sporbare kilder. Hvor dokumentationen er ufuldstændig eller modstridende, forbliver usikkerheden synlig.' : 'This memorial connects surviving names and short accounts of lives to traceable sources. Where evidence is incomplete or conflicting, that uncertainty remains visible.'}</p></div>
+  <div class="grid">{memorialPeople.map(person => <article class="card"><p class="eyebrow">{da ? 'Mindeprofil' : 'Memorial profile'}</p><h2><a href={route(`memorial/${person.slug}`)}>{person.name}</a></h2><p>{person.description[lang]}</p></article>)}</div>
+  <section class="prose"><h2>{da ? 'Et afgrænset udvalg' : 'A bounded selection'}</h2><p>{da ? 'Dette er ikke et fuldstændigt register over slavegjorte eller et repræsentativt udsnit af befolkningen. Personer med overleverede navne og omfattende omtale er lettere at beskrive. Fravær fra denne side betyder ikke, at et liv var mindre betydningsfuldt.' : 'This is not a complete register of enslaved people or a representative population sample. People with surviving names and extensive documentation are easier to describe. Absence from this page does not make a life less significant.'}</p><p>{da ? 'Profilerne er formidling med kildehenvisninger, ikke udgivne rækker fra specialets datasæt. Flere navne kan tilføjes, når deres kildegrundlag er gennemgået. Der indsamles ingen dedikationer eller familieoplysninger.' : 'The profiles are source-linked educational accounts, not released rows from the thesis dataset. Further names can be added as their evidence is reviewed. No dedications or family information are collected.'}</p></section>
+</>}

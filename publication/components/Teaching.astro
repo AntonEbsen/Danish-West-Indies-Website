@@ -1,0 +1,27 @@
+---
+import teaching from '../data/teaching.json';
+import type { Language } from '../data/articles';
+interface Props { lang: Language; teacher?: boolean }
+const { lang, teacher = false } = Astro.props;
+const da = lang === 'da';
+const copy = teaching[lang];
+const route = (path: string) => `${da ? '/da' : ''}/${path}/`;
+const pdf = `/downloads/${teacher ? 'teacher-notes' : 'student-worksheet'}-${lang}.pdf`;
+---
+<div class="prose">
+  <p class="meta">{copy.audience}</p>
+  <p>{copy.status}</p>
+  <div class="actions"><a class="button primary" href={pdf} download>{da ? 'Hent PDF til udskrift' : 'Download printable PDF'}</a><a class="button" href={route(teacher ? 'teaching' : 'teaching/teacher-notes')}>{teacher ? da ? 'Til elevarket' : 'Student worksheet' : da ? 'Separate lærernoter' : 'Separate teacher notes'}</a></div>
+  {teacher ? <>
+    {copy.teacherSections.map(section => <section><h2>{section.title}</h2><p>{section.text}</p></section>)}
+  </> : <>
+    <h2>{da ? 'Læringsmål' : 'Learning goals'}</h2><ul>{copy.goals.map(goal => <li>{goal}</li>)}</ul>
+    <div class="notice"><p>{copy.context}</p></div>
+    <h2>{da ? 'To kilder' : 'Two sources'}</h2><p>{copy.sourceA}</p><p>{copy.sourceB}</p>
+    {copy.questions.map(question => <section><h2>{question.title}</h2><p>{question.prompt}</p></section>)}
+    <p class="notice">{copy.exit}</p>
+  </>}
+  <h2>{copy.sourceHeading}</h2><p class="small">{copy.sourceNote}</p>
+  <ul class="sources">{copy.links.map(link => <li><a href={new URL(link.url).pathname}>{link.label}</a></li>)}</ul>
+  <p class="small">{da ? 'HTML-siden er et læsbart alternativ til PDF. PDF-versionen er til udskrift og er ikke en fuldt tagget tilgængelig PDF. Ingen elevbesvarelser indsamles.' : 'This HTML page is the reading alternative to the PDF. The PDF is intended for printing and is not a fully tagged accessible PDF. No learner responses are collected.'}</p>
+</div>

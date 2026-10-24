@@ -1,0 +1,31 @@
+{
+  "version": "2026-10-24",
+  "contentSha256": "e2247a33ebbccc82b7757b5939cc0cb6805524178fa2ed5a401aab977b39cbee",
+  "generator": "ReportLab 4.4.9; bundled Vera fonts; invariant PDF metadata",
+  "files": [
+    {
+      "name": "student-worksheet-en.pdf",
+      "language": "en",
+      "audience": "student",
+      "sha256": "8441c699e69b32f08ac887175e40f3ecbfed56c6e272e0a09afe58fa05b022f3"
+    },
+    {
+      "name": "teacher-notes-en.pdf",
+      "language": "en",
+      "audience": "teacher",
+      "sha256": "97d254c3bb706137a0efa1979dce25d031a90d3dbd25061361114909fddcccbe"
+    },
+    {
+      "name": "student-worksheet-da.pdf",
+      "language": "da",
+      "audience": "student",
+      "sha256": "cc85a92d96c90813fbf186059888a9cf73c5167d46b1a87bff20575463ed0bcc"
+    },
+    {
+      "name": "teacher-notes-da.pdf",
+      "language": "da",
+      "audience": "teacher",
+      "sha256": "00cd64ccc58a7302767baa33d1e289d4a69e9e57dc9baf4de24a89dddd41b09d"
+    }
+  ]
+}

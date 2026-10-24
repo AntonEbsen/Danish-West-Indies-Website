@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SourceExample from '../components/SourceExample.astro';
+import Teaching from '../components/Teaching.astro';
+import Memorial from '../components/Memorial.astro';
+import { memorialPeople, type MemorialPerson } from '../data/memorial';
 import { pages, type Page } from '../data/pages';
 import { articles, type Article, type Language } from '../data/articles';
 export function getStaticPaths() {
@@ -8,17 +11,18 @@ export function getStaticPaths() {
     const prefix = lang === 'da' ? 'da/' : '';
     return [
       ...pages.map(page => ({ params: { page: `${prefix}${page.path}`.replace(/\/$/, '') || undefined }, props: { lang, page } })),
-      ...articles.map(article => ({ params: { page: `${prefix}history/${article.slug}` }, props: { lang, article } }))
+      ...articles.map(article => ({ params: { page: `${prefix}history/${article.slug}` }, props: { lang, article } })),
+      ...memorialPeople.map(person => ({ params: { page: `${prefix}memorial/${person.slug}` }, props: { lang, person } }))
     ];
   });
 }
-interface Props { lang: Language; page?: Page; article?: Article }
-const { lang, page, article } = Astro.props;
+interface Props { lang: Language; page?: Page; article?: Article; person?: MemorialPerson }
+const { lang, page, article, person } = Astro.props;
 const da = lang === 'da';
-const path = article ? `history/${article.slug}` : page!.path;
+const path = article ? `history/${article.slug}` : person ? `memorial/${person.slug}` : page!.path;
 const route = (path: string) => `${da ? '/da' : ''}/${path}${path ? '/' : ''}`;
-const title = article ? article.title[lang] : page!.title[lang];
-const description = article ? article.summary[lang] : page!.description[lang];
+const title = article ? article.title[lang] : person ? person.name : page!.title[lang];
+const description = article ? article.summary[lang] : person ? person.description[lang] : page!.description[lang];
 ---
 <Layout title={title} description={description} lang={lang} path={path}>
   <p class="eyebrow">{article ? `${article.year} · ${da ? 'Historisk læsning' : 'Historical reading'}` : da ? 'Et selvstændigt formidlingsprojekt' : 'An independent educational project'}</p>
@@ -43,8 +47,15 @@ const description = article ? article.summary[lang] : page!.description[lang];
     <section class="prose"><h2>{da ? 'Forslag til en undervisningsøvelse' : 'A suggested classroom exercise'}</h2><ol><li>{da ? 'Vælg en tekst, og følg den første kildehenvisning.' : 'Choose a reading and follow its first source reference.'}</li><li>{da ? 'Find ét udsagn, som dokumentet støtter, og ét spørgsmål, som det ikke besvarer.' : 'Identify one statement the document supports and one question it cannot answer.'}</li><li>{da ? 'Forklar, hvordan ophavsperson, formål og fraværende stemmer påvirker brugen af kilden.' : 'Explain how authorship, purpose and missing voices affect the source’s use.'}</li></ol><p><a href={route('sources')}>{da ? 'Læs om kilder og redaktionel praksis' : 'Read the sources and editorial policy'}</a>. {da ? 'Siderne kan udskrives eller gemmes som PDF via browserens udskriftsfunktion.' : 'Use your browser’s print function to print a reading or save it as a PDF.'}</p></section>
   </>}
 
-  {page?.kind === 'content' && <div class="prose" set:html={page.body![lang]} />}
+  {page?.kind === 'content' && <>
+    <div class="prose" set:html={page.body![lang]} />
+    {page.path === 'thesis' && <p class="prose rule"><a href={route('methods/linkage')}>{da ? 'Læs om en konkret koblingsbeslutning i den eksisterende pipeline' : 'Read about a concrete linkage decision in the existing pipeline'} →</a></p>}
+    {page.path === 'methods/linkage' && <p class="prose rule">{da ? 'Seks eksisterende regressionstests bestod en afgrænset kørsel den 24. oktober 2026. Det er ikke en test af historisk koblingspræcision.' : 'Six existing regression tests passed a bounded run on 24 October 2026. This is not a test of historical linkage accuracy.'} <a href="/methods/linkage-review.json" download>{da ? 'Gennemgangsrecord med kodefingeraftryk (JSON)' : 'Review record with code fingerprints (JSON)'}</a>.</p>}
+  </>}
   {page?.kind === 'example' && <SourceExample lang={lang} />}
+  {page?.kind === 'example' && <p class="prose rule"><a href={route('methods/linkage')}>{da ? 'En separat metodenote: nummerbaseret evidens er ikke navneevidens' : 'A separate methods note: number evidence is not name evidence'} →</a></p>}
+  {(page?.kind === 'teaching' || page?.kind === 'teacher') && <Teaching lang={lang} teacher={page.kind === 'teacher'} />}
+  {(page?.kind === 'memorial' || person) && <Memorial lang={lang} person={person} />}
 
   {article && <article class="prose">
     <p class="meta">{da ? 'AI-assisteret formidling · kildehenvisninger gennemgået 24. oktober 2026 · ikke fagfællebedømt' : 'AI-assisted educational summary · source references checked 24 October 2026 · not peer-reviewed'}</p>
