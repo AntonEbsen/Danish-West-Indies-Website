@@ -1,17 +1,18 @@
 import { defineConfig } from 'astro/config';
 import sitemap from "@astrojs/sitemap";
-import node from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://danishwestindies.org',
-  adapter: node({
-    mode: 'standalone'
-  }),
+  // Only the curated publication is deployed. src/ retains unpublished prototypes.
+  srcDir: './publication',
+  publicDir: './publication/public',
+  output: 'static',
+  trailingSlash: 'always',
 
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "da", "es", "fr", "nl", "ak", "de", "nh", "yo", "ig", "kg", "sv", "pt"],
+    locales: ["en", "da"],
     routing: {
         prefixDefaultLocale: false
     }

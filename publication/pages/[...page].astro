@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SourceExample from '../components/SourceExample.astro';
+import { pages, type Page } from '../data/pages';
+import { articles, type Article, type Language } from '../data/articles';
+export function getStaticPaths() {
+  return (['en', 'da'] as Language[]).flatMap(lang => {
+    const prefix = lang === 'da' ? 'da/' : '';
+    return [
+      ...pages.map(page => ({ params: { page: `${prefix}${page.path}`.replace(/\/$/, '') || undefined }, props: { lang, page } })),
+      ...articles.map(article => ({ params: { page: `${prefix}history/${article.slug}` }, props: { lang, article } }))
+    ];
+  });
+}
+interface Props { lang: Language; page?: Page; article?: Article }
+const { lang, page, article } = Astro.props;
+const da = lang === 'da';
+const path = article ? `history/${article.slug}` : page!.path;
+const route = (path: string) => `${da ? '/da' : ''}/${path}${path ? '/' : ''}`;
+const title = article ? article.title[lang] : page!.title[lang];
+const description = article ? article.summary[lang] : page!.description[lang];
+---
+<Layout title={title} description={description} lang={lang} path={path}>
+  <p class="eyebrow">{article ? `${article.year} · ${da ? 'Historisk læsning' : 'Historical reading'}` : da ? 'Et selvstændigt formidlingsprojekt' : 'An independent educational project'}</p>
+  <h1>{title}</h1>
+  <p class="lede">{description}</p>
+  <p class="print-note">https://danishwestindies.org{route(path)}</p>
+
+  {page?.kind === 'home' && <>
+    <div class="actions"><a class="button primary" href={route('history')}>{da ? 'Læs historien' : 'Explore the history'}</a><a class="button" href={route('source-to-data')}>{da ? 'Se et arkiveksempel' : 'Inspect a source example'}</a></div>
+    <div class="notice"><p>{da ? 'Udviklet af Anton Meier Ebsen Jørgensen, kandidatstuderende i økonomi. Det tilknyttede speciale er fælles og igangværende; forventet afslutning januar 2027.' : 'Developed by Anton Meier Ebsen Jørgensen, MSc student in Economics. The related thesis is joint work in progress; expected completion January 2027.'} <a href={route('about')}>{da ? 'Om projektet og mit bidrag' : 'About the project and my contribution'}</a>.</p></div>
+    <section aria-labelledby="start"><h2 id="start">{da ? 'En kort vej ind i projektet' : 'A short route through the project'}</h2><div class="grid">
+      <article class="card"><p class="eyebrow">01 · {da ? 'Historie' : 'History'}</p><h3>{da ? 'Læs med kilderne åbne' : 'Read with the sources open'}</h3><p>{da ? 'Tre korte tekster om lovgivning, frigivelse og modstand, med kildehenvisninger og åbne spørgsmål.' : 'Three short readings on law, emancipation and resistance, with source references and open questions.'}</p><a href={route('history')}>{da ? 'Se de tre læsninger' : 'Browse the three readings'} →</a></article>
+      <article class="card"><p class="eyebrow">02 · {da ? 'Metode' : 'Method'}</p><h3>{da ? 'Fra håndskrift til data' : 'From handwriting to data'}</h3><p>{da ? 'Følg tre tal fra et godkendt arkivudsnit til en datastruktur, og se præcis, hvad kontrollen ikke beviser.' : 'Follow three counts from a permitted archival crop to a structured record, including what the checks cannot prove.'}</p><a href={route('source-to-data')}>{da ? 'Undersøg eksemplet' : 'Inspect the example'} →</a></article>
+      <article class="card"><p class="eyebrow">03 · {da ? 'Forskning' : 'Research'}</p><h3>{da ? 'Et igangværende speciale' : 'Research in progress'}</h3><p>{da ? 'Se specialets status, mine konkrete opgaver og de empiriske problemer, vi arbejder med.' : 'See the thesis status, my specific responsibilities and the empirical problems being addressed.'}</p><a href={route('thesis')}>{da ? 'Læs forskningsoversigten' : 'Read the research overview'} →</a></article>
+    </div></section>
+    <section class="prose"><h2>{da ? 'Afgrænset frem for udtømmende' : 'Selective rather than comprehensive'}</h2><p>{da ? 'Projektet undersøger, hvordan koloniale dokumenter kan læses kritisk og bruges ansvarligt. Det repræsenterer ikke alle øernes historier, stemmer eller efterkommeres erfaringer. Udvalget forbinder historisk læsning med gennemsigtige metoder.' : 'This project explores how colonial documents can be read critically and used responsibly. It does not represent every island history, voice or descendant’s experience. The selection connects historical reading with transparent methods.'}</p></section>
+  </>}
+
+  {page?.kind === 'history' && <>
+    <p class="meta">{da ? 'AI-assisterede oversigter · kilder gennemgået 24. oktober 2026 · ikke fagfællebedømt' : 'AI-assisted summaries · sources checked 24 October 2026 · not peer-reviewed'}</p>
+    <div class="grid">{articles.map(item => <article class="card"><p class="eyebrow">{item.year}</p><h2><a href={route(`history/${item.slug}`)}>{item.title[lang]}</a></h2><p>{item.summary[lang]}</p></article>)}</div>
+    <section class="prose"><h2>{da ? 'Forslag til en undervisningsøvelse' : 'A suggested classroom exercise'}</h2><ol><li>{da ? 'Vælg en tekst, og følg den første kildehenvisning.' : 'Choose a reading and follow its first source reference.'}</li><li>{da ? 'Find ét udsagn, som dokumentet støtter, og ét spørgsmål, som det ikke besvarer.' : 'Identify one statement the document supports and one question it cannot answer.'}</li><li>{da ? 'Forklar, hvordan ophavsperson, formål og fraværende stemmer påvirker brugen af kilden.' : 'Explain how authorship, purpose and missing voices affect the source’s use.'}</li></ol><p><a href={route('sources')}>{da ? 'Læs om kilder og redaktionel praksis' : 'Read the sources and editorial policy'}</a>. {da ? 'Siderne kan udskrives eller gemmes som PDF via browserens udskriftsfunktion.' : 'Use your browser’s print function to print a reading or save it as a PDF.'}</p></section>
+  </>}
+
+  {page?.kind === 'content' && <div class="prose" set:html={page.body![lang]} />}
+  {page?.kind === 'example' && <SourceExample lang={lang} />}
+
+  {article && <article class="prose">
+    <p class="meta">{da ? 'AI-assisteret formidling · kildehenvisninger gennemgået 24. oktober 2026 · ikke fagfællebedømt' : 'AI-assisted educational summary · source references checked 24 October 2026 · not peer-reviewed'}</p>
+    <h2>{da ? 'Hvad kilderne dokumenterer' : 'What the sources document'}</h2>
+    {article.paragraphs[lang].map(text => <p>{text}</p>)}
+    <div class="notice"><h2>{da ? 'Begrænsning' : 'A limit of the evidence'}</h2><p>{article.caution[lang]}</p></div>
+    <h2>{da ? 'Et spørgsmål til læseren' : 'A question for the reader'}</h2><p>{article.question[lang]}</p>
+    <h2>{da ? 'Kilder og præcise henvisninger' : 'Sources and precise references'}</h2>
+    <ol class="sources">{article.sources.map(source => <li><a href={source.url}>{source.title}</a><span class="small">{source.kind}</span><span>{source.locator}</span></li>)}</ol>
+    <p class="small">{da ? 'Kildetitler og henvisninger bevares på deres udgivelsessprog. Historiske titler kan indeholde krænkende betegnelser. Disse korte oversigter præsenterer ikke specialets resultater.' : 'Source titles and locators retain their publication language. Historical titles may contain offensive terminology. These short summaries do not present thesis results.'}</p>
+    <p class="rule"><a href={route('history')}>← {da ? 'Alle tre læsninger' : 'All three readings'}</a> · <a href={route('sources')}>{da ? 'Redaktionel praksis og rettelser' : 'Editorial policy and corrections'}</a></p>
+  </article>}
+</Layout>

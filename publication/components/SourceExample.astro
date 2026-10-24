@@ -1,0 +1,44 @@
+---
+import provenance from '../public/evidence/provenance.json';
+import type { Language } from '../data/articles';
+interface Props { lang: Language }
+const da = Astro.props.lang === 'da';
+const { source, record, reading } = provenance;
+const cells = [['creoles', 'Creoler', record.creoles], ['africans', 'Africaner', record.africans], ['total', 'Total', record.total]];
+---
+<div class="prose">
+  <div class="notice"><p>{da ? 'Et godkendt uddrag fra et eksisterende transskriptionsarbejde: tre felter, ikke et fuldt datasæt eller en valideret kobling.' : 'A permitted excerpt from existing transcription work: three cells, not a full dataset or a validated linkage.'}</p></div>
+  <h2>{da ? '1. Find den historiske kilde' : '1. Locate the historical source'}</h2>
+  <p><a href={source.url}>{source.institution}: {source.title}</a>. {da ? 'Dronningens Kvarter, tredje plantagerække; billedviser 207. Identifikatorer:' : 'Dronningens Quarteer, third estate row; viewer image 207. Identifiers:'} <code>epid {source.epid} · bsid {source.bsid} · imageID {source.imageId}</code>.</p>
+  <div class="image-pair">
+    <figure>
+      <a href="/evidence/1792-origin-headings.png"><img src="/evidence/1792-origin-headings.png" width="295" height="280" alt={da ? 'Udsnit med historiske kolonneoverskrifter, herunder Creoler og Africaner.' : 'Crop of the historical column headings, including Creoler and Africaner.'} /></a>
+      <figcaption>{da ? 'Kolonneoverskrifter. Historiske betegnelser er ikke projektets egne kategorier.' : 'Column headings. Historical labels are not categories endorsed by this project.'}</figcaption>
+    </figure>
+    <figure>
+      <a href="/evidence/1792-origin-row.png"><img src="/evidence/1792-origin-row.png" width="295" height="70" alt={da ? 'Udsnit af tre håndskrevne tal, læst som 54, 32 og 86.' : 'Crop of three handwritten counts, read as 54, 32 and 86.'} /></a>
+      <figcaption>{da ? 'Tre felter fra samme række. Udsnittet indeholder ingen personnavne.' : 'Three cells from the same row. The crop contains no personal names.'}</figcaption>
+    </figure>
+  </div>
+  <p class="small">{da ? 'Kilde: Rigsarkivet. To rektangulære udsnit af samme skanning; tallene er ikke ændret. Tilladelse til offentlig gengivelse bekræftet af Anton den 24. oktober 2026; medforfatternes godkendelse er også bekræftet. Ingen generel genbrugslicens gives.' : 'Source: Rigsarkivet. Two rectangular crops of the same scan; the numerals have not been altered. Permission for public reproduction confirmed by Anton on 24 October 2026; coauthor approval also confirmed. No general reuse licence is granted.'}</p>
+  <h2>{da ? '2. Bevar en afgrænset datastruktur' : '2. Preserve a bounded structured record'}</h2>
+  <p>{da ? 'Enhed: personer registreret som slavegjorte. De historiske oprindelseskategorier gengives som kildens administrative betegnelser, ikke som validerede identiteter.' : 'Unit: persons recorded as enslaved. The historical origin categories are retained as administrative labels, not validated personal identities.'}</p>
+  <div class="table-wrap">
+    <table>
+      <caption>{da ? 'Tre værdier fra én række, 31. december 1792' : 'Three values from one row, 31 December 1792'}</caption>
+      <thead><tr><th scope="col">{da ? 'Variabel' : 'Field'}</th><th scope="col">{da ? 'Kildebetegnelse' : 'Source label'}</th><th scope="col">{da ? 'Værdi' : 'Value'}</th></tr></thead>
+      <tbody>{cells.map(([field, label, value]) => <tr><th scope="row">{field}</th><td>{label}</td><td>{value}</td></tr>)}</tbody>
+    </table>
+  </div>
+  <p><a href="/evidence/record.csv" download>{da ? 'Hent de tre værdier (CSV)' : 'Download the three values (CSV)'}</a> · <a href="/evidence/provenance.json" download>{da ? 'Hent proveniens og kontroller (JSON)' : 'Download provenance and checks (JSON)'}</a></p>
+  <h2>{da ? '3. Beskriv præcist, hvad der er kontrolleret' : '3. State exactly what was checked'}</h2>
+  <ul>
+    <li>{da ? 'Eksisterende læselog: modelassisteret visuel læsning' : 'Existing reading log: model-assisted visual reading'} (<code>{reading.method}</code>), {reading.date}.</li>
+    <li>{da ? 'AI-assisteret sammenligning den 24. oktober 2026 af kun de tre felter og kolonneoverskrifterne.' : 'AI-assisted visual comparison on 24 October 2026 of these three cells and the headings only.'}</li>
+    <li>{da ? 'Rækkens sum stemmer:' : 'The row sum agrees:'} <strong>{record.creoles} + {record.africans} = {record.total}</strong>.</li>
+    <li>{da ? 'De valgte felter er ikke markeret eller rettet i de gennemgåede logs over aritmetiske korrektioner. Det er ikke i sig selv dokumentation for korrekt aflæsning.' : 'The selected cells are not flagged or corrected in the inspected arithmetic-correction logs. This does not itself establish that a reading is correct.'}</li>
+  </ul>
+  <div class="notice"><p><strong>{da ? 'Hvad kontrollen ikke viser' : 'What the checks do not establish'}</strong></p><p>{da ? 'En korrekt sum kan også bestå af forkert aflæste tal. Eksemplet er ikke uafhængig menneskelig ground truth, en test af hele arkets præcision, en genealogisk forbindelse eller et resultat fra specialet. Ingen kobling til andre årgange dokumenteres her.' : 'Misread numbers can still add up correctly. This example is not independent human ground truth, a full-sheet accuracy test, a genealogical link or a thesis finding. No linkage across years is demonstrated here.'}</p></div>
+  <h2>{da ? '4. Gør sporet efterprøveligt' : '4. Make the trail inspectable'}</h2>
+  <p>{da ? 'Proveniensfilen angiver arkivlink, identifikatorer, billedmål, udsnitskoordinater og SHA-256-hashes af den anvendte skanning og læselog. Det gør input identificerbare; det gør ikke læsningen ufejlbarlig. Den fulde skanning og den private læselog udgives ikke her.' : 'The provenance file records the archival link, identifiers, image dimensions, crop coordinates and SHA-256 hashes of the scan and reading log used. These identify inputs; they do not make the reading infallible. The full scan and private reading log are not released here.'}</p>
+</div>
