@@ -98,7 +98,8 @@ test('sitemap has no unpublished languages, tools or manuscript routes', () => {
   assert.ok(maps.length >= 2);
   for (const file of maps) {
     const xml = readFileSync(file, 'utf8');
-    assert.doesNotMatch(xml, /\/(api|transcriber|interview|essay-grader|memorial|es|yo|fr|nl)\//);
+    assert.doesNotMatch(xml, /\/(api|transcriber|interview|essay-grader|es|yo|fr|nl)\//);
+    assert.doesNotMatch(xml, /\/memorial\/(descendants|network|dashboard|altar)\//);
     assert.doesNotMatch(xml, /404/);
   }
 });
@@ -120,5 +121,48 @@ test('confirmed identity, dates, individual role and research status stay aligne
   assert.match(da, /maj 2024/);
   assert.match(da, /september 2024/);
   assert.match(da, /januar 2027/);
-  assert.equal(files.filter(file => extname(file) === '.pdf').length, 0, 'No unfinished manuscript or placeholder PDF is published');
+  assert.deepEqual(files.filter(file => extname(file) === '.pdf').map(file => file.split(/[/\\]/).at(-1)).sort(), ['student-worksheet-da.pdf', 'student-worksheet-en.pdf', 'teacher-notes-da.pdf', 'teacher-notes-en.pdf'], 'Only the four teaching handouts are published, not a thesis PDF');
+});
+
+test('teaching PDFs match their manifest and shared HTML content', () => {
+  const teaching = JSON.parse(readFileSync('publication/data/teaching.json', 'utf8'));
+  const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
+  const manifest = JSON.parse(readFileSync(join(root, 'downloads/manifest.json'), 'utf8'));
+  const contentHash = createHash('sha256').update(JSON.stringify(canonical(teaching))).digest('hex');
+  assert.equal(manifest.contentSha256, contentHash, 'Content changed: regenerate PDFs before publishing');
+  assert.equal(manifest.files.length, 4);
+  for (const file of manifest.files) {
+    const data = readFileSync(join(root, 'downloads', file.name));
+    assert.ok(data.subarray(0, 5).equals(Buffer.from('%PDF-')));
+    assert.equal(createHash('sha256').update(data).digest('hex'), file.sha256);
+    assert.equal(teaching[file.language].questions.length, 4);
+    assert.equal(teaching[file.language].teacherSections.length, 6);
+  }
+});
+
+test('methods note distinguishes inspected rule tests from archival accuracy and authorship', () => {
+  const review = JSON.parse(readFileSync(join(root, 'methods/linkage-review.json'), 'utf8'));
+  assert.deepEqual(review.functionsInspected, ['row_links', 'name_matched']);
+  assert.equal(review.regressionTests.passed, 6);
+  assert.match(review.regressionTests.scope, /not historical linkage accuracy/);
+  assert.match(review.authorship, /sole authorship.*not asserted/);
+  for (const path of ['methods/linkage/index.html', 'da/methods/linkage/index.html']) {
+    const html = readFileSync(join(root, path), 'utf8');
+    assert.match(html, /name_matched/);
+    assert.match(html, /number/);
+    assert.doesNotMatch(html, /4:hamsbay|laprevalais|castlenugent|montpellier|C:\\Users\\/i);
+  }
+});
+
+test('only the reviewed memorial profiles are restored, without prototype testimony or statistics', () => {
+  for (const prefix of ['', 'da/']) {
+    const base = join(root, prefix, 'memorial');
+    assert.deepEqual(readdirSync(base).sort(), ['hans-jonathan', 'index.html', 'queen-mary']);
+    for (const slug of ['hans-jonathan', 'queen-mary']) {
+      const html = readFileSync(join(base, slug, 'index.html'), 'utf8');
+      assert.match(html, /lex\.dk/);
+      assert.match(html, /\[1/);
+      assert.doesNotMatch(html, /\(Placeholder\)|Anonymous|human_breathing|mapLat|Personas Interviewed/);
+    }
+  }
 });

@@ -1,0 +1,13 @@
+{
+  "reviewDate": "2026-10-24",
+  "sourceKind": "Existing working code and regression tests from the joint St. Croix thesis, inspected read-only",
+  "sourceRevision": "4d6e23bceecbcee3b486fc21b108be814b485bf4",
+  "files": [
+    {"path": "code/data_acquisition/tabell_links.py", "sha256": "977a6b8602bd98374d9274268546ea0b444b1ef6a38ff6820d154515e93c52a0"},
+    {"path": "tests/test_tabell_links.py", "sha256": "809947b72fa3b0223e1b3de29fcec7815d11e69b9aaff6d9401ecf90c47781c5"}
+  ],
+  "functionsInspected": ["row_links", "name_matched"],
+  "regressionTests": {"executed": 6, "passed": 6, "scope": "Programmed linkage-rule behaviour on existing test fixtures, not historical linkage accuracy"},
+  "publicationBoundary": "No underlying source code, private rows, estate aliases, linkage results or new archival images are distributed with this note",
+  "authorship": "Anton leads transcription, linkage and cleaning in the joint project; sole authorship of this routine is not asserted"
+}

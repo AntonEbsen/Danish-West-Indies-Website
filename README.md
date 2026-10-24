@@ -16,6 +16,13 @@ publication, a comprehensive archive, or a release of final thesis findings.
 - One approved source-to-data excerpt: two cropped archival images, three counts,
   downloadable CSV and provenance JSON. It is not human ground truth or a linkage test.
 - Honest project/contribution statements, source policy, AI disclosure and corrections link.
+- A real, bounded linkage-methods note, based on inspected working code and six
+  existing regression tests, without publishing private rows or claiming sole
+  authorship of the routine.
+- English/Danish student worksheets and separate teacher notes, available as HTML
+  and four one-page printable PDFs. The activity is proposed, not classroom-tested.
+- A selected memorial with two revised, source-linked profiles (Hans Jonathan and
+  Mary Thomas). It is not a population register or a genealogical database.
 
 ## Publication boundary
 
@@ -29,7 +36,9 @@ are not statements about the current publication.
 Do not switch back to `src/` or copy all of legacy `public/` into the build.
 Unverified chart series, generated descendant testimony, manuscript placeholders,
 fake-success forms and server-only AI tools must not silently return.
-Retired routes return the explicit bilingual 404 page. No API key is needed.
+Unreviewed retired routes return the explicit bilingual 404 page. The memorial
+index and its two reviewed profile slugs are restored in `publication/`, without
+importing the old register, maps, statistics or descendant testimony. No API key is needed.
 There are no visitor uploads, live AI calls, trackers or remote fonts.
 
 ## Local verification
@@ -52,6 +61,26 @@ another preview on that port at the same time. Tests check both languages, 320px
 and 390px mobile widths, WCAG A/AA rules via axe, keyboard access, actual
 CSV/JSON downloads, print styles, no-JavaScript navigation and network isolation.
 Static tests crawl built links/fragments/assets and pin approved image hashes.
+
+### Teaching PDFs
+
+HTML and PDFs use the same `publication/data/teaching.json` content. The four
+published downloads and a canonical-content/hash manifest are committed; ordinary
+Node builds do not require Python. Static CI checks fail if that content changes
+without regenerated downloads. To regenerate with the bundled Python runtime or
+an isolated environment:
+
+```sh
+python -m pip install -r requirements-teaching-pdfs.txt
+python scripts/build-teaching-pdfs.py
+python scripts/build-teaching-pdfs.py --check
+```
+
+The generator uses ReportLab's bundled Vera fonts and invariant PDF metadata.
+Authoring copies go to ignored `output/pdf/`, deployment copies to
+`publication/public/downloads/`. Render and visually inspect all four after a
+change. These are print handouts, not fully tagged accessible PDF deliverables;
+the HTML pages provide the reading alternative. Never replace them with thesis PDFs.
 
 For a dev server, follow `AGENTS.md` and the installed Astro command's documented
 background controls. The reader audit does not need a dev server.
@@ -87,3 +116,4 @@ about reuse of educational text. Report corrections through the linked GitHub
 issue form, keeping private information out of public issues.
 
 See [implementation and verification notes](docs/application-readiness-2026-10-24.md).
+The follow-up is documented in [methods, teaching and memorial notes](docs/methods-teaching-memorial-2026-10-24.md).

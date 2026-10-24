@@ -9,7 +9,7 @@ const route = (path: string) => `${prefix}/${path}${path ? '/' : ''}`;
 const enPath = `/${path}${path ? '/' : ''}`;
 const daPath = `/da/${path}${path ? '/' : ''}`;
 const canonical = new URL(da ? daPath : enPath, Astro.site);
-const nav = [ ['history', da ? 'Historie' : 'History'], ['source-to-data', da ? 'Fra kilde til data' : 'Source to data'], ['thesis', da ? 'Forskning' : 'Research'], ['about', da ? 'Om projektet' : 'About'] ];
+const nav = [ ['history', da ? 'Historie' : 'History'], ['memorial', da ? 'Mindesider' : 'Memorial'], ['source-to-data', da ? 'Fra kilde til data' : 'Source to data'], ['teaching', da ? 'Undervisning' : 'Teaching'], ['thesis', da ? 'Forskning' : 'Research'], ['about', da ? 'Om projektet' : 'About'] ];
 ---
 <!doctype html>
 <html lang={lang}>

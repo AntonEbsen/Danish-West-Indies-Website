@@ -1,0 +1,67 @@
+{
+  "version": "2026-10-24",
+  "en": {
+    "worksheetTitle": "Reading a rule, checking a record",
+    "teacherTitle": "Teacher notes: reading a rule, checking a record",
+    "audience": "Upper-secondary / introductory university; suggested 20-25 minutes. Adapt to your group.",
+    "status": "A proposed learning activity, not a classroom-tested or curriculum-accredited resource. Prepared with AI assistance.",
+    "goals": ["Distinguish an announced rule from its implementation and effects.", "Explain why a correct sum does not prove a transcription is correct."],
+    "context": "The activity concerns slavery and colonial record-keeping. Historical category labels are discussed as source terms, not endorsed descriptions of people.",
+    "sourceA": "A. The ordinance of 16 March 1792, clause 1: identify the announced starting year of the trade restriction. Read the linked primary text or the site's short reading; do not confuse a trade restriction with emancipation.",
+    "sourceB": "B. The permitted 1792 St. Croix excerpt: the recorded categories are read as 54 and 32, with a total of 86. The reading and later visual comparison are AI-assisted, not independent human ground truth.",
+    "questions": [
+      {"title": "1. Two dates, two questions", "prompt": "Record the ordinance's date and the year when its restriction was to begin. Why are these different dates useful for different questions?"},
+      {"title": "2. What does the source establish?", "prompt": "Name one claim supported by the ordinance and one question about actual behaviour or living conditions it cannot answer alone."},
+      {"title": "3. A limited numerical check", "prompt": "Calculate 54 + 32 and compare it with 86. What does agreement check? Give one reason why it does not establish transcription accuracy."},
+      {"title": "4. From categories to people", "prompt": "Who created the count and for what administrative purpose? If that purpose is not established by the excerpt, say so. Name one additional source you would seek."}
+    ],
+    "exit": "Exit sentence: This source supports ___, but to establish ___ I would also need ___.",
+    "teacherSections": [
+      {"title": "Preparation and pacing", "text": "Open the two linked readings or supply the printed pages. Suggest 3 minutes for context, 7 for pairs to read and answer, 7 for discussion and 3 for the exit sentence. No account or AI tool is required."},
+      {"title": "Possible responses: questions 1-2", "text": "16 March 1792 is the ordinance date; the restriction was to start in 1803. Announcement may matter for expectations; implementation is another event. The text supports the announced legal provision, not its enforcement, a price response, improved health or the end of slavery. Accept different well-supported questions."},
+      {"title": "Possible responses: question 3", "text": "54 + 32 = 86. This checks internal arithmetic agreement only. Misread entries can still add up; a source total can itself be wrong; labels or row alignment may be mistaken. A second reading of the original and a recorded disagreement process would be stronger evidence than repeating the sum."},
+      {"title": "Possible responses: question 4", "text": "The excerpt alone does not identify every official or establish the complete administrative process. Reward recognition of that limit. Seek the document's title, provenance and surrounding instructions; personal experiences require other kinds of evidence. Do not infer personal identity or ancestry from the categories."},
+      {"title": "Facilitation and formative check", "text": "Contextualize colonial terms without asking learners to impersonate historical people. Assess whether the exit sentence separates a supported claim from missing evidence, not whether it repeats a preferred interpretation. Allow written or spoken responses and more reading time as needed."},
+      {"title": "Limits and extension", "text": "No classroom outcomes have been measured. The separate linkage methods note can extend the discussion: a number-derived alias is not independent name evidence. That note and this three-cell exercise concern different checks; the exercise does not demonstrate a successful linkage."}
+    ],
+    "sourceHeading": "Sources and companion pages",
+    "sourceNote": "A: Christian VII ordinance, clause 1, printed collection (1792), pp. 69-71, via Danmarkshistorien/Lex. B: Rigsarkivet, St. Croix General Tabell, 31 December 1792; epid 20201795, bsid 292226, imageID 58788329. The companion page carries the permitted crops, provenance, CSV and limits.",
+    "links": [
+      {"label": "Ordinance reading and primary-source link", "url": "https://danishwestindies.org/history/1792-abolition-decree/"},
+      {"label": "Permitted source excerpt, provenance and data", "url": "https://danishwestindies.org/source-to-data/"},
+      {"label": "Separate linkage methods note", "url": "https://danishwestindies.org/methods/linkage/"}
+    ]
+  },
+  "da": {
+    "worksheetTitle": "Læs en regel, kontrollér en registrering",
+    "teacherTitle": "Lærernoter: læs en regel, kontrollér en registrering",
+    "audience": "Gymnasium / introducerende universitetsundervisning; foreslået tid 20-25 minutter. Tilpas til holdet.",
+    "status": "Et forslag til en læringsaktivitet, ikke et undervisningsafprøvet eller læreplansgodkendt materiale. Udarbejdet med AI-assistance.",
+    "goals": ["Skeln mellem en bekendtgjort regel, dens gennemførelse og dens virkninger.", "Forklar, hvorfor en korrekt sum ikke beviser, at en transskription er korrekt."],
+    "context": "Aktiviteten omhandler slaveri og kolonial registrering. Historiske kategorier behandles som kildens betegnelser, ikke som beskrivelser af mennesker, vi tilslutter os.",
+    "sourceA": "A. Forordningen af 16. marts 1792, bestemmelse 1: find det varslede startår for handelsbegrænsningen. Læs den linkede primærkilde eller sidens korte tekst; skeln mellem handelsbegrænsning og frigivelse.",
+    "sourceB": "B. Det godkendte uddrag fra Sankt Croix 1792: kategorierne læses som 54 og 32 med totalen 86. Læsningen og den senere visuelle sammenligning er AI-assisterede, ikke uafhængig menneskelig ground truth.",
+    "questions": [
+      {"title": "1. To datoer, to spørgsmål", "prompt": "Notér forordningens dato og det år, hvor begrænsningen skulle begynde. Hvorfor er de to datoer relevante for forskellige spørgsmål?"},
+      {"title": "2. Hvad dokumenterer kilden?", "prompt": "Nævn et udsagn, som forordningen støtter, og et spørgsmål om faktisk adfærd eller levevilkår, som den ikke alene besvarer."},
+      {"title": "3. En afgrænset talkontrol", "prompt": "Beregn 54 + 32 og sammenlign med 86. Hvad kontrollerer overensstemmelsen? Giv én grund til, at den ikke beviser korrekt transskription."},
+      {"title": "4. Fra kategorier til mennesker", "prompt": "Hvem skabte optællingen og til hvilket administrativt formål? Sig det tydeligt, hvis uddraget ikke fastslår formålet. Nævn en yderligere kilde, du ville søge."}
+    ],
+    "exit": "Afslutningssætning: Kilden støtter ___, men for at fastslå ___ behøver jeg også ___.",
+    "teacherSections": [
+      {"title": "Forberedelse og tidsplan", "text": "Åbn de to linkede læsninger eller udlevér udskrifter. Foreslå 3 minutter til kontekst, 7 til læsning og svar i par, 7 til diskussion og 3 til afslutningssætningen. Ingen konto eller AI-værktøj er nødvendigt."},
+      {"title": "Mulige svar: spørgsmål 1-2", "text": "Forordningen er dateret 16. marts 1792; begrænsningen skulle begynde i 1803. Varslingen kan påvirke forventninger; ikrafttrædelsen er en anden begivenhed. Teksten dokumenterer den bekendtgjorte regel, ikke håndhævelse, prisreaktioner, bedre sundhed eller slaveriets ophør. Acceptér forskellige velbegrundede spørgsmål."},
+      {"title": "Mulige svar: spørgsmål 3", "text": "54 + 32 = 86. Det kontrollerer kun intern aritmetisk overensstemmelse. Fejlaflæste felter kan stadig summere korrekt; kildens total kan være forkert; kategorier eller rækkeplacering kan være misforstået. En anden læsning af originalen og dokumentation af uenighed er stærkere evidens end at gentage summen."},
+      {"title": "Mulige svar: spørgsmål 4", "text": "Uddraget identificerer ikke alene alle embedsmænd eller den fulde administrative proces. Anerkend denne begrænsning. Søg titel, proveniens og tilhørende instrukser; menneskers erfaringer kræver andre kildetyper. Udled ikke personidentitet eller slægtskab af kategorierne."},
+      {"title": "Gennemførelse og formativ vurdering", "text": "Sæt koloniale betegnelser i kontekst uden at bede eleverne spille historiske personer. Vurdér, om afslutningssætningen skelner mellem dokumenterede udsagn og manglende evidens, ikke om den gentager én bestemt fortolkning. Tillad skriftlige eller mundtlige svar og ekstra læsetid efter behov."},
+      {"title": "Begrænsninger og udvidelse", "text": "Der er ikke målt undervisningsresultater. Den separate metodenote kan udvide diskussionen: et alias afledt af et nummer er ikke uafhængig navneevidens. Noten og øvelsen med tre felter vedrører forskellige kontroller; øvelsen demonstrerer ikke en vellykket kobling."}
+    ],
+    "sourceHeading": "Kilder og ledsagesider",
+    "sourceNote": "A: Christian 7.s forordning, bestemmelse 1, den trykte samling (1792), s. 69-71, via Danmarkshistorien/Lex. B: Rigsarkivet, St. Croix General Tabell, 31. december 1792; epid 20201795, bsid 292226, imageID 58788329. Ledsagesiden viser godkendte udsnit, proveniens, CSV og begrænsninger.",
+    "links": [
+      {"label": "Kort tekst og link til forordningen", "url": "https://danishwestindies.org/da/history/1792-abolition-decree/"},
+      {"label": "Godkendt kildeuddrag, proveniens og data", "url": "https://danishwestindies.org/da/source-to-data/"},
+      {"label": "Separat metodenote om kobling", "url": "https://danishwestindies.org/da/methods/linkage/"}
+    ]
+  }
+}
