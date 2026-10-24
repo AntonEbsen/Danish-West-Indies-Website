@@ -20,10 +20,12 @@ private `Master-Thesis` repository, not to anything in this one.
 
 ## Not part of the site build
 
-This directory is plain Markdown for people to read and edit. It is deliberately
-outside `src/content/`, which is a typed Astro content collection governed by
-[`src/content.config.ts`](../src/content.config.ts) — dropping loose Markdown in
-there would break `astro check`.
+This directory is plain Markdown for people to read and edit. It is not deployed.
+The active Astro source root is now `publication/`; legacy `src/` content and
+prototypes are also excluded from the publication. See the repository
+[README](../README.md) for the boundary and verification commands. Do not publish
+these plans as completed outputs or import them into the public build without
+an editorial and permissions review.
 
 ## The wider slate
 

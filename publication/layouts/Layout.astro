@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+import type { Language } from '../data/articles';
+interface Props { title: string; description: string; lang: Language; path: string; noindex?: boolean }
+const { title, description, lang, path, noindex = false } = Astro.props;
+const da = lang === 'da';
+const prefix = da ? '/da' : '';
+const route = (path: string) => `${prefix}/${path}${path ? '/' : ''}`;
+const enPath = `/${path}${path ? '/' : ''}`;
+const daPath = `/da/${path}${path ? '/' : ''}`;
+const canonical = new URL(da ? daPath : enPath, Astro.site);
+const nav = [ ['history', da ? 'Historie' : 'History'], ['source-to-data', da ? 'Fra kilde til data' : 'Source to data'], ['thesis', da ? 'Forskning' : 'Research'], ['about', da ? 'Om projektet' : 'About'] ];
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | Danish West Indies</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark light" />
+    {noindex && <meta name="robots" content="noindex" />}
+    {!noindex && <>
+      <link rel="canonical" href={canonical} />
+      <link rel="alternate" hreflang="en" href={new URL(enPath, Astro.site)} />
+      <link rel="alternate" hreflang="da" href={new URL(daPath, Astro.site)} />
+      <link rel="alternate" hreflang="x-default" href={new URL(enPath, Astro.site)} />
+    </>}
+    <meta property="og:title" content={`${title} | Danish West Indies`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{da ? 'Spring til indhold' : 'Skip to content'}</a>
+    <header class="site-header wrap">
+      <a class="brand" href={route('')}>Danish West Indies<span>{da ? 'Historie · Kilder · Metode' : 'History · Sources · Method'}</span></a>
+      <nav aria-label={da ? 'Hovednavigation' : 'Main navigation'}>
+        {nav.map(([slug, label]) => <a href={route(slug)} aria-current={path === slug ? 'page' : undefined}>{label}</a>)}
+      </nav>
+      <nav class="languages" aria-label={da ? 'Sprog' : 'Language'}>
+        <a href={noindex ? '/' : enPath} lang="en" aria-current={!da ? 'true' : undefined}>English</a>
+        <a href={noindex ? '/da/' : daPath} lang="da" aria-current={da ? 'true' : undefined}>Dansk</a>
+      </nav>
+    </header>
+    <main id="main" class="wrap" tabindex="-1"><slot /></main>
+    <footer class="site-footer wrap">
+      <p>{da ? 'Et selvstændigt formidlingsprojekt af Anton Meier Ebsen Jørgensen.' : 'An independent educational project by Anton Meier Ebsen Jørgensen.'}</p>
+      <p>{da ? 'Ikke en officiel hjemmeside for Københavns Universitet eller Rigsarkivet.' : 'Not an official website of the University of Copenhagen or Rigsarkivet.'}</p>
+      <div class="footer-links">
+        <a href={route('sources')}>{da ? 'Kilder og redaktionel praksis' : 'Sources & editorial policy'}</a>
+        <a href={route('about-ai')}>{da ? 'AI og privatliv' : 'AI & privacy'}</a>
+        <a href="https://www.antonebsen.com/en/">{da ? 'Antons akademiske hjemmeside' : 'Anton’s academic website'}</a>
+        <a href="https://github.com/AntonEbsen/Danish-West-Indies-Website/issues/new">{da ? 'Indberet en fejl (GitHub)' : 'Report an error (GitHub)'}</a>
+      </div>
+      <p class="small">{da ? 'Indhold og kildelinks gennemgået med AI-assistance: 24. oktober 2026. Ikke fagfællebedømt.' : 'Content and source links checked with AI assistance: 24 October 2026. Not peer-reviewed.'}</p>
+    </footer>
+  </body>
+</html>
